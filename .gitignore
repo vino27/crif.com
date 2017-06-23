@@ -1,0 +1,8 @@
+# Add any directories, files, or patterns you don't want to be tracked by version contro
+.vs/
+CrifCom/images/
+CrifCom/Media/
+CrifCom/bin/
+CrifCom/PublishingImages/
+CrifCom/App_Data/
+CrifCom/obj/
