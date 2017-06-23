@@ -1,0 +1,392 @@
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\ApplicationInsights.config
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\csc.exe
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\Microsoft.CodeAnalysis.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\Microsoft.CSharp.Core.targets
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\Microsoft.VisualBasic.Core.targets
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\System.Collections.Immutable.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\System.Reflection.Metadata.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\vbc.exe
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\VBCSCompiler.exe
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\roslyn\VBCSCompiler.exe.config
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\CRIFItalia.dll.config
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\CRIFItalia.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\CRIFItalia.pdb
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\AutoMapper.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\AutoMapper.Net4.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\businesslogic.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\ClientDependency.Core.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\ClientDependency.Core.Mvc.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\cms.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\controls.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\CookComputing.XmlRpcV2.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Examine.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\HtmlAgilityPack.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\ICSharpCode.SharpZipLib.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\ImageProcessor.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\ImageProcessor.Web.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\interfaces.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\log4net.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Lucene.Net.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\MarkdownSharp.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.Agent.Intercept.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.DependencyCollector.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.PerfCounterCollector.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.ServerTelemetryChannel.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.Web.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.WindowsServer.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.ApplicationBlocks.Data.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.ApplicationInsights.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AspNet.Identity.Core.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AspNet.Identity.Owin.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.CodeAnalysis.CSharp.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.CodeAnalysis.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.Host.SystemWeb.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.Security.Cookies.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.Security.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.Security.OAuth.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Web.Infrastructure.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\MiniProfiler.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\MySql.Data.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Newtonsoft.Json.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Owin.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Semver.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\SQLCE4Umbraco.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Collections.Immutable.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Data.SqlServerCe.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Data.SqlServerCe.Entity.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Net.Http.Formatting.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Reflection.Metadata.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Helpers.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Http.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Http.WebHost.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Mvc.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Razor.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Webpages.Deployment.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Webpages.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Webpages.Razor.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\TidyNet.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Umbraco.Core.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.DataLayer.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.editorControls.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.MacroEngines.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Umbraco.ModelsBuilder.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.providers.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Umbraco.Web.UI.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\UmbracoExamine.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\UrlRewritingNet.UrlRewriter.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\AutoMapper.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\businesslogic.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\ClientDependency.Core.pdb
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\ClientDependency.Core.Mvc.pdb
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\cms.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\controls.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Examine.pdb
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\HtmlAgilityPack.pdb
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\HtmlAgilityPack.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\interfaces.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Lucene.Net.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.DependencyCollector.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.ServerTelemetryChannel.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.Web.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AI.WindowsServer.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.ApplicationInsights.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AspNet.Identity.Core.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.AspNet.Identity.Owin.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.Host.SystemWeb.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.Security.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.Security.Cookies.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Microsoft.Owin.Security.OAuth.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\MiniProfiler.pdb
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\MiniProfiler.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Newtonsoft.Json.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\SQLCE4Umbraco.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Net.Http.Formatting.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Http.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Http.WebHost.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Umbraco.Core.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.DataLayer.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.editorControls.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.MacroEngines.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Umbraco.ModelsBuilder.pdb
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\umbraco.providers.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\Umbraco.Web.UI.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\UmbracoExamine.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Razor.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Webpages.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Webpages.Deployment.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Webpages.Razor.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Helpers.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\bin\System.Web.Mvc.xml
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\obj\Debug\CRIFItalia.dll
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\obj\Debug\CRIFItalia.pdb
+G:\PROJECTs\77 Agency\CRIF Italia\CRIF Italia\CRIFItalia\CRIFItalia\obj\Debug\CRIFItalia.csprojResolveAssemblyReference.cache
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\obj\Debug\CRIFItalia.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\obj\Debug\CRIFItalia.pdb
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\ApplicationInsights.config
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\csc.exe
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\System.Collections.Immutable.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\System.Reflection.Metadata.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\vbc.exe
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\VBCSCompiler.exe
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\roslyn\VBCSCompiler.exe.config
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\CRIFItalia.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\CRIFItalia.pdb
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\AutoMapper.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\AutoMapper.Net4.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\businesslogic.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\ClientDependency.Core.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\ClientDependency.Core.Mvc.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\cms.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\controls.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\CookComputing.XmlRpcV2.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Examine.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\HtmlAgilityPack.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\ICSharpCode.SharpZipLib.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\ImageProcessor.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\ImageProcessor.Web.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\interfaces.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\log4net.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Lucene.Net.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\MarkdownSharp.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.Agent.Intercept.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.DependencyCollector.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.Web.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.WindowsServer.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.ApplicationBlocks.Data.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.ApplicationInsights.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AspNet.Identity.Core.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.CodeAnalysis.CSharp.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.CodeAnalysis.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.Cookies.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.OAuth.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\MiniProfiler.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\MySql.Data.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Newtonsoft.Json.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Owin.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Semver.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\SQLCE4Umbraco.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Collections.Immutable.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Data.SqlServerCe.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Data.SqlServerCe.Entity.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Net.Http.Formatting.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Reflection.Metadata.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Helpers.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Http.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Http.WebHost.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Mvc.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Razor.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.Deployment.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.Razor.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\TidyNet.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Umbraco.Core.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.DataLayer.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.editorControls.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.MacroEngines.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Umbraco.ModelsBuilder.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.providers.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Umbraco.Web.UI.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\UmbracoExamine.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\UrlRewritingNet.UrlRewriter.dll
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\AutoMapper.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\businesslogic.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\ClientDependency.Core.pdb
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\ClientDependency.Core.Mvc.pdb
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\cms.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\controls.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Examine.pdb
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\HtmlAgilityPack.pdb
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\HtmlAgilityPack.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\interfaces.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Lucene.Net.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.DependencyCollector.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.Web.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.WindowsServer.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.ApplicationInsights.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AspNet.Identity.Core.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.Cookies.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.OAuth.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\MiniProfiler.pdb
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\MiniProfiler.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Newtonsoft.Json.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\SQLCE4Umbraco.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Net.Http.Formatting.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Http.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Http.WebHost.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Umbraco.Core.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.DataLayer.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.editorControls.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.MacroEngines.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Umbraco.ModelsBuilder.pdb
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\umbraco.providers.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\Umbraco.Web.UI.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\UmbracoExamine.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Razor.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.Deployment.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.Razor.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Helpers.xml
+C:\77Projects\Crif Italia Project\trunk\CrifItalia\CrifItalia\bin\System.Web.Mvc.xml
+C:\77Projects\crif italia PROJECT\trunk\CrifItalia\CrifItalia\obj\Debug\CrifItalia.csprojResolveAssemblyReference.cache
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\AutoMapper.Net4.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\ApplicationInsights.config
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\csc.exe
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\System.Collections.Immutable.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\System.Reflection.Metadata.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\vbc.exe
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\VBCSCompiler.exe
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\roslyn\VBCSCompiler.exe.config
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\CrifItalia.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\CrifItalia.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\AutoMapper.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\businesslogic.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\ClientDependency.Core.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\ClientDependency.Core.Mvc.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\cms.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\controls.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\CookComputing.XmlRpcV2.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Examine.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\HtmlAgilityPack.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\ICSharpCode.SharpZipLib.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\ImageProcessor.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\ImageProcessor.Web.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\interfaces.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\log4net.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Lucene.Net.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\MarkdownSharp.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.DependencyCollector.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.Web.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.WindowsServer.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.ApplicationBlocks.Data.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.ApplicationInsights.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AspNet.Identity.Core.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AspNet.Identity.Owin.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.CodeAnalysis.CSharp.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.CodeAnalysis.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.IO.RecyclableMemoryStream.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Host.SystemWeb.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.Cookies.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.OAuth.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\MiniProfiler.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\MySql.Data.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Newtonsoft.Json.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Owin.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Semver.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\SQLCE4Umbraco.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Collections.Immutable.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Data.SqlServerCe.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Data.SqlServerCe.Entity.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Net.Http.Formatting.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Reflection.Metadata.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Helpers.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Http.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Http.WebHost.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Mvc.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Razor.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.Deployment.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.Razor.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\TidyNet.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Umbraco.Core.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.DataLayer.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.editorControls.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.MacroEngines.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Umbraco.ModelsBuilder.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.providers.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Umbraco.Web.UI.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\UmbracoExamine.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\UrlRewritingNet.UrlRewriter.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\AutoMapper.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\AutoMapper.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\AutoMapper.Net4.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\businesslogic.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\ClientDependency.Core.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\ClientDependency.Core.Mvc.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\cms.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\controls.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Examine.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\HtmlAgilityPack.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\HtmlAgilityPack.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\interfaces.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Lucene.Net.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.DependencyCollector.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.Web.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AI.WindowsServer.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.ApplicationInsights.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AspNet.Identity.Core.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.AspNet.Identity.Owin.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.IO.RecyclableMemoryStream.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Host.SystemWeb.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.Cookies.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Microsoft.Owin.Security.OAuth.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\MiniProfiler.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\MiniProfiler.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Newtonsoft.Json.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\SQLCE4Umbraco.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Net.Http.Formatting.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Http.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Http.WebHost.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Umbraco.Core.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.DataLayer.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.editorControls.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.MacroEngines.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Umbraco.ModelsBuilder.pdb
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\umbraco.providers.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\Umbraco.Web.UI.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\UmbracoExamine.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Razor.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.Deployment.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Webpages.Razor.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Helpers.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\bin\System.Web.Mvc.xml
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\obj\Debug\CrifItalia.dll
+C:\Muneer\CrifITA\trunk\CrifItalia\CrifItalia\obj\Debug\CrifItalia.pdb

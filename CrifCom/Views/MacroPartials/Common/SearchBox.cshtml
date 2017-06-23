@@ -1,0 +1,26 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@using System.Globalization;
+@using System.Threading;
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    var searchNode = home.DescendantsOrSelf("ezSearch").FirstOrDefault();
+    string searchUrl = string.Empty;
+    if (searchNode != null)
+    {
+        searchUrl = searchNode.Url;
+    }
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+    <li class="hidden-xs hidden-sm">
+        <div class="search-form">
+            <form action="@searchUrl">
+                <input type="search" name="q"  value="@Request["q"]" class="form-control" placeholder="Cerca...">
+                <input type="search" name="c" value="@culture" class="form-control hidden">
+                <button class="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+            </form>
+        </div>
+    </li>
+
+}
+
+

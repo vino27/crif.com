@@ -1,0 +1,108 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models;
+@using Phases.UmbracoUtils
+@{
+    var currentPage = Model.Content;
+    int count = 4;
+    if (currentPage.HasValue("numberOfSuccessItems"))
+    {
+        count = currentPage.GetPropertyValue<int>("numberOfSuccessItems");
+    }
+    var home = Model.Content.AncestorOrSelf(1);
+    var successStoryHome = home.Descendants("productAndServices").FirstOrDefault();
+    var childPages = home.Descendants("successStorySinglePage").Where(x => x.IsVisible() && x.TemplateId > 0 && x.HasValue("productTags") && x.GetPropertyValue<string>("productTags").Split(new string[] { "," },
+                                 StringSplitOptions.RemoveEmptyEntries).ToList().Contains(currentPage.Id.ToString())
+                                  && x.Id != Model.Content.Id).OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(count);
+
+    if (childPages != null && childPages.Any())
+    { 
+        
+        <div class="col-sm-12 single-listing border-top-gray">
+            <div class="row">
+                <div class="header">
+                    @if (currentPage.HasValue("successStoryTitle"))
+                    {
+                        <h3>@currentPage.GetPropertyValue("successStoryTitle")</h3>
+                    }
+                    else
+                    {
+						@*<h3>@successStoryHome.Name</h3>*@
+                       <h3>Success stories</h3>
+                    }
+
+                   @* @if (successStoryHome.HasValue("internalLinks"))
+                    {
+                        var link = successStoryHome.GetPropertyValue<MultiUrls>("internalLinks");
+                        if (link != null && link.Any())
+                        {
+                            foreach (var linkUrl in link)
+                            {
+                                <a href="@linkUrl.Url" target="@linkUrl.Target" class="standard-link">@linkUrl.Name</a>
+                            }
+                        } 
+                    }
+                     @if (successStoryHome.HasValue("externalLinks"))
+                     {
+                         var links = successStoryHome.GetPropertyValue<MultiUrls>("externalLinks");
+                         if (links != null && links.Any())
+                         {
+                         
+                             foreach (var urlLinks in links)
+                             {
+                                <a href="@urlLinks.Url" target="@urlLinks.Target" class="standard-link">@urlLinks.Name</a><br />
+                             }
+                         }
+                     }*@
+                </div>
+                <ul class="list-unstyled listing-type-one">
+                    @foreach (var children in childPages)
+                    {
+                        var childrenUrl = children.GetUrl();
+                        <li>
+                            @if (children.HasValue("thumbnailImage"))
+                            {
+                                var image = Umbraco.TypedMedia(children.GetPropertyValue<string>("thumbnailImage"));
+                                if (image != null)
+                                {
+                                    <div class="image-holder">
+                                      <a href="@childrenUrl.Url" target="@childrenUrl.Target"><img src="@image.Url" alt="@image.Name"></a> 
+                                    </div>
+                                } 
+                            } 
+                            <div class="article-type-one">
+                                @if (children.HasValue("actualDate"))
+                                {
+                                    <span class="date">@children.GetPropertyValue("actualDate")</span>
+                                } 
+                                <a href="@children.Url">
+                                    @if (children.HasValue("title"))
+                                    {
+                                        <p class="highlight-text">@children.GetPropertyValue("title")</p>
+                                    }
+                                    else
+                                    {
+                                        <p class="highlight-text">@children.Name</p>
+                                    } 
+                                </a>
+                                @if (children.HasValue("shortDescripion"))
+                                {
+                                    <p>@Html.Raw(children.GetPropertyValue("shortDescripion"))</p>
+                                }
+                            </div>
+                        </li>
+                    }
+
+
+                </ul>
+            </div>
+
+        </div>
+
+
+    }
+
+
+
+
+
+}

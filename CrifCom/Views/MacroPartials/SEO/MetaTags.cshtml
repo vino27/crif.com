@@ -1,0 +1,54 @@
+﻿@using Phases.UmbracoUtils;
+@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    if (Model != null) 
+	{
+		string browserTitle, metaDescription, socialMediaTitle, socialMediaDescription;
+		
+		if (Model.Content.HasValue("browserTitle")) {
+			browserTitle = Model.Content.GetPropertyValue<string>("browserTitle");
+		}
+		else {
+			browserTitle = (Model.Content.HasValue("websiteName", true) ? Model.Content.Name + Html.Raw(" - ") + Model.Content.GetPropertyValue<string>("websiteName",true) : Model.Content.Name);
+		}
+		if (Model.Content.HasValue("metaDescription")) {
+			metaDescription = Model.Content.GetPropertyValue<string>("metaDescription");
+		}
+		else if (Model.Content.HasValue("socialMediaDescription")) {
+			metaDescription = Model.Content.GetPropertyValue<string>("socialMediaDescription");
+		}
+		else {
+			metaDescription = Model.Content.GetPropertyValue<string>("metaDescription", true);
+		}
+<title>@browserTitle</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		if(!string.IsNullOrEmpty(metaDescription)) { 
+<meta name="description" content="@metaDescription" />
+		}
+		if (Model.Content.HasValue("metaKeywords", true)) {
+<meta name="keywords" content="@Model.Content.GetPropertyValue("metaKeywords", true)" />
+		}
+        if (Model.Content.HasValue("socialMediaTitle")) {
+            socialMediaTitle = Model.Content.GetPropertyValue<string>("socialMediaTitle");
+		} else {
+			socialMediaTitle = browserTitle;
+		}
+<meta property="og:title" content="@socialMediaTitle" />
+		
+        if (Model.Content.HasValue("socialMediaDescription")) {
+			socialMediaDescription = Model.Content.GetPropertyValue<string>("socialMediaDescription");
+		} else {
+			socialMediaDescription = Model.Content.GetPropertyValue<string>("metaDescription");
+		}
+		if(!string.IsNullOrEmpty(socialMediaDescription)) { 
+<meta property="og:description" content="@socialMediaDescription" />
+		}
+        if (Model.Content.HasValue("socialMediaImage")) {
+            var image = Umbraco.TypedMedia(Model.Content.GetPropertyValue<int>("socialMediaImage"));
+            if (image != null && !string.IsNullOrEmpty(image.Url)) { 
+<meta property="og:image" content="@Common.GetSiteDomainName()@(image.Url)" />
+            }
+        }
+<meta property="og:url" content="@(Common.GetSiteDomainName() + Model.Content.Url)" />
+    }
+}

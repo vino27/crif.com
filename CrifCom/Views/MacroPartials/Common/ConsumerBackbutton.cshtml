@@ -1,0 +1,16 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    if (!string.IsNullOrEmpty(Umbraco.Field("#ConsumerItaly").ToString()))
+    {
+        var consumerNode = Umbraco.TypedContent(Umbraco.Field("#ConsumerItaly").ToString());
+        if (consumerNode != null)
+        {
+            <li>
+                <div class="align-right btn-holder">
+                    <a href="@consumerNode.Url" class="btn-secondary">@Umbraco.Field("#Back To Consumatori")</a>
+                </div>
+            </li>
+        }
+    }
+
+}

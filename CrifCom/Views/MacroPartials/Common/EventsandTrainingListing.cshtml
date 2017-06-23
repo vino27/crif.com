@@ -1,0 +1,84 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models;
+@using Phases.UmbracoUtils
+@{
+   
+    var currentPage = Model.Content;
+	var home = currentPage.AncestorOrSelf(1);
+    var selectedNode = Model.MacroParameters["selectEventsandTrainingNode"];
+    var noOfItemTobeDisplayed = Model.MacroParameters["selectNoOfItems"];
+    var eventsTitle = Model.MacroParameters["eventsListTitle"];
+    var trainingTitle = Model.MacroParameters["trainingListTitle"];
+    int count = 6;
+    if (!string.IsNullOrEmpty(noOfItemTobeDisplayed.ToString()))
+    {
+        count = int.Parse(noOfItemTobeDisplayed.ToString());
+    }
+    if (!string.IsNullOrEmpty(selectedNode.ToString()))
+    {
+        currentPage = Umbraco.TypedContent(selectedNode);
+    }
+
+    var childPages = currentPage.Descendants("singleEventPage");
+    if (childPages != null && childPages.Any())
+    {
+        <section class="padding-30 two-col-listing">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>@Html.Raw(eventsTitle)</h3>
+                        <ul class="list-unstyled">
+                            @foreach (var items in childPages.Where(x => x.GetPropertyValue<string>("eventOrTraining") == "Events").OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(count))
+                            {
+                                @PrintData(items)
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>@Html.Raw(trainingTitle)</h3>
+                        <ul class="list-unstyled">
+                            @foreach (var items in childPages.Where(x => x.GetPropertyValue<string>("eventOrTraining") == "Training").OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(count))
+                            {
+                                @PrintData(items)
+                            }
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    }
+}
+@helper PrintData(IPublishedContent items)
+{
+
+var itemUrl = items.GetUrl();
+    <li class="article-type-one">
+        @if (items.HasValue("actualDate"))
+        {
+            <span class="date">@items.GetPropertyValue("actualDate")</span>
+        }
+
+        @if (items.HasValue("title"))
+        {
+            <a href="@itemUrl.Url" target="@itemUrl.Target"><h4 class="highlight-text">@items.GetPropertyValue("title")</h4> </a>
+        }
+        else
+        {
+            <a href="@itemUrl.Url" target="@itemUrl.Target"><h4 class="highlight-text">@items.Name</h4></a>
+        }
+        @if (items.HasValue("shortDescripion"))
+        {
+
+            <p>@Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)items.GetPropertyValue("shortDescripion")))</p>
+        }
+        @*else if (items.HasValue("bodyText"))
+            {
+            <p>@Html.Raw(Phases.UmbracoUtils.Strings.TruncateAtWord(items.GetPropertyValue<string>("bodyText"), 130, "..."))</p>
+            }*@
+    </li>
+
+}
+
+

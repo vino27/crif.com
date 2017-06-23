@@ -1,0 +1,84 @@
+﻿
+@using System.Net;
+@using System.Configuration;
+@using Umbraco.Core.Logging;
+
+@using TweetSharp;
+
+@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    try
+    {
+        string consumerKey = ConfigurationManager.AppSettings["twitterConsumerKey"];
+        string consumerSecret = ConfigurationManager.AppSettings["twitterConsumerSecret"];
+        string accessToken = ConfigurationManager.AppSettings["twitterAccessToken"];
+        string accessTokenSecret = ConfigurationManager.AppSettings["twitterAccessTokenSecret"];
+        string screenName = ConfigurationManager.AppSettings["twitterUserScreenName"];
+        
+		string twitterUrl = Model.Content.GetPropertyValue<string>("twitterLink", true);
+        
+        int numberOfTweets = 3;
+        if(!int.TryParse(Model.MacroParameters["LimitsOfFeeds"].ToString(), out numberOfTweets))
+        {
+            numberOfTweets = 3;
+        }
+
+        var service = new TwitterService(consumerKey, consumerSecret);
+        service.AuthenticateWith(accessToken, accessTokenSecret);
+
+        var tweets = service.ListTweetsOnUserTimeline(new ListTweetsOnUserTimelineOptions { ScreenName = screenName, Count = numberOfTweets, ExcludeReplies = true });
+        if (tweets.Any())
+        {
+
+            <div class="social_feed_block twitter-feed">
+                <div class="social_media_type">
+                    <h4>
+                        <span>
+                            <a href="@twitterUrl" target="_blank"><img src="/img/social_twiiter_icon.png" alt="Twitter icon"></a>
+                        </span><a href="@twitterUrl" target="_blank">Twitter</a>
+                    </h4>
+                </div>
+                <!--Activity blocks -->
+                <ul class="social_activity">
+                    @foreach (var tweet in tweets)
+                    {
+						
+						var permaLink = string.Format("{0}/status/{1}",twitterUrl,  tweet.Id );		
+						var trailingString = string.Format("<a class=\"dots\" href=\"{0}\" target=\"_blank\">...</a>", permaLink);
+						
+                    
+                        <li>
+                            <h5>
+                                Dean Smith
+								<a href="@permaLink" target="_blank">
+                                	<span class="date-span" data-date="@tweet.CreatedDate.ToString("MM/dd/yyyy hh:mm:ss tt")"><span class="duration-text"></span>ago</span>
+								</a>
+                            </h5>
+                            <p>@tweet.TextDecoded</p>
+							@* <b>@tweet.User.ScreenName</b> *@
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        }
+    }
+    catch (Exception ex)
+    {
+        LogHelper.Error(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType, "[GetTwitterFeeds]" + ex.Message,  ex);
+    }
+
+
+
+}
+@functions {
+
+    public static string TruncateAtWord(string value, int length, string trailingString = "...")
+    {
+        if (value == null || value.Length < length)
+            return value;
+        int iNextSpace = value.LastIndexOf(" ", length);
+        return string.Format("{0}" + trailingString, value.Substring(0, (iNextSpace > 0) ? iNextSpace : length).Trim());
+    }
+
+}

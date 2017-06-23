@@ -1,0 +1,132 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("tabContents"))
+    {
+        var tabsContents = currentPage.GetPropertyValue<ArchetypeModel>("tabContents");
+        if (tabsContents != null && tabsContents.Any())
+        { 
+            var contentCount = 0;
+            var activeContentClass = "";
+            var contentid = "";
+            <div class="tabs-cont-wrap">
+                <!-- Nav tabs -->
+
+                <ul class="nav nav-tabs" role="tablist">
+                   @PrintTabs(tabsContents)
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+
+                    @foreach (var items in tabsContents)
+                   {
+                       if (items.HasValue("tabContents"))
+                       {
+                           var contents = items.GetValue<ArchetypeModel>("tabContents");
+                           if (contents != null && contents.Any())
+                           {
+                                 contentid = "id" + contentCount;
+
+                               if (contentCount == 0)
+                               {
+                                   activeContentClass = "active";
+                               }
+
+                    <div role="tabpanel" class="tab-pane @activeContentClass" id="@contentid">
+
+                       @PrintTabContents(contents)
+
+                    </div> 
+
+                           }
+                       }
+                        contentCount=contentCount+1;
+                   }
+
+
+
+                </div>
+
+            </div>
+
+        }
+
+    }
+}
+@helper PrintTabs(ArchetypeModel tabsContents) {
+    var tabCount = 0;
+    foreach (var tab in tabsContents)
+    {
+        if (tab.HasValue("title"))
+        {
+            string activeClass = "";
+            if (tabCount == 0)
+            {
+                activeClass = "active";
+            }
+            var id = "id" + tabCount;
+            <li role="presentation"><h2>@tab.GetValue("title")</h2></li>
+            tabCount = tabCount + 1;
+        }
+    }
+}
+@helper PrintTabContents(ArchetypeModel contents) {
+    foreach (var data in contents)
+    {
+
+        if (data.HasValue("title") || data.HasValue("shortDescription") || data.HasValue("thumbnailIamge") || data.HasValue("linkTo"))
+        {
+            <div class="row padding-15 tab-two-col-listing">
+
+                @if (data.HasValue("thumbnailIamge"))
+                {
+                    var thumbnailImage = Umbraco.TypedMedia(data.GetValue("thumbnailIamge"));
+                    <div class="col-sm-3 image-holder">
+                        <div class="image-with-border">
+                            <img src="@thumbnailImage.Url" alt="@thumbnailImage.Name">
+                        </div>
+                    </div>
+                }
+                <div class="col-sm-9 content-holder">
+
+                    @if (data.HasValue("title"))
+                    {
+                        <h5>@data.GetValue("title")</h5>
+                    }
+                    @if (data.HasValue("shortDescription"))
+                    { 
+                        @Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)data.GetValue("shortDescription")))
+                    }
+                    @if (data.HasValue("linkTo"))
+                    {
+                        var quickLinks = data.GetValue<MultiUrls>("linkTo");
+                        <p>
+                            @if (data.HasValue("linkToTitle"))
+                            {
+                                @data.GetValue("linkToTitle")<br />
+                            }
+                            @if (quickLinks != null && quickLinks.Any())
+                            {
+                                foreach (var links in quickLinks)
+                                {
+                                    <a href="@links.Url" target="@links.Target" class="link-blue">@links.Name</a>
+                                }
+                            }
+
+
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+        }
+
+    }
+}
+
+	 

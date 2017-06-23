@@ -1,0 +1,41 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+    @{
+        var currentPage = Model.Content;
+        if (currentPage.HasValue("bannerTitle") || currentPage.HasValue("bannerDescription"))
+        {
+            <div class="col-sm-12 two-col-link-boxes border-top-gray">
+                <div class="row">
+                    @if (currentPage.HasValue("bannerTitle"))
+                    {
+                        <h3 class="clr-orange">@currentPage.GetPropertyValue("bannerTitle")</h3>
+                    } 
+                    <div class="row">
+                        @if (currentPage.HasValue("bannerDescription"))
+                        {
+                            <div class="col-sm-9">
+                                <p>@currentPage.GetPropertyValue("bannerDescription")</p>
+                            </div>
+                        }
+                        @if (currentPage.HasValue("contactExternalLink"))
+                        {
+                            var externalLink = currentPage.GetPropertyValue<MultiUrls>("contactExternalLink");
+                            if (externalLink != null)
+                            {
+                                <div class="col-sm-3 text-right">
+                                    <a href="@externalLink.FirstOrDefault().Url" target="@externalLink.FirstOrDefault().Target" class="btn-secondary">@externalLink.FirstOrDefault().Name</a>
+                                </div>
+                            }
+                        }
+                        else if (currentPage.HasValue("linkTo"))
+                        {
+                            <div class="col-sm-3 text-right">
+                                <a href="#" class="btn-secondary">@currentPage.GetPropertyValue("linkTo")</a>
+                            </div>
+                        } 
+                    </div>
+                </div>
+            </div>
+        }
+
+    }

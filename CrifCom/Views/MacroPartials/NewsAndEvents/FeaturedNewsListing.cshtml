@@ -1,0 +1,66 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@using Phases.UmbracoUtils
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("highlightedNews"))
+    {
+        var highlightedNewsList = currentPage.GetPropertyValue<string>("highlightedNews");
+        var highlightedNews = highlightedNewsList.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+        if (!string.IsNullOrEmpty(highlightedNews.ToString()) && highlightedNews.Any())
+        {           
+            <div class="col-sm-12 listing-type-two">				 
+                @foreach (var news in highlightedNews)
+                {
+                    var singleNews = Umbraco.TypedContent(news);
+                    if (singleNews != null)
+                    {
+                            @PrintData(singleNews)
+                    } 
+                }
+            </div> 
+        }
+    } 
+}
+
+@helper PrintData(IPublishedContent singleNews)
+{
+var newsUrl = singleNews.GetUrl();
+var highlightedText = "";
+    <div class="row">
+		 <hr>
+        @if (singleNews.HasValue("thumbnailImage"))
+        {
+            var thumbnailImage = Umbraco.TypedMedia(singleNews.GetPropertyValue("thumbnailImage"));
+            if(thumbnailImage != null)
+            {
+                <div class="image-holder">
+                    <a href="@newsUrl.Url"><img src="@thumbnailImage.Url" alt="@thumbnailImage.Name" class="image-left"></a>
+                </div>
+            }           
+        }
+        <div class="article-type-one">
+            @if (singleNews.HasValue("actualDate"))
+            { 
+                <span class="date">@singleNews.GetPropertyValue("actualDate")</span>
+            }
+            @if (singleNews.HasValue("title"))
+            {
+                highlightedText = singleNews.GetPropertyValue<string>("title");
+            }
+            else
+            {
+                highlightedText = singleNews.Name;
+            }
+            <a href="@newsUrl.Url" target="@newsUrl.Target">
+                <h2 class="highlight-text">@highlightedText</h2>
+            </a>
+            @if (singleNews.HasValue("shortDescripion"))
+            {
+                <p>@Html.Raw(singleNews.GetPropertyValue("shortDescripion"))</p>
+            }
+        </div>
+			
+    </div>
+}

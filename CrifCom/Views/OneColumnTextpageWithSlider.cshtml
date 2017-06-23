@@ -1,0 +1,7 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+    Layout = "Pages.cshtml";
+}
+@Umbraco.RenderMacro("SliderwithImageorVideo")
+@(Model.Content.GetGridHtml(Html, "mainContent"))

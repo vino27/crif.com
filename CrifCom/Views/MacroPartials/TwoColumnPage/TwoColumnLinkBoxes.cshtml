@@ -1,0 +1,99 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models;
+@using RJP.MultiUrlPicker.Models
+@{
+    string sectionClass = "";
+    if (Model.Content.HasValue("linkBoxes"))
+    {
+        var linkBoxes = Model.Content.GetPropertyValue<ArchetypeModel>("linkBoxes");
+        if (linkBoxes != null && linkBoxes.Any())
+        {
+            foreach (var linkBox in linkBoxes)
+            {
+                string imageUrl = "";
+                if (linkBox.HasValue("backgroundImage"))
+                {
+                    sectionClass = "with-background";
+                    var backgroundImagesList = linkBox.GetValue<string>("backgroundImage").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+                    var backgroundImagesCollection = Umbraco.TypedMedia(backgroundImagesList).Where(x => x != null);
+
+                    foreach (var backgroundImage in backgroundImagesCollection)
+                    {
+                        imageUrl = backgroundImage.Url;
+                    }
+                }
+                if (!linkBox.HasValue("backgroundImage"))
+                {
+                    <hr>
+                }
+                <div class="col-sm-12 two-col-link-boxes with-background">
+                    @if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        <div class="content-bg" style="background:url(@imageUrl);"></div>
+                    }                    
+                    <div class="row">
+                        @if (linkBox.HasValue("title"))
+                        {
+                            <h3 class="clr-orange">@linkBox.GetValue("title")</h3>
+                        }
+                        
+                        <div class="row">
+                            @if (linkBox.HasValue("description"))
+                            {
+                                <div class="col-sm-9">
+                                    @Html.Raw(linkBox.GetValue("description"))
+                                </div>
+                            }
+                            @if (linkBox.HasValue("linkTo"))
+                            {
+                                var multiUrlPicker = linkBox.GetValue<MultiUrls>("linkTo");
+                                if (multiUrlPicker != null && multiUrlPicker.Any())
+                                {
+
+                                    foreach (var item in multiUrlPicker)
+                                    {
+                                        <div class="col-sm-3 text-right">
+                                            <a href="@item.Url" class="btn-secondary" target="@item.Target">@item.Name</a>
+                                        </div>                                       
+                                    }                                   
+                                }
+                            }
+                            
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }    
+}
+
+@*
+    <hr>
+        <div class="col-sm-12 two-col-link-boxes">
+            <div class="row">
+                <h3 class="clr-orange">Richiedi il documento</h3>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non</p>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <a href="#" class="btn-secondary">compila il form</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 two-col-link-boxes with-background">
+            <div class="content-bg" style="background:url(../assets/images/banner-img-03.jpg);"></div>
+            <div class="row">
+                <h3 class="clr-orange">Richiedi il documento</h3>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non</p>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <a href="#" class="btn-secondary">compila il form</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+*@

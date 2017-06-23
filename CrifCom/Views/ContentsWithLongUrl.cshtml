@@ -1,0 +1,12 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = null;
+   var homePage = Model.Content.AncestorOrSelf(1);
+    var contents = homePage.Descendants().Where(x => (x.DocumentTypeAlias == "newsSinglePage" || x.DocumentTypeAlias == "singleEventPage" || x.DocumentTypeAlias == "singlePressRelease") && x.NiceUrl().Length>250 );
+    int no = contents.Count();
+    foreach(var node in  contents)
+    {
+        int count=contents.IndexOf(node)+1;
+       <span>(@count.ToString()) @node.NiceUrl()</span><br/>
+    }
+}

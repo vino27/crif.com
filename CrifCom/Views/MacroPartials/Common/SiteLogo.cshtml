@@ -1,0 +1,30 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@{
+            var home = Model.Content.AncestorOrSelf(1);
+            if (home.HasValue("logo"))
+            {
+                var siteLogo = Umbraco.TypedMedia(home.GetPropertyValue("logo"));
+                if (siteLogo != null)
+                {
+                    var homeUrl = home.GetUrl();
+					if(home.Id == Model.Content.Id)
+					{
+						
+            <h1 class="logo-holder pull-left">
+                <a href="@homeUrl.Url" target="@homeUrl.Target"><img src="@siteLogo.Url" alt="@siteLogo.Name"></a>
+            </h1>
+				}
+					else
+					{
+						<div class="logo-holder pull-left">
+                <a href="@homeUrl.Url" target="@homeUrl.Target"><img src="@siteLogo.Url" alt="@siteLogo.Name"></a>
+            </div>
+					}
+        }
+
+    }
+
+}
+ 
+   

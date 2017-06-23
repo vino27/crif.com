@@ -1,0 +1,10 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "PageWithSideMenu.cshtml";
+}
+@Umbraco.RenderMacro("UserProfile")
+<hr>
+@Umbraco.RenderMacro("ResetPassword")
+@section InnerBottomScript{
+    <script src="/scripts/ajaxhandler/form-submission-ajaxhandler.js"></script>
+}

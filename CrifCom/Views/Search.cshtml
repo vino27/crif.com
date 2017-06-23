@@ -1,0 +1,65 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Globalization;
+@using System.Threading;
+@using System.Threading.Tasks;
+@{
+	Layout = "PageWithSideMenu.cshtml";
+}
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    var searchNode = home.DescendantsOrSelf("ezSearch").FirstOrDefault();
+    string searchUrl = string.Empty;
+    if (searchNode != null)
+    {
+        searchUrl = searchNode.Url;
+    }
+    int count = 10;
+    count = searchNode.HasValue("noOfSearchResults") ? searchNode.GetPropertyValue<int>("noOfSearchResults") : 10;
+    int previewLength = 250;
+    previewLength = searchNode.HasValue("previewLength") ? searchNode.GetPropertyValue<int>("previewLength") : 250;
+    var culture = Thread.CurrentThread.CurrentCulture.Name;
+  <!-- search form -->
+    <form action="@searchUrl" class="search-form-inner">
+        <div class="form-group">
+            <input type="text" name="q"  value="@Request["q"]" class="form-control" id="inputLastName" placeholder="">
+            <input type="search" name="c" value="@culture" class="form-control hidden">
+            <button class="button"><i class="fa fa-search" aria-hidden="true"></i></button>
+        </div>
+    </form>
+       <div class="search-results">
+           <div class="header">
+			   @if(searchNode.HasValue("resultsFoundText"))
+			   {				   
+               	<h3>@searchNode.GetPropertyValue("resultsFoundText")</h3>
+			   }
+           </div>
+               <div class="search-listing border-top-gray">
+                   @{ 
+                       string cultureName = "";
+                       if (!string.IsNullOrEmpty(Request["c"]))
+                       {
+                           cultureName = Request["c"].ToString();
+                       }					   
+                       var rootNodeId = ""; 
+                       if (cultureName == "it-IT")
+                       {
+                           rootNodeId = Umbraco.GetDictionaryValue("HomePageNodeId");
+                       }else if(cultureName == "en-GB")
+                       {
+                           rootNodeId = Umbraco.GetDictionaryValue("Consumer_en_node");
+                       }
+                       else if(cultureName == "fr-FR")
+                       {
+                           rootNodeId = Umbraco.GetDictionaryValue("Consumer_fr_node");
+                       }
+					   else
+					   {
+						   rootNodeId = Umbraco.GetDictionaryValue("HomePageNodeId");
+					   }
+                   }
+                   @Umbraco.RenderMacro("ezSearch", new { rootContentNodeId = rootNodeId, rootMediaNodeId = "", indexType = "CONTENT", searchFields = "title,shortDescripion,bodyText,nodeName,metaTitle,metaDescription,metaKeywords,actualDate,pageName", previewFields = "shortDescripion,bodyText,pageName", previewLength = previewLength, pageSize = count, hideFromSearchField = "hideFromSearch", searchFormLocation = "" })
+ 
+               </div>
+       </div>
+                 
+}

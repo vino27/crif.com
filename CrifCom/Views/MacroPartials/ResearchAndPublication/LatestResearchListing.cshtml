@@ -1,0 +1,20 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    <section class="four-col-list filter-wrap">
+        <div class="container">
+            <div class="row">
+                @Umbraco.RenderMacro("ResearchAndpublicationFiltering")
+                <div class="no-items col-md-12">
+                    <p>@Umbraco.Field("noItemsFoundMessage", altText: "No items to be displayed.")</p>
+                </div>
+                <div class="research-ajax-section">
+                    @Umbraco.RenderMacro("ResearchAjaxListing")
+                </div>
+            </div>
+        </div>
+    </section>
+}
+<input type="text" id="txtNodId" value="@Model.Content.AncestorOrSelf(1).Descendant("researchAndPublicationHome").Id" style="display:none;" />
+@section InnerBottomScript{
+    <script src="/scripts/ajaxhandler/ajaxhandler.js"></script>
+}

@@ -1,0 +1,120 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@{
+    var home = Model.Content;
+    if (home.HasValue("imageSlider"))
+    {
+        var sliderTimeOut = 3000;
+		var autoPlaySpeed = 3000;
+        if (home.HasValue("sliderTimeOut"))
+        {
+            sliderTimeOut = home.GetPropertyValue<int>("sliderTimeOut");
+        }
+		if (home.HasValue("selectSliderAutoPlaySpeed"))
+        {
+            autoPlaySpeed = home.GetPropertyValue<int>("selectSliderAutoPlaySpeed");
+        }
+        int imageCount = 0;
+        var imageSlider = Umbraco.TypedMedia(Model.Content.GetPropertyValue<int>("imageSlider"));
+        <section class="main-slider-wrap bg-grey-light">
+            <div class="main-slider slider-major" data-speed="@sliderTimeOut" data-autospeed="@autoPlaySpeed">
+                @if (imageSlider.ContentType.Alias == "Folder")
+                {
+                    foreach (var slider in imageSlider.Children.Where(x => x.IsVisible()))
+                    {
+                        if (slider.HasValue("image"))
+                        {
+
+                            @displaySlider(slider)
+                        }
+
+                        imageCount = imageCount + 1;
+                    }
+                }
+                else
+                {
+                    @displaySlider(imageSlider)
+                }
+            </div>
+            <!-- Slider controls  -->
+            @if (imageCount > 1)
+                {
+                <div class="slider-controls container">
+                    <!-- Pagination -->
+                    <div id="pagination-wrap"></div>
+                    <!-- nav controls -->
+                    <span class="arrow-left"><i class="slider-prev-icon"></i></span>
+                    <span class="arrow-right"><i class="slider-next-icon"></i></span>
+                </div>
+            }
+        </section>
+    }
+
+}
+
+@helper displaySlider(IPublishedContent slider)
+{
+if (slider.HasValue("image"))
+{
+    var sliderTitle = slider.GetPropertyValue<string>("sliderTitle");
+    string sliderDescription = Phases.UmbracoUtils.Strings.TruncateAtWord(slider.GetPropertyValue<string>("shortDescription"), 284, "...");
+    var sliderSubTitle = slider.GetPropertyValue<string>("subTitle");
+    var sliderLinkTo = slider.GetPropertyValue<MultiUrls>("link");   
+    
+    <div class="slider-item eq-ht">
+        <div class="container-fluid">
+            @if (slider.HasValue("image"))
+            {               
+                var sliderImage= Umbraco.TypedMedia(slider.GetPropertyValue<string>("image"));
+                <div class="slider-image" style="background:url('@sliderImage.Url')"> </div>
+            } 
+        </div>
+        <div class="container">
+            <div class="slider-text">
+               @if (sliderLinkTo != null && sliderLinkTo.Any() && sliderLinkTo.Count() ==1)
+               {
+                   var sliderItem = sliderLinkTo.FirstOrDefault();
+                <a href="@sliderItem.Url" target="@sliderItem.Target"><h2 class="section-title">@sliderTitle</h2></a>
+               }
+               else
+               {
+                   if (!string.IsNullOrEmpty(sliderTitle))
+                   {
+                        <h2 class="section-title">@sliderTitle</h2>
+                   }
+
+               }
+                @if (!string.IsNullOrEmpty("sliderSubTitle"))
+                {
+                    @*<h3 class="section-sub-title">@slider.GetPropertyValue("subTitle")</h3>*@
+					@*slider.GetPropertyValue("subTitle")*@
+					<div class="section-sub-title">
+						@Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)sliderSubTitle))
+					</div>
+                }
+                @if (!string.IsNullOrEmpty("sliderDescription"))
+                {
+                    <div class="section-main-text">
+                        @Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)sliderDescription))
+                    </div>
+                }
+                @if (sliderLinkTo != null && sliderLinkTo.Any())
+                {
+                    if (sliderLinkTo != null && sliderLinkTo.Any())
+                    {
+                        foreach (var sliderLink in sliderLinkTo)
+                        {
+                            string linkTo = sliderLink.Url;
+                            string target = sliderLink.Target;
+                            string Name = sliderLink.Name;
+                            <a href="@linkTo" target="@target" class="btn btn-primary">@Name</a>
+                        }
+                    }
+               }
+
+            </div>
+        </div>
+    </div>
+}
+}
+

@@ -1,0 +1,149 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("worldWideContacts"))
+    {
+        var countryList = currentPage.GetPropertyValue<ArchetypeModel>("worldWideContacts");
+        if (countryList != null && countryList.Any())
+        {
+            var contentCount = 0;
+            var activeContentClass = "";
+            var contentid = "";
+            <div class="tabs-cont-wrap">
+                @if (currentPage.HasValue("worldWideContactTitle"))
+                {
+                    <div class="row">
+                        <div class="header col-sm-12">
+                            <h3>@currentPage.GetPropertyValue("worldWideContactTitle")</h3>
+                        </div>
+                    </div>
+                }
+                
+                <ul class="nav nav-tabs" role="tablist">
+                    @PrintTabs(countryList)
+                </ul>
+                   <div class="tab-content">
+                       @foreach (var items in countryList)
+                       {
+                           if (items.HasValue("worldWideDetails"))
+                           {
+                               var details = items.GetValue<ArchetypeModel>("worldWideDetails");
+                               if (details != null && details.Any())
+                               {
+                                   contentid = "id" + contentCount;
+
+                                   if (contentCount == 0)
+                                   {
+                                       activeContentClass = "active";
+                                   }
+
+                                   <div role="tabpanel" class="tab-pane @activeContentClass" id="@contentid">
+
+                                       @PrintTabContents(details)
+
+                                   </div>
+
+                               }
+                           }
+                           contentCount = contentCount + 1;
+                       }
+                   </div>
+            </div>
+
+        }
+    }
+
+
+}
+@helper PrintTabs(ArchetypeModel tabsContents)
+{
+var tabCount = 0;
+foreach (var tab in tabsContents)
+{
+    if (tab.HasValue("countryName"))
+    {
+        string activeClass = "";
+        if (tabCount == 0)
+        {
+            activeClass = "active";
+        }
+        var id = "id" + tabCount;
+            <li role="presentation"><h2>@tab.GetValue("countryName")</h2></li>
+        tabCount = tabCount + 1;
+    }
+}
+}
+ @helper PrintTabContents(ArchetypeModel details)
+ {
+foreach (var data in details)
+{
+    var linkUrl = "";
+    var linkTarget = "";
+    var linkName = "";
+    if (data.HasValue("linkTo"))
+    {
+        var quickLinks = data.GetValue<MultiUrls>("linkTo");
+        if (quickLinks != null && quickLinks.Any())
+        {
+            var linkContent = quickLinks.FirstOrDefault();
+            linkUrl = linkContent.Url;
+            linkTarget = linkContent.Target;
+            linkName = linkContent.Name;
+        }
+    }
+
+    if (data.HasValue("title") || data.HasValue("address") || data.HasValue("email") || data.HasValue("image"))
+    {
+            <div class="row padding-15 tab-two-col-listing col-md-6">
+
+                @if (data.HasValue("image"))
+                {
+                    var thumbnailImage = Umbraco.TypedMedia(data.GetValue("image"));
+                    <div class="col-sm-3 image-holder">
+                        <div class="image-with-border">
+                            @if (!string.IsNullOrEmpty(linkUrl))
+                            {
+                                <a href="@linkUrl" target="@linkTarget"><img src="@thumbnailImage.Url" alt="@thumbnailImage.Name"></a>
+                            }
+                            else
+                            {
+                                <img src="@thumbnailImage.Url" alt="@thumbnailImage.Name">
+                            }
+
+                        </div>
+                    </div>
+                }
+                <div class="col-sm-9 content-holder">
+
+                    @if (data.HasValue("title"))
+                    {
+                        if (!string.IsNullOrEmpty(linkUrl))
+                        {
+                            <a href="@linkUrl" target="@linkTarget"><h5 class="format-capital blue-text">@data.GetValue("title")</h5></a>
+                        }
+                        else
+                        {
+                            <h5 class="format-capital blue-text">@data.GetValue("title")</h5>
+                        }
+
+                    }
+                    @if (data.HasValue("address"))
+                    { 
+                        @Html.Raw(data.GetValue("address"))
+                    }
+                    @if (data.HasValue("email"))
+                    {
+                       <a href="mailto:@data.GetValue("email")"><h5 class="blue-text">@data.GetValue("email")</h5></a>
+                    }
+
+                </div>
+
+            </div>
+    }
+}
+}
+ 

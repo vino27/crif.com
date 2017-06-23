@@ -1,0 +1,184 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models
+@using RJP.MultiUrlPicker.Models
+@using Phases.UmbracoUtils
+@{
+   
+    var home = Model.Content.AncestorOrSelf(1);
+    var currentPage = Model.Content;
+    var metticontoPage = home.DescendantOrSelf("mettinconto");
+    var childPage = metticontoPage.Children;
+    var activeNodeTitle = currentPage.HasValue("title") ? currentPage.GetPropertyValue("title") : currentPage.Name;
+    var mettincontoTitle = metticontoPage.HasValue("title") ? metticontoPage.GetPropertyValue("title") : metticontoPage.Name;
+    if (childPage != null && childPage.Any())
+    {
+        var activeClass = "";
+		<div class="tab-dropdown-wrapper hidden-md hidden-lg">
+			<div class="tab-dropdown-title"> @activeNodeTitle <i class="fa fa-angle-down" aria-hidden="true"></i></div>
+			<ul class="tab-dropdown-list list-unstyled">
+                @if (metticontoPage.HasValue("bodyText"))
+                {                    
+                    <li><a href="@metticontoPage.Url">@mettincontoTitle</a></li>
+                }
+                @foreach (var singleTab in childPage)
+                {
+                    var title = singleTab.HasValue("title") ? singleTab.GetPropertyValue("title") : singleTab.Name;
+                    <li><a href="@singleTab.Url">@title</a></li>
+                }				
+			</ul>
+		</div>
+        <div class="tabs-green tab-left">
+			
+            <ul class="nav nav-tabs hidden-xs hidden-sm">
+                @if (metticontoPage.HasValue("bodyText"))
+                {
+                    activeClass = currentPage.DocumentTypeAlias == "mettinconto"? "class=\"active\"":"";
+                    var singleTabLink = metticontoPage.GetUrl();
+                    var title = metticontoPage.HasValue("title") ? metticontoPage.GetPropertyValue("title") : metticontoPage.Name;
+                    <li @Html.Raw(activeClass)>
+                        <a href="@singleTabLink.Url" target="@singleTabLink.Target">@title</a>
+                    </li>
+                }
+                @foreach (var singleTab in childPage)
+                {
+                   
+                    activeClass = currentPage.Id == singleTab.Id ? "class=\"active\"" : "";                   
+                    var singleTabLink = singleTab.GetUrl();
+                    var title = singleTab.HasValue("title") ? singleTab.GetPropertyValue("title") : singleTab.Name;
+                    <li @Html.Raw(activeClass)>
+                        <a href="@singleTabLink.Url" target="@singleTabLink.Target">@title</a>
+                    </li>
+                }
+            </ul>
+            <br>
+            @if (currentPage.DocumentTypeAlias == "mettinconto")
+            {
+                var title = Model.Content.HasValue("title") ? Model.Content.GetPropertyValue("title") : Model.Content.Name;
+                <h1 class="clr-green">@title</h1>
+                @Html.Raw(metticontoPage.GetPropertyValue("bodyText"))
+            }
+              @foreach (var singleDetais in childPage)
+              {
+                  if (currentPage.Id == singleDetais.Id)
+                  {
+                     var title = Model.Content.HasValue("title") ? Model.Content.GetPropertyValue("title") : Model.Content.Name;
+                    <h1 class="clr-green">@title</h1>
+                    @Html.Raw(singleDetais.GetPropertyValue("bodyText"))
+                  } 
+              }
+            
+            @*<div class="tab-content">
+                @foreach (var singleDetais in childPage)
+                {
+                    if (count == 0)
+                    {
+                        id = "id=id1";
+                        activeClass = "active";
+                    }
+                    <div role="tabpanel" class="tab-pane @activeClass" @id>
+                        @Html.Raw(singleDetais.GetPropertyValue("bodyText"))
+                         
+                    </div>
+                }
+            </div>*@
+        </div>
+    }
+    @*if (currentPage.HasValue("tabData"))
+    {
+        var tabContents = currentPage.GetPropertyValue<ArchetypeModel>("tabData");
+        if (tabContents != null && tabContents.Any())
+        {
+            var count = 0;
+            var id = "";
+            var activeClass = "";
+            <div class="tabs-cont-wrap tabs-green">
+                <ul class="nav nav-tabs">
+                    @foreach (var singleTab in tabContents)
+                    {
+                        <li role="presentation">
+                            <h2>@singleTab.GetValue("title")</h2>
+                        </li>
+                    }
+                </ul>
+                <div class="tab-content">
+                    @foreach (var singleDetais in tabContents)
+                    {
+                        if (count == 0)
+                        {
+                            id = "id=id1";
+                            activeClass = "active";
+                        }
+                        <div role="tabpanel" class="tab-pane @activeClass" @id>
+                            @Html.Raw(singleDetais.GetValue("tabContent"))
+                            @if (singleDetais.HasValue("tabContentWithImage"))
+                            {
+                                var contents = singleDetais.GetValue<ArchetypeModel>("tabContentWithImage");
+                                if (contents != null && contents.Any())
+                                {
+                                    @PrintTabContents(contents)
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }*@
+
+
+}
+@helper PrintTabContents(ArchetypeModel contents)
+{
+foreach (var data in contents)
+{
+
+    if (data.HasValue("title") || data.HasValue("shortDescription") || data.HasValue("thumbnailIamge") || data.HasValue("linkTo"))
+    {
+            <div class="row padding-15 tab-two-col-listing">
+
+                @if (data.HasValue("thumbnailIamge"))
+                {
+                    var thumbnailImage = Umbraco.TypedMedia(data.GetValue("thumbnailIamge"));
+                    <div class="col-sm-3 image-holder">
+                        <div class="image-with-border">
+                            <img src="@thumbnailImage.Url" alt="@thumbnailImage.Name">
+                        </div>
+                    </div>
+                }
+                <div class="col-sm-9 content-holder">
+
+                    @if (data.HasValue("title"))
+                    {
+                        <h5>@data.GetValue("title")</h5>
+                    }
+                    @if (data.HasValue("shortDescription"))
+                    {
+                        @Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)data.GetValue("shortDescription")))
+                    }
+                    @if (data.HasValue("linkTo"))
+                    {
+                        var quickLinks = data.GetValue<MultiUrls>("linkTo");
+                        <p>
+                            @if (data.HasValue("linkToTitle"))
+                            {
+                                @data.GetValue("linkToTitle")<br />
+                            }
+                            @if (quickLinks != null && quickLinks.Any())
+                            {
+                                foreach (var links in quickLinks)
+                                {
+                                    <a href="@links.Url" target="@links.Target" class="link-blue">@links.Name</a>
+                                }
+                            }
+
+
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+    }
+
+}
+}

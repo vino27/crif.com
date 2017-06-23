@@ -1,0 +1,15 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    if (Model.Content.HasValue("productLogo"))
+    {
+        var logo = Umbraco.TypedMedia(Model.Content.GetPropertyValue("productLogo"));
+        if (logo != null)
+        {
+            <div class="product-img-wrap">
+                <div class="image-holder">
+                    <img src="@logo.Url" alt="@logo.Name">
+                </div>
+            </div>
+        }
+    }
+}

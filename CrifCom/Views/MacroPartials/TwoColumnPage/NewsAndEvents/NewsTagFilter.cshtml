@@ -1,0 +1,76 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Crifireland.Utils;
+@using System.Globalization;
+@{
+    var currentModel = Model.Content;
+    var years = currentModel.Children;
+    var markets = currentModel.AncestorOrSelf(1).Descendants("market");
+    var eventtraing = currentModel.Descendants().Where(x => x.HasProperty("eventOrTraining"));
+    <div class="filter-block">
+        <form action="#">
+		 <hr />
+            @if (eventtraing != null && eventtraing.Count() > 0)
+            {
+                <div class="form-group">
+                    <select class="selectpicker form-control" id="event">
+                        <option value="-1">@Umbraco.Field("#Event Or Training")</option>
+                        <option value="Events">Event</option>
+                        <option value="Training">Training</option>
+                    </select>
+                </div>
+            }            
+            @if (years.Any())
+            {
+                <div class="form-group">
+                    <select class="selectpicker form-control" id="date">
+                        <option value="-1">@Umbraco.Field("#Year")</option>
+                        @foreach (var year in years)
+                        {
+                            var months = year.Children;
+                            <optgroup label="@year.Name">
+                                @{
+                                    var italianCulture = new CultureInfo("it-IT");
+                                    var englishCulture = new CultureInfo("en-GB");
+                                    foreach (var month in months)
+                                    {
+                                        string date = string.Format("{0}-{1}", month.Name, year.Name);
+                                        string[] monthNames = englishCulture.DateTimeFormat.MonthGenitiveNames;
+                                        int monthPosition = Array.IndexOf(monthNames, month.Name);
+                                        if (monthPosition > -1)
+                                        {
+                                            DateTime Italiandate = Convert.ToDateTime("01-" + month.Name + "-2011");
+                                            <option value="@date">@Italiandate.ToString("MMMM", italianCulture)</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@date">@month.Name</option>
+                                        }
+
+                                    }
+                                } 
+                            </optgroup>
+                        }
+                    </select>
+                </div>
+            }
+           @if (!currentModel.GetPropertyValue<bool>("hideMarketFilter"))
+            {
+                if (markets != null && markets.Any())
+                {
+                    <div class="form-group">
+                        <select class="selectpicker form-control" id="market">
+                            <option value="-1">@Umbraco.Field("#Market")</option>
+                            @foreach (var market in markets)
+                            {
+                                <option value="@market.Id">@market.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                }
+            } 
+        </form>
+    </div>
+
+}
+

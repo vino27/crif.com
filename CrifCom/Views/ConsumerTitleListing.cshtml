@@ -1,0 +1,78 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+    Layout = null;
+}
+@using Phases.UmbracoUtils
+@{
+    if (Model.Content.HasValue("titleList"))
+    {
+        var TitleList = Model.Content.GetPropertyValue<Archetype.Models.ArchetypeModel>("titleList");
+        if (TitleList != null && TitleList.Any())
+        {
+            <section class="simple-listing">
+                <div class="container">
+                    <div class="row">
+                        @PrintData(TitleList)
+                    </div>
+                </div>
+            </section>
+        }
+    }
+}
+
+@helper PrintData(Archetype.Models.ArchetypeModel childPages)
+{
+    <div class="tile-listing">
+        @foreach (var items in childPages)
+        {
+            string url = "", target = "_blank";
+            var multiUrlPicker = items.GetValue<RJP.MultiUrlPicker.Models.MultiUrls>("linkTo");
+            if (multiUrlPicker.Any())
+            {
+
+                foreach (var item in multiUrlPicker)
+                {
+                    url = item.Url;
+                    target = item.Target;
+                }
+
+            }
+            var cssClass = "col-sm-12";
+            <div class="col-md-4 col-sm-6 col-xs-12 single-column tab-two-col-listing">
+                @if (items.HasValue("iconImage") || items.HasValue("mouseHoverIcon"))
+                {
+                    cssClass = "col-sm-9";
+                    <div class="col-sm-3 image-holder">
+                        <a href="@url" target="@target">
+                            <div class="image-with-border">
+                                @if (items.HasValue("iconImage"))
+                                {
+                                    var iconImage = Umbraco.TypedMedia(items.GetValue("iconImage"));
+                                    <img src="@iconImage.Url" alt="@iconImage.Name">
+                                }
+                                @if (items.HasValue("mouseHoverIcon"))
+                                {
+                                    var hoverImage = Umbraco.TypedMedia(items.GetValue("mouseHoverIcon"));
+                                    <img src="@hoverImage.Url" alt="@hoverImage.Name">
+                                }
+                            </div>
+                        </a>
+                    </div>
+                }
+                <div class="@cssClass content-holder">
+                    <a href="@url" target="@target">
+                        @if (items.HasValue("title"))
+                        {
+                            <h2 class="article-heading">@items.GetValue("title")</h2>
+                        }
+                    </a>
+                    @if (items.HasValue("marketDescription"))
+                    {
+                        @Html.Raw(items.GetValue("marketDescription"))
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

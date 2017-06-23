@@ -1,0 +1,38 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+            var currentModel = Model.Content.AncestorOrSelf(1);
+            var markets = currentModel.Descendants("market");
+            var topics = currentModel.Descendants("topic");
+
+    <div class="col-sm-12 filter-wrap">
+        <div class="filter-block margin-bottom-20">
+            <form action="#">
+                @*if (markets != null && markets.Any())
+                {
+                    <div class="form-group">
+                        <select class="selectpicker form-control" id="market">
+                            <option value="-1">@Umbraco.Field("#Market")</option>
+                            @foreach (var market in markets)
+                            {
+                                <option value="@market.Id">@market.Name</option>
+                            }
+                        </select>
+                    </div>
+                }*@
+                @if (topics != null && topics.Any())
+                {                    
+                    <div class="form-group">
+                        <select class="selectpicker form-control" id="topic">
+                            <option value="-1">@Umbraco.Field("#Topics")</option>
+                            @foreach (var topic in topics)
+                            {
+                                string asTitleCase = System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(topic.Name.ToLower());
+                                <option value="@topic.Id">@asTitleCase</option>
+                            }                            
+                        </select>
+                    </div>
+                }                              
+            </form>
+        </div>
+    </div>
+}

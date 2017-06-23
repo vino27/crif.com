@@ -1,0 +1,86 @@
+{
+    "scale": "human",
+	"title": {
+		        "media": {
+		            "caption": "",
+		            "credit": "",
+		            "url": "",
+		            "thumb": 	""
+		        },
+	            "text": {
+	                "headline": "Welcome to CRIF",
+	                "text": "<p>TimelineJS is an open-source tool that enables you to build visually-rich interactive timelines and is available in 40 languages.</p><p>You're looking at an example of one right now.</p><p>Click on the arrow to the right to learn more.</p>"
+	            }
+	    },
+    "events": [
+        {
+            "start_date": {
+                "year":			"1851",
+                "month":		"",
+                "day": 			"",
+                "hour": 		"",
+                "minute": 		"",
+                "second": 		"",
+                "millisecond": 	"",
+                "format": 		""
+            },
+            "media": {
+                "caption": "",
+                "credit": "",
+                "url": "http://wsb09:2000/assets/images/timeline-1.jpg",
+                "thumb": 	""
+            },
+            "text": {
+                "headline": "Lorem Ipsum dolor sit amet",
+                "text": "<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in </p>"
+            }
+        },
+        {
+            "start_date": {
+                "year":         "1851",
+                "month":        "",
+                "day":          "4",
+                "hour":         "",
+                "minute":       "",
+                "second":       "",
+                "millisecond":  "",
+                "format":       ""
+            },
+            "media": {
+                "caption": "",
+                "credit": "",
+                "url": "http://wsb09:2000/assets/images/timeline-1.jpg",
+                "thumb":    ""
+            },
+            "text": {
+                "headline": "Lorem Ipsum dolor sit amet",
+                "text": "<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in</p>"
+            }
+        },
+        {
+            "start_date": {
+                "year":         "1851",
+                "month":        "",
+                "day":          "",
+                "hour":         "",
+                "minute":       "",
+                "second":       "",
+                "millisecond":  "",
+                "format":       ""
+            },
+            "media": {
+                "caption": "",
+                "credit": "",
+                "url": "https://www.youtube.com/watch?v=tCrQvsaNU58",
+                "thumb":    ""
+            },
+            "text": {
+                "headline": "youtube",
+                "text": "<p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in</p>"
+            }
+        }
+        
+        
+    ]
+}
+

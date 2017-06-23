@@ -1,0 +1,101 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@{
+    Layout = null;
+}
+@{
+    string alignClass = "", offsetImageClass = "", offsetContentClass = "";
+    bool rightAlign = false;
+    if (Model.Content.HasValue("imageRightAlign") && Model.Content.GetPropertyValue<bool>("imageRightAlign"))
+    {
+        alignClass = "with-image-right";
+        rightAlign = true;
+    }
+    else
+    {
+        alignClass = "with-image-left";
+    }
+    <section class="content-with-extd-img @alignClass margin-bottom-30">
+        @if (rightAlign)
+        {
+            offsetImageClass = "col-sm-offset-6";
+            @BannerContentDisplay(Model.Content, offsetContentClass)
+            @BannerImageDisply(Model.Content, offsetImageClass)
+        }
+        else
+        {
+            offsetContentClass = "col-sm-offset-6";
+            @BannerImageDisply(Model.Content, offsetImageClass)
+            @BannerContentDisplay(Model.Content, offsetContentClass)
+        }
+    </section>
+}
+
+@helper BannerContentDisplay(IPublishedContent nodeItem, string offsetContentClass)
+{
+var multiUrlPicker = nodeItem.GetPropertyValue<MultiUrls>("linkTo");
+string url = "";
+if (multiUrlPicker != null && multiUrlPicker.Any() && multiUrlPicker.Count() == 1)
+{
+    url = multiUrlPicker.FirstOrDefault().Url;
+}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-10 col-centered">
+                <div class="col-sm-6 @offsetContentClass content-holder">
+                    @if (nodeItem.HasValue("bannerTitle"))
+                    {
+                        if(!string.IsNullOrEmpty(url))
+                        {
+                            <a href="@url"><h2 class="section-title-medium">@nodeItem.GetPropertyValue("bannerTitle")</h2></a>
+                        }
+                        else
+                        {
+                            <h2 class="section-title-medium">@nodeItem.GetPropertyValue("bannerTitle")</h2>
+                        }
+                    }
+                    @if (nodeItem.HasValue("bannerDescription"))
+                    {
+                        @Html.Raw(nodeItem.GetPropertyValue("bannerDescription"))
+                    }
+
+                    @if (multiUrlPicker != null && multiUrlPicker.Any())
+                    {
+                        if(multiUrlPicker.Count()==1)
+                        {
+                            <a href="@multiUrlPicker.FirstOrDefault().Url" class="standard-link" target="@multiUrlPicker.FirstOrDefault().Target" rel="nofollow">@multiUrlPicker.FirstOrDefault().Name</a>
+                        }
+                        else
+                        {
+                            foreach (var item in multiUrlPicker)
+                            {
+                                <a href="@item.Url" class="standard-link" target="@item.Target">@item.Name</a>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper BannerImageDisply(IPublishedContent nodeItem, string offsetClass)
+{
+if (nodeItem.HasValue("bannerSideimage"))
+{
+    var bannerImagesList = Model.Content.GetPropertyValue<string>("bannerSideimage").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+    var bannerImagesCollection = Umbraco.TypedMedia(bannerImagesList).Where(x => x != null);
+    if (bannerImagesCollection != null)
+    {
+        foreach (var bannerImage in bannerImagesCollection)
+        {
+                <div class="container-fluid">
+                    <div class="col-sm-6 image-holder @offsetClass" style="background:url('@bannerImage.Url');">
+                        <img src="@bannerImage.Url" class="content-hidden-seo" alt="@bannerImage.Name" />
+                    </div>
+                </div>
+        }
+    }
+}
+}

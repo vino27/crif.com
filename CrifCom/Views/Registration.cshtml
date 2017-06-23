@@ -1,0 +1,72 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Configuration
+@using System.Globalization
+@{
+    Layout = "PageWithSideMenu.cshtml";
+}
+@{var clientId = ConfigurationManager.AppSettings["ClientIDForLinkedInRegister"];}
+@Umbraco.RenderMacro("Registration")
+
+@*@functions {
+    public object GetCultureName(string code)
+    {
+        var cultureInfo = new CultureInfo(code);
+        return cultureInfo.Name;
+    }
+}*@
+<input id="hdApiClientId" type="hidden" value="@clientId" />
+@section InnerBottomScript{
+    <script src="/scripts/ajaxhandler/form-submission-ajaxhandler.js"></script>
+}
+@section InnerTopScript{
+    <script src="/scripts/country.js"></script>
+        @*<script type="text/javascript">
+        $(document).ready(function() { 
+            $.getScript("https://platform.linkedin.com/in.js?async=true", function success() { 
+                IN.init({ 
+                    // api_key: "75xq113gk33z2t",
+                    api_key: "@clientId",
+                    authorize: true,
+                    onLoad : onLinkedInLoad
+                }); 
+            }); 
+        });
+</script>
+    <script>
+        // Once logged in this function should automatically invoke
+        function onLinkedInLoad() {
+			//IN.UI.Authorize().place(); 
+            IN.Event.on(IN, "auth", function () { onLinkedInLogin();});
+            IN.Event.on(IN, "logout", function () { onLinkedInLogout(); });
+        }
+        // If user logged in successfully, get user details
+        function onLinkedInLogin() {
+            IN.API.Profile("me")
+              .fields(["id", "firstName", "lastName", "industry", "positions", "emailAddress", "location"])
+          .result(function (result) {
+              // Get required fields
+              var details = result.values[0];
+              var countryname = getCountryName(details.location.country.code.toUpperCase()); 
+              $('#nameTxt').val(details.firstName);
+              $('#surnameTxt').val(details.lastName);
+              $('#emailTxt').val(details.emailAddress);
+              $('#companyTxt').val(details.positions.values[0].company.name);
+              $('#roleTxt').val(details.positions.values[0].title);
+              $('#nationTxt').val(countryname); 
+			  
+          })
+          .error(function (err) {
+              alert(err);
+          });
+			
+        }
+        // This is required to acquire oAuth 2.0
+        function liAuth() {
+        IN.User.authorize(function () {});
+    }
+    </script>*@
+		 <script type="text/javascript" src="/scripts/linkedin.js"></script>
+
+    @*<script src="/scripts/custom.js"></script>*@
+}
+

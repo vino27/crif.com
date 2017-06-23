@@ -1,0 +1,92 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+	var productSubFamilyList = home.Descendants("dataRepository").DescendantsOrSelf("productSubcategoryHome").DescendantsOrSelf("subcategory").Where(x => x.IsVisible());
+    var currentPage = Model.Content;
+    string marketId = Request["market"];
+    string familyId = Request["family"];
+    if (!string.IsNullOrEmpty(marketId) && !string.IsNullOrEmpty(familyId))
+    {
+        var productList = home.Descendants("productAndServices").DescendantsOrSelf("productOrService").Where(x => x.IsVisible() && x.TemplateId > 0);
+
+        if (marketId == "0" || marketId == "-1")
+        {
+            productList = productList.Where(x=>x.HasValue("selectFamily") && x.GetPropertyValue<string>("selectFamily").Split(new string[] { "," },
+                            StringSplitOptions.RemoveEmptyEntries).ToList().Contains(familyId));
+        }
+        else
+        {
+            productList = productList.Where(x=>x.HasValue("selectFamily") && x.GetPropertyValue<string>("selectFamily").Split(new string[] { "," },
+                            StringSplitOptions.RemoveEmptyEntries).ToList().Contains(familyId) && x.HasValue("selectMarket")
+                            && x.GetPropertyValue<string>("selectMarket").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(marketId));
+        }
+
+
+        if (productList != null && productList.Any())
+        {
+            var productsWithoutsubCategory=productList.Where(x => (!x.HasValue("selectCategory"))).ToList() ;
+            <div class="col-sm-12">
+                <div class="row">
+                    @foreach (var product in productsWithoutsubCategory)
+                    {
+                        var productUrl = product.GetUrl();
+                        <div class="col-sm-4 col-md-3 article-type-one">
+                            <a href="@productUrl.Url" target="@productUrl.Target">
+                                @if (product.HasValue("title"))
+                                {
+                                    <h2 class="highlight-text">@product.GetPropertyValue("title")</h2>
+                                }
+                                else
+                                {
+                                    <h2 class="highlight-text">@product.Name</h2>
+                                }
+                            </a>
+                            @if (product.HasValue("shortDescription"))
+                            {
+                                <p>@Html.Raw(product.GetPropertyValue("shortDescription"))</p>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+			 foreach (var subCategory in productSubFamilyList)
+            {
+                var products = productList.Where(x => x.HasValue("selectCategory") && x.GetPropertyValue<string>("selectCategory")
+                                        .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(subCategory.Id.ToString())
+                                        && ((!subCategory.HasValue("relatedFamily")) || (subCategory.HasValue("relatedFamily") && subCategory.GetPropertyValue<string>("relatedFamily").Split(new string[] { "," },
+                                        StringSplitOptions.RemoveEmptyEntries).ToList().Contains(familyId.ToString()))));
+                if (products != null && products.Any())
+                {
+                    <div class="col-sm-12">
+                        <h4 for="#">@subCategory.Name</h4>
+                        <div class="row">
+            @foreach (var product in products)
+            {
+                var productUrl = product.GetUrl();
+                <div class="col-sm-4 col-md-3 article-type-one">
+                    <a href="@productUrl.Url" target="@productUrl.Target">
+                        @if (product.HasValue("title"))
+                        {
+                            <h2 class="highlight-text">@product.GetPropertyValue("title")</h2>
+                        }
+                        else
+                        {
+                            <h2 class="highlight-text">@product.Name</h2>
+                        }
+
+                    </a>
+                    @if (product.HasValue("shortDescription"))
+                    {
+                        <p>@Html.Raw(product.GetPropertyValue("shortDescription"))</p>
+                    }
+
+                </div>
+            }
+					</div>
+                    </div>
+        }
+            }
+        }
+    }
+}

@@ -1,0 +1,120 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models;
+@{
+
+	var currentNode = Model.Content;
+	string fullWidthClass = "width-100";
+    bool featuredBoxLeft = currentNode.HasValue("featuredBoxLeft");
+    bool featuredBoxRight = currentNode.HasValue("featuredBoxRight");
+    <section class="banner-wrapper  swith-bg">
+        @if (currentNode.HasValue("backgroundImage") || currentNode.HasValue("mobileBackgroundImage"))
+        {
+
+            var bannerImagesList = currentNode.GetPropertyValue<string>("backgroundImage").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+            var bannerImagesCollection = Umbraco.TypedMedia(bannerImagesList).Where(x => x != null);
+            var bannerMobileImage = "";
+            if (currentNode.HasValue("mobileBackgroundImage"))
+            {
+                var mobileImage = Umbraco.TypedMedia(currentNode.GetPropertyValue("mobileBackgroundImage"));
+                bannerMobileImage = mobileImage.Url;
+            }
+            foreach (var bannerImage in bannerImagesCollection)
+            {
+                <div class="bg-figure content-bg img-switch" data-bg-mob="@bannerMobileImage" data-bg-desktop="@bannerImage.Url"></div>
+            }
+        }
+     
+        <div class="container">
+            <div class="col-sm-10 col-centered">
+                <div class="col-xs-12 col-sm-12 col-md-10 pull-right">
+                    <div class="banner-content clr-white">
+                        @if (currentNode.HasValue("bannerTitle"))
+                        {
+                            <h1 class="clr-orange">@currentNode.GetPropertyValue("bannerTitle")</h1>
+                        }
+                        @if (currentNode.HasValue("bannerDescription"))
+                        {
+                            @Html.Raw(currentNode.GetPropertyValue("bannerDescription"))
+                        }
+
+                        @if (featuredBoxLeft || featuredBoxRight)
+                        {
+                            <div class="box-flex-zig-zag-container">
+                                @if (featuredBoxLeft)
+                                {									
+                                    var featureBoxLeftCollections = currentNode.GetPropertyValue<ArchetypeModel>("featuredBoxLeft"); 
+                                    if (featureBoxLeftCollections != null && featureBoxLeftCollections.Any() && featureBoxLeftCollections.Count() >0)
+                                    {
+										fullWidthClass = "";
+                                        <div class="col-1">
+                                            @foreach (var featureBoxLeftItem in featureBoxLeftCollections)
+                                            {
+                                                <div class="box">
+                                                    <div class="title-content-inline-view">
+                                                        @if (featureBoxLeftItem.HasValue("mainTitleNumber"))
+                                                        {
+                                                            <h2 class="clr-orange title"><span class="number counter">@featureBoxLeftItem.GetValue("mainTitleNumber")</span></h2>
+                                                        }
+                                                        @if (featureBoxLeftItem.HasValue("mainTitleText"))
+                                                        {
+                                                            <p>@featureBoxLeftItem.GetValue("mainTitleText")</p>
+                                                        }
+
+                                                    </div>
+                                                    <div class="title-content-inline-view">
+                                                        @if (featureBoxLeftItem.HasValue("subTitleNumber"))
+                                                        {
+                                                            <h2 class="clr-orange title"><span class="">@featureBoxLeftItem.GetValue("subTitleNumber")</span></h2>
+                                                        }
+                                                        @if (featureBoxLeftItem.HasValue("subTitleText"))
+                                                        {
+                                                            <p>@featureBoxLeftItem.GetValue("subTitleText")</p>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }                                           
+                                        </div>
+                                    }
+
+                                }
+                                @if (featuredBoxRight)
+                                {
+                                    var featureBoxRightCollections = currentNode.GetPropertyValue<ArchetypeModel>("featuredBoxRight");
+                                    if (featureBoxRightCollections != null && featureBoxRightCollections.Any())
+                                    {
+                                        <div class="col-2 border @fullWidthClass">
+                                            <div class="box">
+                                            @foreach (var featureBoxRightItem in featureBoxRightCollections)
+                                            {
+                                                <div class="title-content-block-view">
+                                                    @if (featureBoxRightItem.HasValue("number") || featureBoxRightItem.HasValue("titleText"))
+                                                    {
+                                                        <h2 class="clr-orange title">
+                                                            <span class="number">
+                                                            @if (featureBoxRightItem.HasValue("hidePlusSign") && !featureBoxRightItem.GetValue<bool>("hidePlusSign"))
+                                                            {
+                                                                <span class="plus">+</span>
+                                                            }
+                                                            <span class="">@featureBoxRightItem.GetValue("number")</span></span> @featureBoxRightItem.GetValue("titleText")
+                                                        </h2>
+                                                    }
+                                                    @if (featureBoxRightItem.HasValue("description"))
+                                                    {
+                                                        <p>@featureBoxRightItem.GetValue("description")</p>
+                                                    }
+                                                </div>
+                                            }
+                                               
+                                            </div>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+}

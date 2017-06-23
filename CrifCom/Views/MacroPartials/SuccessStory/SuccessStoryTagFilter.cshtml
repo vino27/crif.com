@@ -1,0 +1,25 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    var currentModel = Model.Content; 
+    var markets = currentModel.AncestorOrSelf("market").DescendantsOrSelf("marketNeeds").Where(x=>x.IsVisible()&&x.TemplateId>0); 
+    <div class="filter-block">
+        <form action="#">
+            <hr /> 
+            @if (markets != null && markets.Any())
+            {
+                <div class="form-group">
+                    <select class="selectpicker form-control" id="market-needs">
+                        <option value="-1">@Umbraco.Field("#All")</option>
+                        @foreach (var market in markets)
+                        {
+                            <option value="@market.Id">@market.Name</option>
+                        }
+                    </select>
+                </div>
+
+            }
+        </form>
+    </div>
+
+}
+

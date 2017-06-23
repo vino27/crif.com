@@ -1,0 +1,39 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    var current = Model.Content;
+    var home = current.AncestorOrSelf(1);
+    if ((current.DocumentTypeAlias == "consumerHome" || current.DocumentTypeAlias == "consumer") && (home.HasValue("englishNode") || (home.HasValue("frenchNode"))))
+    {
+        <li class="lang-switcher">
+            <ul>
+                @if (home.HasValue("englishNode"))
+                {
+                    var className = current.GetCulture().ToString() == "en-GB" ? "class = \"active\"" : "";
+                    var englishNodeListValue = home.GetPropertyValue<string>("englishNode");
+                    var englishNodeList = englishNodeListValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+                    var englishNodeCollection = Umbraco.TypedContent(englishNodeList).Where(x => x != null);
+                    if (englishNodeCollection != null && englishNodeCollection.Any())
+                    {
+                        var node = englishNodeCollection.FirstOrDefault();
+                        var title = home.HasValue("englishTitle") ? home.GetPropertyValue("englishTitle") : "EN";
+                        <li @Html.Raw(className)><a href="@node.Url">@title</a></li>
+                    }
+
+                }
+                @if(home.HasValue("frenchNode"))
+                {                    
+                    var className = current.GetCulture().ToString() == "fr-FR" ? "class = \"active\"":"";
+                    var frenchNodeListValue = home.GetPropertyValue<string>("frenchNode");
+                    var frenchNodeList = frenchNodeListValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+                    var frenchNodeCollection = Umbraco.TypedContent(frenchNodeList).Where(x => x != null);
+                    if (frenchNodeCollection != null && frenchNodeCollection.Any())
+                    {
+                        var frenchnode = frenchNodeCollection.FirstOrDefault();
+                        var title = home.HasValue("frenchTitle") ? home.GetPropertyValue("frenchTitle") : "French";						
+                        <li @Html.Raw(className)><a href="@frenchnode.Url">@title</a></li>
+                    }
+                }
+            </ul>
+        </li>
+    }
+}

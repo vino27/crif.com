@@ -1,0 +1,114 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models;
+@using RJP.MultiUrlPicker.Models
+	@{
+        if (Model.Content.HasValue("selectWidget"))
+        {
+            var leftSideWidgets = Model.Content.GetPropertyValue<ArchetypeModel>("selectWidget");
+            if (leftSideWidgets != null && leftSideWidgets.Any())
+            {
+                foreach (var widget in leftSideWidgets)
+                {
+                    if (widget.Alias == "predefinedWidget")
+                    {
+                        if (widget.HasValue("selectWidget"))
+                        {
+                            string url = "";
+                            MultiUrls multiUrlPicker = null;
+                            var node = Umbraco.TypedContent(widget.GetValue<int>("selectWidget"));
+                            if (node.HasValue("linkTo"))
+                            {
+                                multiUrlPicker = node.GetPropertyValue<MultiUrls>("linkTo");
+                                if (multiUrlPicker != null && multiUrlPicker.Any() && multiUrlPicker.Count() == 1)
+                                {
+                                    url = multiUrlPicker.FirstOrDefault().Url;
+                                }
+                            }
+                            <div class="widget wrap-30 bg-grey-light margin-top-30 hidden-xs">
+                                @if (node.HasValue("title"))
+                                {
+                                    if (!string.IsNullOrEmpty(url))
+                                    {
+                                        <a href="@url"><h3 class="clr-orange">@node.GetPropertyValue("title")</h3></a>
+                                    }
+                                    else
+                                    {
+                                        <h3 class="clr-orange">@node.GetPropertyValue("title")</h3>
+                                    }
+
+                                }
+                                @if (node.HasValue("shortDescription"))
+                                {
+                                    <p>@node.GetPropertyValue("shortDescription")</p>
+                                }
+                                
+                                @if (multiUrlPicker != null && multiUrlPicker.Any())
+                                {
+                                    foreach (var item in multiUrlPicker)
+                                    {
+                                        <a href="@item.Url" target="@item.Target" class="standard-link">@item.Name</a>
+                                    }
+                                }
+                                
+
+                            </div>
+
+                        }
+                    }
+                    else if (widget.Alias == "customWidget")
+                    {
+                        MultiUrls multiUrlPicker = null;
+                        string url = "";
+                        if (widget.HasValue("linkTo"))
+                        {
+                            multiUrlPicker = widget.GetValue<MultiUrls>("linkTo");
+                            if(multiUrlPicker != null && multiUrlPicker.Any() && multiUrlPicker.Count() == 1)
+                            {
+                                url = multiUrlPicker.FirstOrDefault().Url;
+                            }
+                        }
+                        <div class="widget wrap-30 bg-grey-light margin-top-30 hidden-xs">
+                            @if (widget.HasValue("title"))
+                            {
+                                if (!string.IsNullOrEmpty(url))
+                                {
+                                    <a href="@url"><h3 class="clr-orange">@widget.GetValue("title")</h3></a>
+                                }
+                                else
+                                {
+                                    <h3 class="clr-orange">@widget.GetValue("title")</h3>
+                                }
+
+                            }
+                            @if (widget.HasValue("description"))
+                            {
+                                <p>@widget.GetValue("description")</p>
+                            }
+                            
+                            @if (multiUrlPicker != null && multiUrlPicker.Any())
+                            {
+                                foreach (var item in multiUrlPicker)
+                                {
+                                    <a href="@item.Url" target="@item.Target" class="standard-link">@item.Name</a>
+                                }
+                            }
+                            
+                        </div>
+                    }
+                }
+            }
+
+        }
+
+    }
+        
+@*<div class="widget wrap-30 bg-grey-light margin-top-30">
+    <h3 class="clr-orange">Hai bisogno di supporto?</h3>
+    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti</p>
+    <a href="#" class="standard-link">Contattaci</a>
+</div>
+<div class="widget wrap-30 bg-grey-light margin-top-30">
+    <h3 class="clr-orange">Sei un consumatore?</h3>
+    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores. et quas molestias excepturi sint </p>
+    <a href="#" class="standard-link">Consumatori</a>
+</div>*@

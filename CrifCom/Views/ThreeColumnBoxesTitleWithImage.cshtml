@@ -1,0 +1,53 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Archetype.Models;
+@using RJP.MultiUrlPicker.Models
+@{
+	Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("threeColumnContent") && currentPage.HasValue("hideSection") && !currentPage.GetPropertyValue<bool>("hideSection"))
+    {
+        var dataItem = currentPage.GetPropertyValue<ArchetypeModel>("threeColumnContent");
+        if (dataItem != null && dataItem.Any())
+        {
+            <section class="three-columns bg-grey-light padding-30">
+                <div class="container">
+                    <div class="row">
+                        @foreach (var items in dataItem)
+                        {
+                            <div class="col-sm-4">
+                                <h3 class="header-with-image">
+                                @if (items.HasValue("image"))
+                                {
+                                    var image = Umbraco.TypedMedia(items.GetValue("image"));
+                                    <img src="@image.Url?widht=30px&height=30px" alt="@image.Name">
+                                } 
+                                @if (items.HasValue("title"))
+                                {
+                                    <span>@items.GetValue("title")</span>
+                                }
+                               </h3> 
+                                @if (items.HasValue("shortDescription"))
+                                {
+                                    @Html.Raw(items.GetValue("shortDescription"))
+                                }
+                                @if (items.HasValue("linkTo"))
+                                {
+                                    var linkTo = items.GetValue<MultiUrls>("linkTo");
+                                    if (linkTo != null && linkTo.Any())
+                                    {
+                                        <a href="@linkTo.FirstOrDefault().Url" target="@linkTo.FirstOrDefault().Target" class="standard-link">@linkTo.FirstOrDefault().Name</a>
+                                    }
+                                }
+                              
+                            </div>
+                        }
+                         
+                    </div>
+                </div>
+            </section>
+        }
+    }
+
+}

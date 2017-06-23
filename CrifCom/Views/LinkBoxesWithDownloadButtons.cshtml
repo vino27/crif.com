@@ -1,0 +1,138 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+	Layout = null;
+}
+@{ 
+
+    var currentPage = Model.Content;
+    if(currentPage.HasValue("title") || currentPage.HasValue("backgroundImage")|| currentPage.HasValue("shotDescription"))
+    {
+        
+        string cssAlign = "banner content-left swith-bg";
+        if (currentPage.GetPropertyValue<bool>("textAlignRight"))
+        {
+            cssAlign = "banner content-right swith-bg";
+        }
+       <section class="@cssAlign">
+           @if (currentPage.GetPropertyValue<bool>("textAlignRight"))
+           {
+               @PrintBanner(currentPage)
+               @PrintData(currentPage)
+           }
+           else
+           {
+            @PrintData(currentPage)
+            @PrintBanner(currentPage)
+           }
+       </section>
+
+    }
+
+}
+
+@*Print Banner Images*@
+@helper PrintBanner(IPublishedContent currentPage) {
+var mobileBacgroundUrl = "";
+string ImageUrl = "",Name ="";
+if (currentPage.HasValue("backgroundImage"))
+{
+    var image = Umbraco.TypedMedia(currentPage.GetPropertyValue("backgroundImage"));
+    ImageUrl = image.Url;
+    Name = image.Name;
+}
+if (currentPage.HasValue("mobileBackgroundImage"))
+{
+    var thumbImage = Umbraco.TypedMedia(currentPage.GetPropertyValue("mobileBackgroundImage"));
+    mobileBacgroundUrl = thumbImage.Url;	
+}
+	if(string.IsNullOrEmpty(mobileBacgroundUrl))
+    {		
+        mobileBacgroundUrl = ImageUrl;
+    }
+
+            <div class="content-bg img-switch" data-bg-mob="@mobileBacgroundUrl" data-bg-desktop="@ImageUrl">
+                <img src="@ImageUrl" class="content-hidden-seo" alt="@Name" />
+            </div>
+
+}
+@*print data inside banner*@
+@helper PrintData(IPublishedContent currentPage) {
+var cssRight = ""; 
+string cssContentColor = ""; 
+if (currentPage.HasValue("contentColor"))
+{
+    cssContentColor = currentPage.GetPropertyValue<string>("contentColor");
+}
+    <div class="container @cssContentColor">
+        <div class="row">
+            
+            @if (currentPage.GetPropertyValue<bool>("textAlignRight"))
+            {
+                cssRight = "col-sm-offset-6";
+            }
+            <div class="col-sm-6 @cssRight">
+                @{
+
+                    var linkUrl = "";
+                    var linkTarget = "_blank";
+                    var count = 0;
+                    if (currentPage.HasValue("links"))
+                    {
+                        var links = currentPage.GetPropertyValue<MultiUrls>("links");
+                        if (links != null && links.Count() == 1)
+                        {
+                            linkUrl = links.FirstOrDefault().Url;
+                            linkTarget = links.FirstOrDefault().Target;
+                            count = 1;
+                        }
+                    }
+                    if (currentPage.HasValue("title"))
+                    {
+                        if (count == 1)
+                        {
+                            <a href="@linkUrl" target="@linkTarget"><h3 class="section-title">@currentPage.GetPropertyValue("title")</h3></a>
+                        }
+                        else
+                        {
+                            <h3 class="section-title">@currentPage.GetPropertyValue("title")</h3>
+                        }
+
+                    }
+                    if (currentPage.HasValue("shotDescription"))
+                    {
+                        <p>@Html.Raw(currentPage.GetPropertyValue("shotDescription"))</p>
+                    }
+
+                    if (currentPage.HasValue("links"))
+                    {
+                        var links = currentPage.GetPropertyValue<MultiUrls>("links");
+                        if (links != null && links.Any())
+                        {
+                            var cssLinkClass = "standard-link";
+                            foreach (var linkTo in links)
+                            {
+                                if (linkTo.Type.ToString() == "Media")
+                                {
+                                    cssLinkClass = "download-link";
+                                }
+                                else
+                                {
+                                    cssLinkClass = "standard-link";
+                                }
+                                if (linkTo != null)
+                                {
+                                    <a href="@linkTo.Url" target="@linkTo.Target" class="@cssLinkClass">@linkTo.Name</a>
+                                }
+
+                            }
+                        }
+                    }
+                }                                        
+            </div>
+        </div>
+    </div>
+}
+ 

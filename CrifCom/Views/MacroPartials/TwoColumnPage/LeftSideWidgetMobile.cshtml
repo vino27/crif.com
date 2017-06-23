@@ -1,0 +1,67 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models;
+@using RJP.MultiUrlPicker.Models
+@{
+    if (Model.Content.HasValue("selectWidget"))
+    {
+        var leftSideWidgets = Model.Content.GetPropertyValue<ArchetypeModel>("selectWidget");
+        if (leftSideWidgets != null && leftSideWidgets.Any())
+        {
+            <div class="mob-only-links hidden-sm hidden-lg hidden-md col-md-12">
+                @foreach (var widget in leftSideWidgets)
+                {
+                    if (widget.Alias == "predefinedWidget")
+                    {
+                        if (widget.HasValue("selectWidget"))
+                        {
+                            var node = Umbraco.TypedContent(widget.GetValue<int>("selectWidget"));
+                            string url = "", target = "_blank";
+                            if (node.HasValue("linkTo"))
+                            {
+                                var multiUrlPicker = node.GetPropertyValue<MultiUrls>("linkTo");
+                                if (multiUrlPicker != null && multiUrlPicker.Any())
+                                {
+                                    foreach (var item in multiUrlPicker)
+                                    {
+                                        url = item.Url;
+                                        target = item.Target;
+                                    }
+                                }
+                            }
+
+                            if (node.HasValue("title"))
+                            {
+                                <a href="@url" class="mobile-link-block bg-grey-light" target="@target">
+                                    <h3>@node.GetPropertyValue("title")</h3>
+                                </a>
+                            }
+                        }
+                    }
+                    else if (widget.Alias == "customWidget")
+                    {
+                        string url = "", target = "_blank";
+                        if (widget.HasValue("linkTo"))
+                        {
+                            var multiUrlPicker = widget.GetValue<MultiUrls>("linkTo");
+                            if (multiUrlPicker != null && multiUrlPicker.Any())
+                            {
+                                foreach (var item in multiUrlPicker)
+                                {
+                                    url = item.Url;
+                                    target = item.Target;
+
+                                }
+                            }
+                            if (widget.HasValue("title"))
+                            {
+                                <a href="@url" class="mobile-link-block bg-grey-light" target="@target">
+                                    <h3>@widget.GetValue("title")</h3>
+                                </a>
+                            }
+                        }
+                    }
+                }
+            </div>
+        }
+    }
+}

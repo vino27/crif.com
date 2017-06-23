@@ -1,0 +1,135 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    var currentPage = Model.Content;
+    var markets = home.Descendants("market");
+    var productFamilyList = home.Descendants("dataRepository").DescendantsOrSelf("productFamilyHome").DescendantsOrSelf("productFamily").Where(x => x.IsVisible()
+                     && x.HasProperty("hideFromListing") && !x.GetPropertyValue<bool>("hideFromListing"));
+    var productSubFamilyList = home.Descendants("dataRepository").DescendantsOrSelf("productSubcategoryHome").DescendantsOrSelf("subcategory").Where(x => x.IsVisible());
+    if (productFamilyList != null && productFamilyList.Any())
+    {
+
+        foreach (var family in productFamilyList)
+        {
+            var productList = home.Descendants("productAndServices").DescendantsOrSelf("productOrService").Where(x => x.IsVisible() && x.TemplateId > 0
+                              && x.HasValue("selectFamily") && x.GetPropertyValue<string>("selectFamily").Split(new string[] { "," },
+                               StringSplitOptions.RemoveEmptyEntries).ToList().Contains(family.Id.ToString()));
+
+            if (productList != null && productList.Any())
+            {
+                <section id="@family.Id" class="listing-block margin-bottom-20 positiion-relative">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12 filter-wrap">
+                                <hr>
+                                <h3>@family.Name</h3>
+                                <div class="filter-block">
+                                    @PrintDropDownList(markets, family.Id)
+                                </div>
+                            </div>
+                            <div class="filter-items-wrap listing-four-columns product-list-container">
+                                @{var productsWithoutsubCategory=productList.Where(x => (!x.HasValue("selectCategory"))).ToList() ;}
+                                <div class="col-sm-12">
+                                            <div class="row">
+                                                @foreach (var product in productsWithoutsubCategory)
+                                                {
+                                                    var productUrl = product.GetUrl();
+                                                    <div class="col-sm-4 col-md-3 article-type-one">
+                                                        <a href="@productUrl.Url" target="@productUrl.Target">
+                                                            @if (product.HasValue("title"))
+                                                            {
+                                                                <h2 class="highlight-text">@product.GetPropertyValue("title")</h2>
+                                                            }
+                                                            else
+                                                            {
+                                                                <h2 class="highlight-text">@product.Name</h2>
+                                                            }
+                                                        </a>
+                                                        @if (product.HasValue("shortDescription"))
+                                                        {
+                                                            <p>@Html.Raw(product.GetPropertyValue("shortDescription"))</p>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                @foreach (var subCategory in productSubFamilyList)
+                                {
+
+                                    var products = productList.Where(x => x.HasValue("selectCategory") && x.GetPropertyValue<string>("selectCategory")
+                                        .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(subCategory.Id.ToString())
+                                        && ((!subCategory.HasValue("relatedFamily")) || (subCategory.HasValue("relatedFamily") && subCategory.GetPropertyValue<string>("relatedFamily").Split(new string[] { "," },
+                                        StringSplitOptions.RemoveEmptyEntries).ToList().Contains(family.Id.ToString()))));
+                                    if (products != null && products.Any())
+                                    {
+                                        <div class="col-sm-12 pdct-category">
+                                            <h4 for="#">@subCategory.Name</h4>
+                                            <div class="row">
+                                                @foreach (var product in products.Where(x => x.HasValue("selectCategory")))
+                                                {
+                                                    var productUrl = product.GetUrl();
+                                                    <div class="col-sm-4 col-md-3 article-type-one">
+                                                        <a href="@productUrl.Url" target="@productUrl.Target">
+                                                            @if (product.HasValue("title"))
+                                                            {
+                                                                <h2 class="highlight-text">@product.GetPropertyValue("title")</h2>
+                                                            }
+                                                            else
+                                                            {
+                                                                <h2 class="highlight-text">@product.Name</h2>
+                                                            }
+                                                        </a>
+                                                        @if (product.HasValue("shortDescription"))
+                                                        {
+                                                            <p>@Html.Raw(product.GetPropertyValue("shortDescription"))</p>
+                                                        }
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <a class="return-to-top" href="#">
+                            @Umbraco.Field("#Back To Top")
+                            <i class="fa fa-angle-up" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="no-items container">
+                        @if (currentPage.HasValue("noItemFoundText"))
+                        {
+                            <h3>@currentPage.GetPropertyValue("noItemFoundText")</h3>
+                        }
+                    </div>
+
+                    <div class="loader">
+                        <img src="/images/default.gif" alt="loader">
+                    </div>
+                </section>
+            }
+        }
+    }
+}
+
+@helper PrintDropDownList(IEnumerable<IPublishedContent> markets, int id)
+{
+    <form action="#">
+        @if (markets != null && markets.Any())
+        {
+            var dropdownId = "market" + id;
+            <div class="form-group">
+                <select class="selectpicker form-control dropdown-product-listing" id="@dropdownId">
+                    <option value="-1">@Umbraco.Field("#All")</option>
+                    @foreach (var market in markets)
+                    {
+                        <option value="@market.Id">@market.Name</option>
+                    }
+                </select>
+            </div>
+        }
+    </form>
+}
+
+

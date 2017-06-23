@@ -1,0 +1,130 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("locationMapTitle") || currentPage.HasValue("locationShortDescription") || currentPage.HasValue("locationMap") || currentPage.HasValue("servicesProvided"))
+    {
+        <div class="col-md-12 col-sm-3 col-xs-12">
+            @if (currentPage.HasValue("locationMapTitle"))
+                {
+                <div class="clearfix"><h2 class="clr-orange">@currentPage.GetPropertyValue("locationMapTitle")</h2> </div>
+            }
+            @if (currentPage.HasValue("locationShortDescription"))
+            {
+                <p>
+                    @Html.Raw(currentPage.GetPropertyValue("locationShortDescription"))
+                </p>
+            }
+            @if (currentPage.HasValue("locationMap") || currentPage.HasValue("servicesProvided"))
+            {
+                <div class="location-map">
+                    @if (currentPage.HasValue("locationMap"))
+                    {
+                        var map = Umbraco.TypedMedia(currentPage.GetPropertyValue("locationMap"));
+                        if (map != null)
+                        {
+                            <img src="@map.Url" alt="@map.Name">
+                        }
+                    }
+                    <ul class="map-points-wrap">
+                        @Umbraco.Field("serviceOneTitle", insertBefore: "&lt;li&gt;&lt;i class=&quot;icon-dot dark-blue&quot;&gt;&lt;/i&gt;", insertAfter: "&lt;/li&gt;")
+                        @Umbraco.Field("serviceTwoTitle", insertBefore: "&lt;li&gt;&lt;i class=&quot;icon-dot green&quot;&gt;&lt;/i&gt;", insertAfter: "&lt;/li&gt;")
+                        @Umbraco.Field("serviceThreeTitle", insertBefore: "&lt;li&gt;&lt;i class=&quot;icon-dot light-blue&quot;&gt;&lt;/i&gt;", insertAfter: "&lt;/li&gt;")
+                        @Umbraco.Field("serviceFourTitle", insertBefore: "&lt;li&gt;&lt;i class=&quot;icon-dot pink&quot;&gt;&lt;/i&gt;", insertAfter: "&lt;/li&gt;")
+						@Umbraco.Field("serviceFiveTitle", insertBefore: "&lt;li&gt;&lt;i class=&quot;icon-dot normal-grey&quot;&gt;&lt;/i&gt;", insertAfter: "&lt;/li&gt;")
+						@Umbraco.Field("serviceSixTitle", insertBefore: "&lt;li&gt;&lt;i class=&quot;icon-dot yellow&quot;&gt;&lt;/i&gt;", insertAfter: "&lt;/li&gt;")
+						@Umbraco.Field("serviceSevenTitle", insertBefore: "&lt;li&gt;&lt;i class=&quot;icon-dot normal-brown&quot;&gt;&lt;/i&gt;", insertAfter: "&lt;/li&gt;")
+                    </ul>
+                </div>
+            }
+            @if (currentPage.HasValue("mapLocations"))
+            {
+
+                var mapLocations = currentPage.GetPropertyValue<ArchetypeModel>("mapLocations");
+                if (mapLocations != null && mapLocations.Any())
+                {
+                    <div class="location-details">
+                        <div class="row">
+                            @foreach (var locations in mapLocations)
+                            {
+                                <div class="col-sm-3 col-xs-6">
+                                    <div class="country-wise-list">
+                                        <h5>
+                                            @if (locations.HasValue("countryName"))
+                                            {
+                                                @locations.GetValue("countryName")
+                                            }
+                                            @if (locations.HasValue("services"))
+                                            {
+                                                @PrintIcons(locations.GetValue<string>("services").Split(','))
+
+                                            }
+                                        </h5>
+                                        @PrintLocations(locations)
+
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+
+}
+
+@helper PrintIcons(string[] locations)
+{
+    foreach (var item in locations)
+    {
+        if (item == "Information")
+        {
+                <i class="icon-dot dark-blue"></i>
+        }
+
+        else if (item == "Solutions")
+        {
+                <i class="icon-dot green"></i>
+        }
+        else if (item == "Outsourcing & Processing")
+        {
+                <i class="icon-dot light-blue"></i>
+        }
+        else if (item == "CRIF Ratings")
+        {
+                <i class="icon-dot pink"></i>
+        }
+        else if (item == "Grey Dot")
+        {
+                <i class="icon-dot normal-grey"></i>
+        }
+        else if (item == "Yellow Dot")
+        {
+                <i class="icon-dot yellow"></i>
+        }
+        else if (item == "Brown Dot")
+        {
+                <i class="icon-dot normal-brown"></i>
+        }
+
+}
+}
+@helper PrintLocations(ArchetypeFieldsetModel locations)
+{
+    var locationTitles = locations.GetValue<ArchetypeModel>("locations");
+    if (locationTitles != null && locationTitles.Any())
+    {
+        <ul>
+            @foreach (var locationNames in locationTitles)
+            {
+                if (locationNames.HasValue("location"))
+                {
+                    <li>@locationNames.GetValue("location")</li>
+                }
+            }
+        </ul>
+    }
+}

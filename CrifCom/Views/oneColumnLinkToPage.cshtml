@@ -1,0 +1,44 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using RJP.MultiUrlPicker.Models
+@{
+	Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("title") || currentPage.HasValue("shortDescription"))
+    {
+        <section class="fullwidth-content padding-30">
+            <div class="container">
+                <div class="row">
+                    @if (currentPage.HasValue("title"))
+                    {
+                        <div class="header col-sm-12">
+                            <h3>@currentPage.GetPropertyValue("title")</h3>
+                        </div>
+                    }
+                    @if (currentPage.HasValue("shortDescription"))
+                    {
+                        <div class="col-sm-9">
+                             @Html.Raw(currentPage.GetPropertyValue("shortDescription"))
+                        </div>
+                    }
+                    @if (currentPage.HasValue("linkButton"))
+                    {
+                        var linkButton = currentPage.GetPropertyValue<MultiUrls>("linkButton");
+                        if (linkButton != null && linkButton.Any())
+                        {
+                            var targetUrl = linkButton.FirstOrDefault().Url;
+                            var target = linkButton.FirstOrDefault().Target;
+                            <div class="col-sm-3 text-right">
+                                <a href="@targetUrl" target="@target" class="btn-secondary">@linkButton.FirstOrDefault().Name</a>
+                            </div>
+                        }
+
+                    }
+                    
+                </div>
+            </div>
+        </section>
+    }
+
+}

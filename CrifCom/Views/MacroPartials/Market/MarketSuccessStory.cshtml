@@ -1,0 +1,98 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models;
+@using Phases.UmbracoUtils
+@{
+	 var currentPage = Model.Content;
+    var home = currentPage.AncestorsOrSelf(1);
+   
+    int count = 4;
+    if (currentPage.HasValue("numberOfSuccessItems"))
+    {
+        count = currentPage.GetPropertyValue<int>("numberOfSuccessItems");
+    }
+    var childPage = currentPage.AncestorsOrSelf("market").DescendantsOrSelf("successStoryHome").Where(x => x.IsVisible());
+
+    if (childPage != null && childPage.DescendantsOrSelf("successStorySinglePage").Any())
+    {
+        var childItems = childPage.DescendantsOrSelf("successStorySinglePage").Where(x => x.IsVisible());
+        if (currentPage.DocumentTypeAlias == "marketNeeds")
+        {
+            childItems = childItems.Where(x => x.HasValue("marketNeeds") && x.GetPropertyValue<string>("marketNeeds").Split(new string[] { "," },
+                                   StringSplitOptions.RemoveEmptyEntries).Contains(currentPage.Id.ToString())).OrderByDescending(x => x.GetPropertyValue("publicationDate"));
+        }
+        if (childItems != null && childItems.Any())
+        {
+            <section class="four-col-list">
+                <div class="container">
+                    <div class="row">
+                        <div class="header col-sm-12">
+                            <hr>
+                            @if (currentPage.HasValue("successStoryTitle"))
+                            {
+                               <a href="@childPage.FirstOrDefault().Url"><h3>@currentPage.GetPropertyValue("successStoryTitle")</h3></a>
+                            }
+                            else
+                            {
+                                <a href="@childPage.FirstOrDefault().Url"><h3>@childPage.FirstOrDefault().Name</h3></a>
+                            }
+                            @if (childPage.FirstOrDefault().HasValue("internalLinks"))
+                            {
+                                var internalLink = childPage.FirstOrDefault().GetPropertyValue<MultiUrls>("internalLinks");
+                                if (internalLink != null && internalLink.Any())
+                                {
+                                    foreach (var links in internalLink)
+                                    {
+                                        <a href="@links.Url" target="@links.Target" class="standard-link">@links.Name</a>
+                                    }
+                                }
+                            }
+
+                        </div>
+
+
+                        @foreach (var items in childItems.Take(count))
+                        {
+                            var itemsUrl = items.GetUrl();
+                            <div class="single_item col-sm-3 col-xs-6">
+                                @if (items.HasValue("thumbnailImage"))
+                                {
+                                    var thumbnailImage = Umbraco.TypedMedia(items.GetPropertyValue("thumbnailImage"));
+                                    if (thumbnailImage != null)
+                                    {
+                                        <div class="image-holder">
+                                            <a href="@itemsUrl.Url" target="@itemsUrl.Target"><img src="@thumbnailImage.Url" alt="@thumbnailImage.Name"></a>
+                                        </div>
+                                    }
+                                }
+                                <div class="article-type-one">
+                                    @if (items.HasValue("actualDate"))
+                                    {
+                                        <span class="date">@items.GetPropertyValue("actualDate")</span>
+                                    }
+
+                                    @if (items.HasValue("title"))
+                                    {
+                                        <a href="@itemsUrl.Url" target="@itemsUrl.Target">
+                                            <h3 class="highlight-text">@items.GetPropertyValue("title")</h3>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@itemsUrl.Url" target="@itemsUrl.Target">
+                                            <p class="highlight-text">@items.Name</p>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </section>
+        }
+
+    }
+
+
+
+}
+      

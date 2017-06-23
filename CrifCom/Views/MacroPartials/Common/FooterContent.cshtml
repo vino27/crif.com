@@ -1,0 +1,71 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    if (home.HasValue("leftLogo") || home.HasValue("copyrightText") || home.HasValue("address") || home.HasValue("footerLeftBodyText"))
+    {
+        <div class="footer-left col-sm-6">
+            @if (home.HasValue("leftLogo"))
+            {
+                var footerLeftLogo = Umbraco.TypedMedia(home.GetPropertyValue("leftLogo"));
+                <div class="logo-holder">
+                    <a href="#"><img src="@footerLeftLogo.Url" alt="@footerLeftLogo.Name"></a>
+                </div>
+            }
+
+            <p>
+                @if (home.HasValue("copyrightText"))
+                {
+                    @home.GetPropertyValue("copyrightText")<br>
+                }
+                @if (home.HasValue("address"))
+                {
+
+                    @Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)home.GetPropertyValue("address")))
+                }
+
+            </p>
+            @if (home.HasValue("footerLeftBodyText"))
+            {
+                @Html.Raw(home.GetPropertyValue("footerLeftBodyText"))
+            }
+
+
+        </div>
+    }
+
+
+    if (home.HasValue("rightLogo") || home.HasValue("footerRightBodyText") || home.HasValue("footerQuickLinks"))
+    {
+        <div class="footer-right col-sm-6">
+
+
+            @if (home.HasValue("rightLogo"))
+                {
+                    var footerRightLogo = Umbraco.TypedMedia(home.GetPropertyValue("rightLogo"));
+                <div class="top">
+                    <img src="@footerRightLogo.Url" alt="@footerRightLogo.Name">
+                    @if (home.HasValue("footerRightBodyText"))
+                    {
+                        @Html.Raw(home.GetPropertyValue("footerRightBodyText"))
+                    }
+                </div>
+            }
+
+            @if (home.HasValue("footerQuickLinks"))
+                {
+                    var quickLinks = home.GetPropertyValue<MultiUrls>("footerQuickLinks");
+                    if (quickLinks != null && quickLinks.Any())
+                    {
+                    <ul class="footer-links">
+                        @foreach (var links in quickLinks)
+                        {
+                            <li><a href="@links.Url" target="@links.Target">@links.Name</a></li>
+                        }
+                    </ul>
+                }
+            }
+        </div>
+    }
+
+}

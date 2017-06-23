@@ -1,0 +1,166 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    IPublishedContent researchTypeHome = null;
+    if (!string.IsNullOrEmpty(Request["newsId"]))
+    {
+        researchTypeHome = Umbraco.TypedContent(Request["newsId"]);
+    }
+    else
+    {
+        researchTypeHome = Model.Content;
+    }
+
+    List<int> featuredNewsNodeId = new List<int>();
+    if (researchTypeHome.HasValue("highlightedNews"))
+    {
+        var newsListValue = researchTypeHome.GetPropertyValue<string>("highlightedNews");
+        var newsList = newsListValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+        var newsCollection = Umbraco.TypedContent(newsList).Where(x => x != null);
+        foreach (var item in newsCollection)
+        {
+            featuredNewsNodeId.Add(item.Id);
+        }
+    }
+
+    var researchItems = researchTypeHome.Descendants("singleResearchPage").Where(x => x.IsVisible() && x.TemplateId > 0 && !featuredNewsNodeId.Contains(x.Id)).OrderByDescending(x => x.GetPropertyValue("publicationDate"));
+
+    if (researchItems != null && researchItems.Any())
+    {
+        string nextLinkCssClass = "";
+        string prevLinkCssClass = "";
+        string currentClass = "";
+
+        int totalItems = researchItems.Count();
+        int page = 1;
+        int pageSize = researchTypeHome.HasValue("numberOfResearchItems") ? researchTypeHome.GetPropertyValue<int>("numberOfResearchItems") : 5;
+        string pageIndex = Request["page"];
+        int totalPages = (int)Math.Ceiling((double)totalItems / (double)pageSize);
+        if (!int.TryParse(pageIndex, out page) || page <= 0)
+        {
+            page = 1;
+        }
+        <div class="filter-content margin-top-20 ">
+            <ul class="list-unstyled listing-type-one">
+                @foreach (var research in researchItems.WhereNotNull().Skip((page - 1) * pageSize).Take(pageSize))
+                {
+                    string title = research.HasValue("title")
+                           ? research.GetPropertyValue<string>("title")
+                           : research.Name;
+                    string shortDescription = research.HasValue("shortDescripion")
+                         ? research.GetPropertyValue<string>("shortDescripion")
+                         : Phases.UmbracoUtils.Strings.TruncateAtWord(research.GetPropertyValue<string>("bodyText"), 130, "...");
+                    string date = research.HasValue("actualDate")
+                            ? research.GetPropertyValue<string>("actualDate")
+                            : "";
+                    <li>
+                        @if (research.HasValue("thumbnailImage"))
+                        {
+                            var newsImagesList = research.GetPropertyValue<string>("thumbnailImage")
+                                                .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+                            var newsImagesCollection = Umbraco.TypedMedia(newsImagesList).Where(x => x != null);
+                            if (newsImagesCollection != null && newsImagesCollection.Any())
+                            {
+                                var imageItem = newsImagesCollection.FirstOrDefault();
+                                <div class="image-holder">
+                                    <img src="@imageItem.Url" alt="@imageItem.Name">
+                                </div>
+                            }
+                        }
+
+                        <div class="article-type-one">
+                            @if (!string.IsNullOrEmpty(date))
+                            {
+                                <span class="date">@date</span>
+                            }
+
+                            <a href="@research.Url">
+                                <p class="highlight-text">@title</p>
+                            </a>
+                            @if (!string.IsNullOrEmpty("shortDescription"))
+                            {
+                                @Html.Raw(shortDescription)
+                            }
+
+                        </div>
+                    </li>
+                }
+            </ul>
+            <div class="loader" id="loader">
+                <img src="/images/default.gif" alt="loader">
+            </div>
+            <hr>
+            @if (totalItems > pageSize)
+            {
+                int statingPage = 1;
+                int currentPage = totalPages;
+                if (totalPages > 4 && page <= totalPages)
+                {
+                    currentPage = page + 4;
+                    statingPage = page;
+                }
+
+                if (((page > totalPages - 4) && (page <= totalPages) && (page - 4 >= 0)) || currentPage > totalPages)
+                {
+                    currentPage = totalPages;
+                    statingPage = totalPages - 4;
+                    if (statingPage < 1)
+                    {
+                        statingPage = 1;
+                    }
+                }
+                if (page == 1)
+                {
+                    prevLinkCssClass = "disabled";
+                }
+                <div class="pagination-wrap">
+                    <ul class="pagination pagination-md pull-right">
+                        @if (page != 1)
+                        {
+                            <li class="page-item with-arrow first-item">
+                                <a class="page-link @prevLinkCssClass" href="#" aria-label="Previous">
+                                    <span><i class="fa fa-angle-double-left first-page" aria-hidden="true"></i></span>
+                                </a>
+                            </li>
+                            <li class="page-item with-arrow @prevLinkCssClass">
+                                <a href="#" class="page-link previous-page"><i class="fa fa-angle-left" aria-hidden="true"></i></a>
+                            </li>
+                        }
+
+                        @for (int i = statingPage; i <= currentPage; i++)
+                        {
+                            if (i == page)
+                            {
+                                currentClass = "active";
+                            }
+                            else
+                            {
+                                currentClass = "";
+                            }
+                            <li class="page-item @currentClass"><a class="page-link page-number" href="#">@i</a></li>
+                        }
+                        @if (page >= totalPages)
+                        {
+                            nextLinkCssClass = "disabled";
+                        }
+                        @if (page != totalPages)
+                        {
+                            <li class="page-item with-arrow  next-page @nextLinkCssClass">
+                                <a class="page-link next-page" href="#" aria-label="Next">
+                                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li class="page-item with-arrow last-page last-item @nextLinkCssClass">
+                                <a class="page-link last-page" href="#" aria-label="Next">
+                                    <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+                </div>
+            }
+        </div>
+        <input type="text" id="txtPage" value="@page" style="display:none;" />
+        <input type="text" id="txtTotlaPage" value="@totalPages" style="display:none;" />
+    }
+}

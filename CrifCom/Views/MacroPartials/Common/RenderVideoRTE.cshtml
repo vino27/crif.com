@@ -1,0 +1,37 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@{
+    if (Model.MacroParameters["SelectVideoFile"] != null)
+    {
+
+        string imageUrl = "";
+        if(Model.MacroParameters["SelectVideoFile"] != null)
+        {
+            var videoThumbImage = Model.MacroParameters["thumbnailImage"].ToSafeString();
+            var thumbImage = Umbraco.TypedMedia(videoThumbImage);
+            if(thumbImage!= null)
+            {
+                imageUrl = "poster="+ @thumbImage.Url+"";
+            }
+        }
+        var mediaItem = Umbraco.TypedMedia(Model.MacroParameters["SelectVideoFile"]);
+		<div class="videocontent">
+        <video @Html.Raw(imageUrl) controls>
+            @if (mediaItem.HasValue("h264MP4Video"))
+            {
+                <source src="@mediaItem.GetPropertyValue("h264MP4Video")" type="video/mp4">
+            }
+            @if (mediaItem.HasValue("webMVideo"))
+            {
+                <source src="@mediaItem.GetPropertyValue("webMVideo")" type="video/webm">
+            }
+            @if (mediaItem.HasValue("oggFile"))
+            {
+                <source src="@mediaItem.GetPropertyValue("oggFile")" type="video/ogg">
+            }
+            <p>Your browser does not support HTML5 Video. Please <a target="_blank" href="http://browsehappy.com/">upgrade</a> to a modern browser.</p>
+        </video>
+				</div>
+}
+
+}

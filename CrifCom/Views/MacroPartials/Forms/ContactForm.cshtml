@@ -1,0 +1,269 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models;
+@using CrifCom.Models;
+@{
+    Contact contact = new Contact();
+	var currentNode = Model.Content;
+    Dictionary<string, string> market = new Dictionary<string, string>();
+    Dictionary<string, string> requestTypeoption = new Dictionary<string, string>();
+    var marketNodes = currentNode.AncestorOrSelf(1).Descendants("market");
+    if (marketNodes != null && marketNodes.Any())
+    {
+        foreach (var marketnode in marketNodes)
+        {
+            market.Add(marketnode.Id.ToString(), marketnode.Name);
+        }
+    }
+
+    if (currentNode.HasValue("requestType"))
+    {
+        var requestTypes = currentNode.GetPropertyValue<ArchetypeModel>("requestType");
+        if (requestTypes != null && requestTypes.Any())
+        {
+            foreach (var requestType in requestTypes)
+            {
+                if (requestType.HasValue("type"))
+                {
+                    requestTypeoption.Add(requestType.GetValue("type"), requestType.GetValue("type"));
+                }
+            }
+        }
+    }
+    string typeofRequestPlaceholder = currentNode.HasValue("richiestaPlaceholder") ? currentNode.GetPropertyValue<string>("richiestaPlaceholder") : "--select riciesta--";
+    string marketPlaceholder = currentNode.HasValue("marketPalceholder") ? currentNode.GetPropertyValue<string>("marketPalceholder") : "--select market--";
+
+    @Umbraco.Field("contactFormTitle", insertBefore: "&lt;h2&gt;", insertAfter: "&lt;/h2&gt;")
+    if(TempData["falied"] != "")
+    {        
+        <h3>@TempData["falied"]</h3>
+    }
+    if(TempData["Name"] != null)
+    {
+        contact.Name = TempData["Name"].ToString();
+    }
+    if (TempData["SurName"] != null)
+    {
+        contact.Surname = TempData["SurName"].ToString();
+    }
+    if (TempData["Email"] != null)
+    {
+        contact.Email = TempData["Email"].ToString();
+    }
+    if(TempData["Company"] != null)
+    {        
+        contact.Company = TempData["Company"].ToString();
+    }
+    if (TempData["Role"] != null)
+    {
+        contact.Role = TempData["Role"].ToString();
+    }
+    if(TempData["Country"] != null)
+    {        
+        contact.Nation = TempData["Country"].ToString();
+    }
+    string strUserAgent = Request.UserAgent.ToString().ToLower();
+    var linkedInTitle = "";
+    if (currentNode.HasValue("linkedInLoginTitle"))
+    {
+        linkedInTitle = currentNode.GetPropertyValue<string>("linkedInLoginTitle");
+    }
+	if (strUserAgent != null)
+	{
+		if (strUserAgent.Contains("ipad") || strUserAgent.Contains("iphone"))
+		{
+			using (Html.BeginUmbracoForm<CrifCom.Controllers.LinkedInController>("index", null))
+            {
+	            <div class="col-sm-12 form-group linkedin-Login lnkdin-iphn">
+					<i class="fa fa-linkedin" aria-hidden="true"></i>
+                        <input type="submit" value="@linkedInTitle" class="fa fa-linkedin lnkdin-iphn-btn" />
+                </div> 
+            } 
+		}
+    }
+    <div class="margin-top-20">
+        @using (Html.BeginUmbracoForm<CrifCom.Controllers.ContactController>("SubmitContact", null, new { id = "ContactForm" }))
+        {
+            
+            <div class="row row-offset-10"> 
+               @{
+                if (strUserAgent != null)
+				{
+				
+					if (!(strUserAgent.Contains("ipad")) && !(strUserAgent.Contains("iphone")))
+					{
+						 <div class="col-sm-12 form-group linkedin-Login">
+                            <a href="javascript:void(0);" onclick="liAuth()"><i class="fa fa-linkedin" aria-hidden="true"></i>@linkedInTitle</a>
+                        </div>
+					}
+				}
+                }
+            </div>
+            <div class="row row-offset-10">
+                <div class="col-sm-4 form-group">
+                    @Html.DropDownListFor(x => contact.RequestType, new SelectList(requestTypeoption, "Key", "Value"), typeofRequestPlaceholder,
+                                                                  new
+                                                                  {
+                                                                      @class = "form-control selectpicker",
+                                                                      id = "requestTypeTxt",
+                                                                      data_val = "true"
+                                                                  })
+                </div>
+            </div>
+            <div class="row row-offset-10">
+                <div class="col-sm-4 form-group">
+                    @Html.TextBoxFor(x => contact.Name, new
+               {
+                   id = "nameTxt",
+                   @class = "form-control contact-mandatory",
+                   autocorrect = "off",
+                   autocapitalize = "on",
+                   maxlength = 500,
+                   placeholder = currentNode.GetPropertyValue<string>("namePlaceholder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("nameFieldRequired"),
+				   @data_val_regex = currentNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                   data_val = "true"
+               })
+                    @Html.ValidationMessageFor(x => contact.Name, null, new { @class = "errormessage" })
+                </div>
+                <div class="col-sm-4 form-group">
+                    @Html.TextBoxFor(x => contact.Surname, new
+               {
+                   id = "surnameTxt",
+                   @class = "form-control contact-mandatory",
+                   autocorrect = "off",
+                   autocapitalize = "On",
+                   maxlength = 500,
+                   placeholder = currentNode.GetPropertyValue<string>("surnamePlaceholder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("surnameFieldRequired"),
+					@data_val_regex = currentNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                   data_val = "true"
+               })
+                    @Html.ValidationMessageFor(x => contact.Surname, null, new { @class = "errormessage" })
+                </div>
+                <div class="col-sm-4 form-group">
+                    @Html.TextBoxFor(x => contact.Company, new
+               {
+                   id = "companyTxt",
+                   @class = "form-control contact-mandatory",
+                   autocorrect = "off",
+                   autocapitalize = "on",
+                   maxlength = 500,
+                   placeholder = currentNode.GetPropertyValue<string>("companyPlaceholder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("companyFieldRequired"),
+					  @data_val_regex = currentNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                   data_val = "true"
+               })
+                    @Html.ValidationMessageFor(x => contact.Company, null, new { @class = "errormessage" })
+                </div>
+            </div>
+            <div class="row row-offset-10">
+                <div class="col-sm-4 form-group">
+                    @Html.TextBoxFor(x => contact.Email, new
+               {
+                   id = "emailTxt",
+					   type="email",
+                   @class = "form-control contact-mandatory",
+                   autocorrect = "off",
+                   autocapitalize = "off",
+                   maxlength = 500,
+                   placeholder = currentNode.GetPropertyValue<string>("emailPlaceholder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("emailFieldRequired"),
+                   @data_val_regex = currentNode.GetPropertyValue<string>("invalidEmailError"),
+                   data_val = "true"
+               })
+                    @Html.ValidationMessageFor(x => contact.Email, null, new { @class = "errormessage" })
+                </div>
+                <div class="col-sm-4 form-group">
+                    @Html.TextBoxFor(x => contact.Telephone, new
+               {
+                   id = "telephoneTxt",
+                   @class = "form-control",
+                   autocorrect = "off",
+                   maxlength = 500,
+                   placeholder = currentNode.GetPropertyValue<string>("telephonePlaceholder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("telephoneFieldRequired"),
+					   @data_val_regex = currentNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                   data_val = "true"
+               })
+                  @Html.ValidationMessageFor(x => contact.Telephone, null, new { @class = "errormessage" })
+                </div>
+                <div class="col-sm-4 form-group">
+                    @Html.TextBoxFor(x => contact.Role, new
+               {
+                   id = "roleTxt",
+                   @class = "form-control contact-mandatory",
+                   autocorrect = "off",
+                   autocapitalize = "on",
+                   maxlength = 500,
+                   placeholder = currentNode.GetPropertyValue<string>("rolePlaceholder"), 
+					   @data_val_regex = currentNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+						    data_val = "true"
+                   })
+						@Html.ValidationMessageFor(x => contact.Role, null, new { @class = "errormessage" })
+                </div>
+            </div>
+            <div class="row row-offset-10">
+                <div class="col-sm-4 form-group">
+                    @Html.DropDownListFor(x => contact.Market, new SelectList(market, "Key", "Value"), marketPlaceholder,
+                                                                  new
+                                                                  {
+                                                                      @class = "form-control selectpicker",
+                                                                      id = "marketTxt",
+                                                                      @data_val_required = currentNode.GetPropertyValue<string>("marketFieldRequired"),
+                                                                      data_val = "true"
+                                                                  })
+                    @Html.ValidationMessageFor(x => contact.Market, null, new { @class = "errormessage" })
+                </div>
+                <div class="col-sm-4 form-group">
+                    @Html.TextBoxFor(x => contact.Nation, new
+               {
+                   id = "nationTxt",
+                   @class = "form-control contact-mandatory",
+                   autocorrect = "off",
+                   autocapitalize = "on",
+                   maxlength = 500,
+                   placeholder = currentNode.GetPropertyValue<string>("nationPlaceholder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("nationFieldRequired"),
+					   @data_val_regex = currentNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                   data_val = "true"
+               })
+                    @Html.ValidationMessageFor(x => contact.Nation, null, new { @class = "errormessage" })
+
+                </div>
+            </div>
+            <div class="row row-offset-10">
+                <div class="col-sm-12 form-group">
+                    @Html.TextAreaFor(x => contact.Message, new
+               {
+                   id = "messageTxt",
+                   @rows = 4,
+                   autocorrect = "off",
+                   autocapitalize = "on",
+                   maxlength = 5000,
+                   placeholder = currentNode.GetPropertyValue<string>("messagePlaceholer"),
+					   @data_val_regex = currentNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                   data_val = "true"
+               })
+					@Html.ValidationMessageFor(x => contact.Message, null, new { @class = "errormessage" })
+                </div>
+            </div>
+					@Umbraco.RenderMacro("Googlecaptch")
+            <div class="row row-offset-10">
+                <div class="col-sm-12 form-group">
+                    <div class="checkbox">
+                        @Html.CheckBoxFor(x => contact.IsPrivacyChecked, new { id = "checkbox1", @class="contact-mandatory", data_val_range = currentNode.GetPropertyValue("privacyPolicyRequired") })
+                        <label id="terms-chkbx" for="checkbox1"><strong>@currentNode.GetPropertyValue("privacyTextTitle")</strong> @currentNode.GetPropertyValue("privacyText")</label>                        
+                        @Html.ValidationMessageFor(x => contact.IsPrivacyChecked, null, new { @class = "errormessage" })                        
+                    </div>
+                </div>
+            </div>           
+            <div class="row row-offset-10">
+
+                <div class="col-sm-12 ">
+                    <input tabindex="" type="submit" value="@currentNode.GetPropertyValue("buttonText")" class="btn-primary" />
+                </div>
+            </div>
+        }
+    </div>
+    <hr>
+}

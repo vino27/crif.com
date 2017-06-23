@@ -1,0 +1,10 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@{
+    Layout = "Pages.cshtml";
+}
+@Umbraco.RenderMacro("SliderWithRightSideImageOrVideo")
+@(Model.Content.GetGridHtml(Html, "bodyContent"))
+@section InnerBottomScript{
+    <script src="/scripts/ajaxhandler/product-listing-ajax-handler.js"></script>
+}

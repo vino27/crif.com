@@ -1,0 +1,115 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    if (home.HasValue("menuHeading"))
+    {
+        <li class="submenu clr-orange">
+            <a href="javascript:void(0)" class="popup-trigger-button"><i class="glob-icon"></i><i class="close-icon-small active-icon"></i>&nbsp;&nbsp;&nbsp;@home.GetPropertyValue("menuHeading")</a>
+
+
+            @if (home.HasValue("title") || home.HasValue("corporateTitle") || home.HasValue("corporateLinks") || home.HasValue("worldWideWebsites"))
+                {
+            <div id="worldwide-popup" class="worldwide-popup menu-dropdown">
+                <div class="worldwide-wrapper">
+                    @if (home.HasValue("title"))
+                            {
+                            <h2 class="clr-orange">@home.GetPropertyValue("title")</h2>
+                            }
+                    @if (home.HasValue("corporateLinks"))
+                            {
+                                var corporateLinks = home.GetPropertyValue<MultiUrls>("corporateLinks");
+                                if (corporateLinks != null && corporateLinks.Any())
+                                {
+                            <div class="lang-switcher-wrapper">
+                                @if (home.HasValue("corporateTitle"))
+                                            {
+                                        <p><i class="glob-icon"></i> <span class="text">@home.GetPropertyValue("corporateTitle")</span></p>
+                                            }
+
+                                <ul class="lang-switcher">
+                                    @foreach (var links in corporateLinks)
+                                                {
+                                            <li><a href="@links.Url" target="@links.Target">@links.Name</a></li>
+
+                                                }
+                                </ul>
+                            </div>
+                                }
+                            }
+                    @if (home.HasValue("worldWideWebsites"))
+                            {
+                                var countryList = home.GetPropertyValue<ArchetypeModel>("worldWideWebsites").OrderBy(x => x.GetValue("title"));
+                            <div class="row margin-top-25">
+                                @if (countryList != null && countryList.Any())
+                                    {
+                                        int divCount = 2;
+                                        int listTotal = countryList.Count();
+                                        int listTake = 0;
+                                        if (listTotal % 2 == 0)
+                                        {
+                                            listTake = listTotal / divCount;
+                                        }
+                                        else
+                                        {
+                                            listTake = (listTotal / divCount) + 1;
+                                        }
+                                    @PrintCountryList(countryList.Take(listTake));//print the first div with ahlf count
+                                    @PrintCountryList(countryList.Skip(listTake));//print the second div with rest of the list
+                                    }
+                            </div>
+                            }
+                </div>
+            </div>
+                }
+
+        </li>
+    }
+}
+
+@helper PrintCountryList(IEnumerable<ArchetypeFieldsetModel> countryList)
+{
+    <div class="col-sm-6">
+        <ul class="list-unstyled lang-switcher-list">
+            @foreach (var country in countryList)
+            {
+                <li>
+                    <div class="lang-switcher-wrapper">
+
+                        @if (country.HasValue("countryFlagImage") || country.HasValue("title"))
+                        { 
+                            <p>
+                                @if (country.HasValue("countryFlagImage"))
+                                {
+                                    var flag = Umbraco.TypedMedia(country.GetValue("countryFlagImage"));
+                                    <i><img src="@flag.Url" alt="@flag.Name"></i>
+                                }
+                                @if (country.HasValue("title"))
+                                {
+                                    <span class="text">@country.GetValue("title")</span>
+                                }
+                            </p>
+                        }
+
+                        @if (country.HasValue("linkTo"))
+                        {
+                            var links = country.GetValue<MultiUrls>("linkTo");
+                            if (links != null && links.Any())
+                            {
+                                <ul class=" lang-switcher">
+                                    @foreach (var siteLinks in links)
+                                    {
+                                        <li><a href="@siteLinks.Url" target="@siteLinks.Target">@siteLinks.Name</a></li>
+                                    }
+                                </ul>
+                            } 
+                        } 
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+

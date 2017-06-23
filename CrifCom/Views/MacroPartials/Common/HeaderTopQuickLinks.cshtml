@@ -1,0 +1,39 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+	var hideLoginButton = home.GetPropertyValue<bool>("hideLoginButton");
+    <nav class="top-nav">
+        <ul class="list-unstyled top-navigation-list">
+
+            @if (home.HasValue("headerQuickLinks"))
+            {
+                var quickLinks = home.GetPropertyValue<MultiUrls>("headerQuickLinks");
+                if (quickLinks != null && quickLinks.Any())
+                { 
+                    <li>
+                        <ul class="nav navbar-nav">
+                            @foreach (var links in quickLinks)
+                            {
+                                var className = Model.Content.Path.Split(",".ToCharArray()).Contains(links.Id.ToString()) ? "class=\"active\"" : string.Empty;
+                                <li @Html.Raw(className)><a href="@links.Url">@links.Name</a></li>
+                            }
+                        </ul>
+                    </li>
+                }
+            } 
+            @Umbraco.RenderMacro("SearchBox")
+            <li>
+                <ul class="nav navbar-nav nav-right">
+                    @if(!hideLoginButton)
+                    {
+                        @Umbraco.RenderMacro("Login")
+                    }
+                    @Umbraco.RenderMacro("WorldWideLocation")                   
+                </ul>
+            </li>
+            @Umbraco.RenderMacro("LanguageSwitch")
+        </ul>
+    </nav>
+}

@@ -1,0 +1,13 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "_Layout.cshtml";
+}
+@{var title = Model.Content.HasValue("title")? Model.Content.GetPropertyValue("title"): Model.Content.Name;}
+<h1 class="content-hidden-seo">@title</h1>
+@RenderBody()
+	  @section BottomScript{
+            @RenderSection("InnerBottomScript",false)
+            }
+@section TopScript{
+    @RenderSection("InnerTopScript", false)
+}

@@ -1,0 +1,74 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+
+@{  var home = Model.Content.AncestorOrSelf(1);
+    var selection = home.Children.Where(x =>!x.GetPropertyValue<bool>("hideFromSitemap"));
+    var excludedDoctypes = new[] { "uDateFoldersyFolderYear", "uDateFoldersyFolderMonth","dataRepository" };
+    }
+
+<article class="article sitemap">
+    <div> 
+        <div class="sitemap">
+            <div class="sitemap_wrapper">
+                <ul>
+                    <li><a href="@home.Url" title="@home.Name">@home.Name</a></li>
+                    @{
+                        var childNodes = home.Children.Where(x =>(!excludedDoctypes.Contains(x.DocumentTypeAlias)) && !x.GetPropertyValue<bool>("hideFromSitemap"));
+                        foreach (var child in childNodes)
+                        {
+                            @PrintMenu(child, true)
+                        }
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+@helper PrintMenu(IPublishedContent node, bool isMainMenuItem = false)
+{
+var childNodes = node.Children.Where(x => x.Level <= 3 && !x.GetPropertyValue<bool>("hideFromSitemap"));
+bool hasChild = childNodes.Any();
+string className = string.Empty;
+if (hasChild)
+{
+    className = "dropdown";
+}
+className = Model.Content.Path.Split(",".ToCharArray()).Contains(node.Id.ToSafeString()) ? className + " current-menu-item" : className;
+    <li>
+        @{
+            var pageUrl = node.GetUrl();
+            if (pageUrl.DisabledLink)
+            {
+                <span>
+                    @node.Name 
+                </span>
+            }
+            else {
+                if (node.DocumentTypeAlias == "uDateFoldersyFolderYear" || node.DocumentTypeAlias == "uDateFoldersyFolderMonth"|| node.DocumentTypeAlias == "dataRepository")
+                {
+                    <span>
+                        @node.Name
+                    </span>
+                }
+                else {
+                        <a href="@pageUrl.Url" target="@pageUrl.Target">
+                            @node.Name
+                        </a>
+                        }
+
+                        }
+                        if (hasChild)
+                        {
+                        <ul>
+                            @foreach (var child in childNodes)
+                            {
+                                @PrintMenu(child)
+                            }
+                        </ul>
+                        }
+                        }
+
+</li>
+}

@@ -1,0 +1,110 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@using Phases.UmbracoUtils
+@{
+    var currentPage = Model.Content;
+    var home = currentPage.AncestorOrSelf(1);
+
+    var productHome = home.Descendants("productAndServices").FirstOrDefault();
+    var productFamilyList = home.Descendants("dataRepository").DescendantsOrSelf("productFamilyHome").DescendantsOrSelf("productFamily").Where(x => x.IsVisible()
+                     && x.HasProperty("hideFromListing") && !x.GetPropertyValue<bool>("hideFromListing"));
+    var productList = home.Descendants("productAndServices").DescendantsOrSelf("productOrService").Where(x => x.IsVisible() && x.TemplateId > 0);
+    var products = home.Descendants("productAndServices").DescendantsOrSelf("productOrService").Where(x => x.IsVisible() && x.TemplateId > 0);    
+    foreach (var family in productFamilyList)
+    {
+        products = productList.Where(x => x.HasValue("selectFamily") && x.GetPropertyValue<string>("selectFamily")
+                         .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(family.Id.ToString())
+                         || (x.HasValue("selectMarket") && x.GetPropertyValue<string>("selectMarket")
+                         .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Model.Content.Parent.Id.ToString())
+                         && x.HasValue("selectMarketNeeds") && x.GetPropertyValue<string>("selectMarketNeeds")
+                         .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Model.Content.Id.ToString())));
+
+    }
+    if (productFamilyList != null && productFamilyList.Any() && products != null && products.Any() && products.Count() > 0)
+    {
+        <div class="tabs-cont-wrap">
+            <div class="row">
+                <div class="header col-sm-12">
+                    <a href="@productHome.Url"><h3>@productHome.Name</h3></a>
+                    @if (productHome.HasValue("internalLinks"))
+                    {
+                        var internalLink = currentPage.GetPropertyValue<MultiUrls>("internalLinks");
+                        if (internalLink != null && internalLink.Any())
+                        {
+                            foreach (var links in internalLink)
+                            {
+                                <a href="@links.Url" target="@links.Target" class="standard-link">@links.Name</a>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+                @foreach (var family in productFamilyList)
+                {
+                    products = productList.Where(x => x.HasValue("selectFamily") && x.GetPropertyValue<string>("selectFamily")
+                          .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(family.Id.ToString())
+                          && (x.HasValue("selectMarket") && x.GetPropertyValue<string>("selectMarket")
+                          .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Model.Content.Parent.Id.ToString())
+                          && x.HasValue("selectMarketNeeds") && x.GetPropertyValue<string>("selectMarketNeeds")
+                          .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Model.Content.Id.ToString())));
+                    if (products != null && products.Any() && products.Count() > 0)
+                    {
+                        <li role="presentation">
+                            <h2>@family.Name</h2>
+                        </li>
+                    }
+
+                }
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                @foreach (var family in productFamilyList)
+                {
+                    products = productList.Where(x => x.HasValue("selectFamily") && x.GetPropertyValue<string>("selectFamily")
+                          .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(family.Id.ToString())
+                          && (x.HasValue("selectMarket") && x.GetPropertyValue<string>("selectMarket")
+                          .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Model.Content.Parent.Id.ToString())
+                          && x.HasValue("selectMarketNeeds") && x.GetPropertyValue<string>("selectMarketNeeds")
+                          .Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(Model.Content.Id.ToString())));
+                    if (products != null && products.Any())
+                    {
+                        @PrintData(products)
+
+                    }
+                }
+            </div>
+        </div>
+    }
+
+}
+@helper PrintData(IEnumerable<IPublishedContent> productList)
+{   
+    <div role="tabpanel" class="tab-pane active" id="id1">
+        <div class="row content-type-2 product-service-listing">
+            @foreach (var product in productList)
+            {
+                var productUrl = product.GetUrl();
+                <div class="col-sm-12 col-md-6 margin-top-20 article-flow">
+                    <div>
+                        <a href="@productUrl.Url" target="@productUrl.Target">
+                            @if (product.HasValue("title"))
+                            {
+                                <strong class="clr-blue">@product.GetPropertyValue("title")</strong><br />
+                            }
+                            else
+                            {
+                                <strong class="clr-blue">@product.Name</strong><br />
+                            }
+                        </a>
+                    </div>
+                    @if (product.HasValue("shortDescription"))
+                    {
+                        @Html.Raw(product.GetPropertyValue("shortDescription"))
+                    }
+                </div>
+            }
+        </div>
+    </div>           
+}

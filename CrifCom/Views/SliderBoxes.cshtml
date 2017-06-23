@@ -1,0 +1,81 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage 
+@using Archetype.Models;
+@using RJP.MultiUrlPicker.Models
+@{
+	Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("creditTitle") || currentPage.HasValue("creditInformations"))
+    {
+        <section class="thumbnails-four-cols business-info bg-grey-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (currentPage.HasValue("creditTitle"))
+                        {
+                            <h3>@currentPage.GetPropertyValue("creditTitle")</h3>
+                        }
+                        @if (currentPage.HasValue("creditInformations"))
+                        {
+                            var creditInformation = currentPage.GetPropertyValue<ArchetypeModel>("creditInformations");
+                            if (creditInformation != null && creditInformation.Any())
+                            {
+                                <div class="box-wrapper item-slider">
+                                    @foreach (var information in creditInformation)
+                                    {
+                                        var target="";var targetUrl="";
+                                        if (information.HasValue("linkTo"))
+                                        {
+                                            var linkTo = information.GetValue<MultiUrls>("linkTo");
+                                            if(linkTo!=null && linkTo.Any())
+                                            {
+                                                targetUrl = "href=\""+ linkTo.FirstOrDefault().Url + "\"";
+                                                target = "target=\"" + linkTo.FirstOrDefault().Target + "\"";
+                                            }
+                                        }
+                                        <div class="col-sm-3">
+                                            <a @Html.Raw(targetUrl) @Html.Raw(target)>
+                                                @if (information.HasValue("image"))
+                                                {
+                                                    var image = Umbraco.TypedMedia(information.GetValue("image"));
+                                                    if (image != null)
+                                                    {
+                                                        <img src="@image.Url?width=60px&height=60px" alt="@image.Name">
+                                                    }
+                                                }
+                                                @if (information.HasValue("hoverImage"))
+                                                {
+                                                    var hoverImage = Umbraco.TypedMedia(information.GetValue("hoverImage"));
+                                                    if (hoverImage != null)
+                                                    {
+                                                        <img src="@hoverImage.Url?width=60px&height=60px" alt="@hoverImage.Name">
+                                                    }
+                                                }
+                                                else if(information.HasValue("image"))
+                                                {
+                                                    var image = Umbraco.TypedMedia(information.GetValue("image"));
+                                                    if (image != null)
+                                                    {
+                                                        <img src = "@image.Url?width=60px&height=60px" alt = "@image.Name" >
+                                                    }
+                                                }
+
+                                                @if (information.HasValue("title"))
+                                                {
+                                                    <h3>@information.GetValue("title")</h3>
+                                                } 
+                                            </a>
+                                        </div>
+                                    } 
+                                </div> 
+                            }
+                        }
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+
+}

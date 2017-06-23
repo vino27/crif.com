@@ -1,0 +1,64 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Archetype.Models;
+@using RJP.MultiUrlPicker.Models
+@{
+	Layout = null;
+}
+@{ 
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("infoBox"))
+    {
+        var infoBoxData = currentPage.GetPropertyValue<ArchetypeModel>("infoBox");
+        if (infoBoxData != null && infoBoxData.Any())
+        {
+            <section class="boxed-content">
+                <div class="container">
+                    <div class="row">
+                        @foreach (var boxData in infoBoxData)
+                        {
+                            <div class="col-sm-6">
+                                @if (boxData.HasValue("title"))
+                                {
+                                    <h3>@boxData.GetValue("title")</h3>
+                                } 
+                                <div class="boxed-cont-wrap">
+                                    @if (boxData.HasValue("infoBoxes"))
+                                    {
+                                        var childInfoBox = boxData.GetValue<ArchetypeModel>("infoBoxes");
+                                        if (childInfoBox != null && childInfoBox.Any())
+                                        {
+                                            foreach (var item in childInfoBox)
+                                            {
+                                                var target="";var targetUrl="";
+                                                if (item.HasValue("linkTo"))
+                                                {
+                                                    var linkTo = item.GetValue<MultiUrls>("linkTo");
+                                                    if(linkTo !=null && linkTo.Any())
+                                                    {
+                                                        target = "target=\""+linkTo.FirstOrDefault().Target+"\"";
+                                                        targetUrl = "href=\"" + linkTo.FirstOrDefault().Url + "\"";
+                                                    }
+                                                }
+                                                <div class="col-sm-6 boxed-link">
+
+                                                    <a @targetUrl @target>
+                                                        @if (item.HasValue("title"))
+                                                        {
+                                                            <span>@item.GetValue("title")</span>
+                                                        }
+                                                      
+                                                    </a>
+                                                </div>
+                                            }
+                                        }
+                                    } 
+                                </div>
+                            </div>
+                        } 
+                         
+                    </div>
+                </div>
+            </section>
+        }
+    }
+}

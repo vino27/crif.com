@@ -1,0 +1,73 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+	Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+    var rightAlignClass= "";
+    if (currentPage.HasValue("title") || currentPage.HasValue("shortDescription"))
+    {
+        <section class="banner content-right bg-white">
+            @if (currentPage.HasValue("backgroundImage"))
+            {
+                var backgroundImage = Umbraco.TypedMedia(currentPage.GetPropertyValue("backgroundImage"));
+                if (backgroundImage != null)
+                {
+                    var backgroundImageUrl = backgroundImage.Url;
+                    <div class="banner-bg" style="background:url(@backgroundImageUrl);"></div>
+                }
+            } 
+            <div class="container">
+                <div class="row">  
+                    @if (currentPage.GetPropertyValue<bool>("rightAlignContent"))
+                    { 
+                        rightAlignClass = "col-sm-offset-6";
+                    }
+                    else
+                    {
+                        rightAlignClass = "";
+                    }
+                    <div class="col-sm-6 @rightAlignClass contents-in-green">
+						@if (currentPage.HasValue("title"))
+                        {
+						 	<h3 class="section-sub-title clr-green">@currentPage.GetPropertyValue("title")</h3>
+						}
+                        @if (currentPage.HasValue("logo"))
+                        {
+                            var logoImage = Umbraco.TypedMedia(currentPage.GetPropertyValue("logo"));
+                            if (logoImage != null)
+                            {
+                                <img src="@logoImage.Url" alt="@logoImage.Name">
+                            }
+                        }
+                        @*@if (currentPage.HasValue("title"))
+                        {
+                            <h3 class="section-title clr-green">@currentPage.GetPropertyValue("title")</h3>
+                        }*@
+
+                        @if (currentPage.HasValue("shortDescription"))
+                        {
+                            @Html.Raw(currentPage.GetPropertyValue("shortDescription"))
+                        }
+                        @if (currentPage.HasValue("links"))
+                        {
+                            var pageLinks = currentPage.GetPropertyValue<MultiUrls>("links");
+                            if (pageLinks != null && pageLinks.Any())
+                            {
+                                foreach (var links in pageLinks)
+                                {
+                                    <a href="@links.Url" target="@links.Target" class="btn btn-secondary-green">@links.Name</a>
+                                }
+                            }
+                        }
+
+                    </div>
+</div>
+            </div>
+        </section>
+    }
+
+}

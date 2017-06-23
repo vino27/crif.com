@@ -1,0 +1,181 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+    @using CrifCom.ViewModels
+@{
+    Dictionary<string, string> Market = new Dictionary<string, string>();
+	var currentNode = Model.Content;
+    var registrationNode = currentNode.AncestorOrSelf(1).Descendants("registration");
+    var marketNodes = currentNode.AncestorOrSelf(1).Descendants("market");
+    if (marketNodes != null && marketNodes.Any())
+    {
+        foreach (var marketnode in marketNodes)
+        {
+            Market.Add(marketnode.Id.ToString(), marketnode.Name);
+        }
+
+    }
+
+    if (Umbraco.MemberIsLoggedOn())
+    {
+        string currentMemberEmail = Umbraco.MembershipHelper.CurrentUserName;
+        RegistrationViewModel existingMember = new RegistrationViewModel();
+        existingMember = existingMember.GetUserByEmail(currentMemberEmail);
+        if (existingMember != null)
+        {
+            
+            using (Html.BeginUmbracoForm<CrifCom.Controllers.UserProfileController>("UpdateUser", null, new { id = "userProfile-updation" }))
+            {
+                <div class="row row-offset-10">
+
+                    <div class="col-sm-4 form-group">
+
+                        @Html.TextBoxFor(x => existingMember.Name, new
+                                                                   {
+                                                                       id = "nameTxt",
+                                                                       @class = "form-control",
+                                                                       placeholder = currentNode.GetPropertyValue<string>("namePlaceHolder"),
+                                                                       @data_val_required = currentNode.GetPropertyValue<string>("nameFieldRequired"),
+                                                                       data_val = "true"
+                                                                   })
+                        @Html.ValidationMessageFor(x => existingMember.Name, null, new { @class = "errormessage" })
+                    </div>
+                    <div class="col-sm-4 form-group">
+
+                        @Html.TextBoxFor(x => existingMember.Surname, new
+                                                                       {
+                                                                           id = "surnameTxt",
+                                                                           @class = "form-control",
+                                                                           placeholder = currentNode.GetPropertyValue<string>("lastNamePlaceholder"),
+                                                                           @data_val_required = currentNode.GetPropertyValue<string>("lastNameFieldRequired"),
+                                                                           data_val = "true"
+                                                                       })
+                        @Html.ValidationMessageFor(x => existingMember.Surname, null, new { @class = "errormessage" })
+                    </div>
+                    <div class="col-sm-4 form-group">
+
+                        @Html.TextBoxFor(x => existingMember.Email, new
+                                                                    {
+                                                                        id = "emailTxt",
+																		type="email",
+                                                                        @class = "form-control",
+                                                                        placeholder = currentNode.GetPropertyValue<string>("emailPlaceholder"),
+                                                                        @data_val_required = currentNode.GetPropertyValue<string>("emailFieldRequired"),
+                                                                        data_val = "true"
+                                                                    })
+                        @Html.ValidationMessageFor(x => existingMember.Email, null, new { @class = "errormessage" })
+                    </div>
+
+                </div>
+                <div class="row row-offset-10">
+                    <div class="col-sm-4 form-group">
+
+                        @Html.DropDownListFor(x => existingMember.Market, new SelectList(Market, "Key", "Value", existingMember.Market),
+                                                                  new
+                                                                  {
+                                                                      @class = "form-control selectpicker",
+                                                                      id = "marketTxt",
+                                                                      placeholder = currentNode.GetPropertyValue<string>("marketPlaceholder"),
+                                                                      @data_val_required = currentNode.GetPropertyValue<string>("marketFieldRequired"),
+                                                                      data_val = "true"
+                                                                  })
+                        @Html.ValidationMessageFor(x => existingMember.Market, null, new { @class = "errormessage" })
+                    </div>
+                    <div class="col-sm-4 form-group">
+
+                        @Html.TextBoxFor(x => existingMember.Company, new
+                                                                       {
+                                                                           id = "companyTxt",
+                                                                           @class = "form-control",
+                                                                           placeholder = currentNode.GetPropertyValue<string>("companyPlaceholder"),
+                                                                           @data_val_required = currentNode.GetPropertyValue<string>("companyFieldRequired"),
+                                                                           data_val = "true"
+                                                                       })
+                        @Html.ValidationMessageFor(x => existingMember.Company, null, new { @class = "errormessage" })
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        @Html.TextBoxFor(x => existingMember.Role, new
+                                                                   {
+                                                                       id = "roleTxt",
+                                                                       @class = "form-control",
+                                                                       placeholder = currentNode.GetPropertyValue<string>("rolePlaceholder"),
+                                                                   })
+                    </div>
+                </div>
+                <div class="row row-offset-10">
+                    <div class="col-sm-4 form-group">
+
+                        @Html.TextBoxFor(x => existingMember.Nation, new
+                                                                       {
+                                                                           id = "nationTxt",
+                                                                           @class = "form-control",
+                                                                           placeholder = currentNode.GetPropertyValue<string>("nationPlaceholder"),
+                                                                           @data_val_required = currentNode.GetPropertyValue<string>("nationFieldRequired"),
+                                                                           data_val = "true"
+                                                                       })
+                        @Html.ValidationMessageFor(x => existingMember.Nation, null, new { @class = "errormessage" })
+                    </div>
+                    <div class="col-sm-4 form-group">
+
+                        @Html.PasswordFor(x => existingMember.Password, new
+                                                                           {
+                                                                               id = "passwordTxt",
+                                                                               @class = "form-control",
+                                                                               placeholder = currentNode.GetPropertyValue<string>("passwordPlaceholder"),
+                                                                               @data_val_required = currentNode.GetPropertyValue<string>("passwordFieldRequired"),
+                                                                               data_val = "true"
+                                                                           })
+                        @Html.ValidationMessageFor(x => existingMember.Password, null, new { @class = "errormessage" })
+                    </div>
+                    <div class="col-sm-4 form-group">
+
+                        @Html.PasswordFor(x => existingMember.PasswordConfirmation, new
+                                                                               {
+                                                                                   id = "conformTxt",
+                                                                                   @class = "form-control",
+                                                                                   placeholder = currentNode.GetPropertyValue<string>("confirmPasswordPlaceholder"),
+                                                                                   @data_val_required = currentNode.GetPropertyValue<string>("confirmPasswordFieldRequired"),
+                                                                                   @data_val_equalto = currentNode.GetPropertyValue<string>("passwordMismatchErrorMessage"),
+                                                                                   data_val = "true"
+                                                                               })
+                        @Html.ValidationMessageFor(x => existingMember.PasswordConfirmation, null, new { @class = "errormessage" })
+                    </div>
+                </div>
+                if (registrationNode != null)
+                {
+                    <div class="row row-offset-10">
+                        <div class="col-sm-12 form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox1" name="@existingMember.IsPrivacyChecked" required checked>
+                                <label id="terms-chkbx" for="checkbox1"><strong>@registrationNode.FirstOrDefault().GetPropertyValue("privacyTitle")</strong> @registrationNode.FirstOrDefault().GetPropertyValue("privacyText")</label>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+                <div class="row row-offset-10">
+                    <div class="col-sm-12 ">
+                        <input type="submit" value="@Model.Content.GetPropertyValue("submitButtonText")" class="btn-primary" />
+                    </div>
+                </div>                
+            }
+             
+
+            <div id="RegistrationSuccessMessage" class="alert alert-success alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>@currentNode.GetPropertyValue("successMessage")</strong>
+            </div>
+            <div id="RegistrationFailedMessage" class="alert alert-danger alert-dismissible fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>@currentNode.GetPropertyValue("failureMessage")</strong>
+            </div>
+           
+            <div class="loader" id="loader">
+                <img src="/images/default.gif" alt="loader">
+            </div>
+        }
+    }
+}

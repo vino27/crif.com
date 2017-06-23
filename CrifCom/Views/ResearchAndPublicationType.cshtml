@@ -1,0 +1,12 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "PageWithSideMenu.cshtml";
+}
+@Umbraco.RenderMacro("FeaturedNewsListing")
+<div class="reseatch-type-home-ajax-section">
+    @Umbraco.RenderMacro("ResearchTypeLatestResearchListing")
+</div>
+<input type="text" id="txtNodId" value="@Model.Content.Id" style="display:none;" />
+@section InnerBottomScript{
+    <script src="/scripts/ajaxhandler/research-type-ajaxhandler.js"></script>
+}

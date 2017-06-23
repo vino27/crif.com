@@ -1,0 +1,198 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Archetype.Models; 
+@using RJP.MultiUrlPicker.Models
+@using CrifCom.Controllers
+@using CrifCom.Models
+@{
+    var currentPage = Model.Content;  
+    if (currentPage.HasValue("downloadForms"))
+    {
+        var downloadFormList = currentPage.GetPropertyValue<ArchetypeModel>("downloadForms");
+        if (downloadFormList != null && downloadFormList.Any())
+        {
+            var currentMember = Phases.UmbracoUtils.Member.GetCurrentLoggedinMember();
+            foreach (var forms in downloadFormList)
+            { 
+                if (currentMember != null && Session["LoginId"] != null)
+                {
+                    @PrintData(forms)
+                }
+                else if (forms.GetValue<bool>("allowPublicToDownload"))
+                {
+                    @PrintData(forms)
+                }
+            }
+        }
+    }
+}
+@helper PrintData(ArchetypeFieldsetModel forms)
+{
+
+if (forms.HasValue("formBoxTitle") || forms.HasValue("formBoxDescription"))
+{ 
+            <div class="col-sm-12 two-col-link-boxes border-top-gray">
+                <div class="row">
+                    @if (forms.HasValue("formBoxTitle"))
+                    {
+                        <h3 class="clr-orange">@forms.GetValue("formBoxTitle")</h3>
+                    }
+                    <div class="row">
+
+                        @if (forms.HasValue("formBoxDescription"))
+                        { <div class="col-md-9">
+                                    <p>@Html.Raw(forms.GetValue("formBoxDescription"))</p>
+                                </div>
+                        }
+                        <div class="col-md-3 text-right">
+                            @PrintButton(forms)
+                        </div>
+                    </div>
+                </div>
+            </div>
+    }
+
+ 
+}
+
+ @helper  PrintButton(ArchetypeFieldsetModel forms) {
+
+if (forms.HasValue("downloadButtonLabel"))
+{
+            var fileId="";
+            if (forms.HasValue("downloadFile"))
+            {
+                var file = Umbraco.TypedMedia(forms.GetValue("downloadFile"));
+                if (file != null)
+                {
+                    fileId = file.Id.ToString();
+                }
+
+            }
+             <div>
+                <a href="javascript:void(0)" data-id="@fileId" data-backdrop="static" data-toggle="modal" data-target="#downloadFormModal" class="btn-secondary form-download">@forms.GetValue("downloadButtonLabel")</a>
+            </div>
+    } 
+}
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    var researchHome = home.DescendantOrSelf("researchAndPublicationHome");
+    FormDownload FormDownload = new FormDownload();
+    <div class="modal fade flexible-modal" role="dialog" id="downloadFormModal">
+        <div class="modal-dialog">
+            <!-- Modal content login form-->
+            <div class="modal-content big-layout">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="login-form-wrapper">
+                    <h3 class="clr-orange text-center">@researchHome.GetPropertyValue("formTitle")</h3>
+                    @using (Html.BeginUmbracoForm<CrifCom.Controllers.RegistrationController>("SubmitFormDownload", null, new { id = "documentDownloadForm" }))
+                    {
+                        <div class="row row-offset-10">
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => FormDownload.Name, new
+                           {
+                               id = "txtFirstName",
+                               @class = "form-control",
+                               placeholder = researchHome.GetPropertyValue<string>("firstNamePlaceholder"),
+                               @data_val_required = researchHome.GetPropertyValue<string>("firstNameRequiredMessage"),
+                               data_val = "true",
+                               Name= "Name"
+                           })
+                                @Html.ValidationMessageFor(x => FormDownload.Name, null, new { @class = "errormessage", @data_valmsg_for = "Name" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => FormDownload.Surname, new
+                           {
+                               id = "txtLastName",
+                               @class = "form-control",
+                               placeholder = researchHome.GetPropertyValue<string>("lastNamePlaceholder"),
+                               @data_val_required = researchHome.GetPropertyValue<string>("lastNameRequiredMessage"),
+                               data_val = "true",
+                               Name = "Surname"
+                           })
+                                @Html.ValidationMessageFor(x => FormDownload.Surname, null, new { @class = "errormessage", @data_valmsg_for = "Surname" })
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => FormDownload.Company, new
+                           {
+                               id = "txtCompany",
+                               @class = "form-control",
+                               placeholder = researchHome.GetPropertyValue<string>("companyPlaceholder"),
+                               @data_val_required = researchHome.GetPropertyValue<string>("companyRequiredMessage"),
+                               data_val = "true",
+                               Name = "Company"
+                           })
+                                @Html.ValidationMessageFor(x => FormDownload.Company, null, new { @class = "errormessage", @data_valmsg_for = "Company" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => FormDownload.Role, new
+                           {
+                               id = "txtRole",
+                               @class = "form-control",
+                               placeholder = researchHome.GetPropertyValue<string>("rolePlaceholder"),
+                               @data_val_required = researchHome.GetPropertyValue<string>("roleRequiredMessage"),
+                               data_val = "true",
+                               Name = "Role"
+                           })
+                                @Html.ValidationMessageFor(x => FormDownload.Role, null, new { @class = "errormessage", @data_valmsg_for = "Role" })
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => FormDownload.Email, new
+                           {
+                               id = "txtEmail",
+                               @class = "form-control",
+                               placeholder = researchHome.GetPropertyValue<string>("emailPlaceholder"),
+                               @data_val_required = researchHome.GetPropertyValue<string>("emailRequiredMessage"),
+                               @data_val_regex = researchHome.GetPropertyValue<string>("emailValidationMessage"),
+                               data_val = "true",
+                               Name = "Email"
+                           })
+                                @Html.ValidationMessageFor(x => FormDownload.Email, null, new { @class = "errormessage", @data_valmsg_for = "Email" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => FormDownload.Telephone, new
+                           {
+                               id = "txtTelephone",
+                               @class = "form-control",
+                               placeholder = researchHome.GetPropertyValue<string>("telephonePlaceholder"),
+                               @data_val_required = researchHome.GetPropertyValue<string>("telephoneRequiredMessage"),
+                               data_val = "true",
+                               Name = "Telephone"
+                           })
+                                @Html.ValidationMessageFor(x => FormDownload.Telephone, null, new { @class = "errormessage", @data_valmsg_for = "Telephone" })
+                            </div>
+                        </div>
+                        <input type="hidden" class="hidden" id="hidden-url"  value="" name="contentId"/> 
+                        <input type="hidden" class="hidden" id="hidden-node-id" value="@Model.Content.Id" name="NodeId" />
+                        <div class="row row-offset-10">
+                            <div class="col-sm-12 form-group">
+                                <div class="checkbox">
+                                    <input type="checkbox" id="checkbox1" name="isprivacy" required>
+                                    <label id="terms-chkbx" for="checkbox1"><strong>@researchHome.GetPropertyValue("privacyTextTitle")</strong> 
+                                        @Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)researchHome.GetPropertyValue("privacyDescription")))
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-sm-12 text-center">
+                                <input type="submit" value="@researchHome.GetPropertyValue("submitButtonText")" class="btn-primary" />
+                            </div>
+                        </div> 
+
+                    }
+                    <input type="hidden" class="hidden" id="hidden-content-id" />
+                    <a href="" download="" class="hidden hidden-a-tag"></a>
+                    <div class="loader" id="loader-form-submision">
+                        <img src="/images/default.gif" alt="loader">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+

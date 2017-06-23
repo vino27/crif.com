@@ -1,0 +1,54 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using umbraco.cms.businesslogic.web
+@using Umbraco.Core.Services;
+@{
+	Layout = null;
+}
+@{
+	
+@***Delete nodes under news***@
+@*Document parentNode = new Document(1346);//use id of parent node 
+foreach (Document child in parentNode.Children)
+{
+	var id=child.Id;
+    child.delete();
+        umbraco.library.UpdateDocumentCache(child.Id);  
+	@id 
+}
+umbraco.library.RefreshContent();*@
+	
+	
+@****Assign Templates to resigna stamba ****@
+	
+	@*IContentService cs = ApplicationContext.Current.Services.ContentService;
+foreach (var page in Model.Content.AncestorOrSelf(1).DescendantsOrSelf("singlePressRelease"))
+{
+    var content = cs.GetById(page.Id);
+    content.Template = content.ContentType.DefaultTemplate;
+    cs.SaveAndPublish(content);
+   @content.Name <br />
+}*@
+@*	string[] myCookies = Request.Cookies.AllKeys;
+foreach (string cookie in myCookies)
+{
+	@cookie
+  Response.Cookies[cookie].Expires = DateTime.Now.AddDays(-1);
+}*@
+	HttpWebRequest request = (HttpWebRequest) WebRequest.Create("http://qsl.roccofortehotels.com/sync/sync.ashx?cli=pgo&user=equa&pwd=3qu4&action=lgo&app=Sync&task=reg");
+    request.Method = "POST";
+    request.ContentType = "application/json";
+    Stream dataStream = request.GetRequestStream();
+
+    string postData = string.Empty;
+    byte[] postArray = System.Text.Encoding.ASCII.GetBytes(postData);
+    dataStream.Write(postArray, 0, postArray.Length);
+    dataStream.Flush();
+    dataStream.Close();
+
+    HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+    dataStream = response.GetResponseStream();
+    var reader = new StreamReader(dataStream);
+    string responseFromServer = reader.ReadToEnd();
+string contents = reader.ReadToEnd();
+@responseFromServer
+}

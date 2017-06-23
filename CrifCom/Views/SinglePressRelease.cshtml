@@ -1,0 +1,9 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "PageWithSideMenu.cshtml";
+} 
+ @if (Model.Content.HasValue("attachment"))
+ {
+	  var attachmentLink = Model.Content.GetPropertyValue("attachment");  
+	  <a href="@attachmentLink" target="_blank" class="download-link">@Umbraco.GetDictionaryValue("Press_Release_Download")</a> 
+ }  

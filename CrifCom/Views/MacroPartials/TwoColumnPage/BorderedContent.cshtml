@@ -1,0 +1,15 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+    if (!string.IsNullOrEmpty(Model.MacroParameters["description"].ToString()))
+    {
+        <div class="bordered-content">
+            @Html.Raw(Model.MacroParameters["description"].ToString())
+        </div>
+    }
+    else if (Model.Content.HasValue("borderBoxContent"))
+    {
+        <div class="bordered-content">
+            @Html.Raw(Model.Content.GetPropertyValue("borderBoxContent"))
+        </div>
+    }
+}

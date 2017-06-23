@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "_Layout.cshtml";
+}
+
+@Umbraco.RenderMacro("HomeSlider") 
+
+@(Model.Content.GetGridHtml(Html, "bodyContent"))

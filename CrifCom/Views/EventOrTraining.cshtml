@@ -1,0 +1,151 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@using Phases.UmbracoUtils
+@{
+    Layout = null;
+}
+@{
+    var currentNode = Model.Content;
+    if (currentNode.HasValue("selectTheNode"))
+    {
+        string cssClass = "";
+        var excludedDoctypes = new[] { "uDateFoldersyFolderYear", "uDateFoldersyFolderMonth" };
+        bool isContainChild = false;
+        int count = 6;
+        if (currentNode.HasValue("noOfItemsToShow"))
+        {
+            count = currentNode.GetPropertyValue<Int32>("noOfItemsToShow");
+        }
+        // var NodeList = Model.Content.GetPropertyValue<string>("newsItems").Split(',');
+        var nodeList = currentNode.GetPropertyValue<MultiUrls>("selectTheNode");
+        /*check list contains data*/
+
+        if (nodeList != null && nodeList.Any())
+        {
+            var nodes = nodeList.FirstOrDefault();
+            var singleNode = Umbraco.TypedContent(nodes.Id);
+            var pageUrl = singleNode.GetUrl();
+            <section class="three-col-list">
+                <div class="container">
+                    <div class="row">                                                
+                            @if (singleNode != null)
+                            {
+                                var eventNodes = singleNode.Descendants("singleEventPage").Where(X => X.HasValue("eventOrTraining") && X.GetPropertyValue<string>("eventOrTraining") == "Events").OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(count);
+                                var trainingNodes = singleNode.Descendants("singleEventPage").Where(X => X.HasValue("eventOrTraining") && X.GetPropertyValue<string>("eventOrTraining") == "Training").OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(count);
+
+                                if (currentNode.HasValue("hideEventListing") && !currentNode.GetPropertyValue<bool>("hideEventListing"))
+                                {
+                                    MultiUrls internalLink = null, ExternalLinks = null;
+                                    var title = currentNode.GetPropertyValue<string>("eventSectionTitle");
+                                    if (currentNode.HasValue("eventInternalLinks"))
+                                    {
+                                        internalLink = currentNode.GetPropertyValue<MultiUrls>("eventInternalLinks");
+
+                                    }
+                                    if (currentNode.HasValue("eventsExternalLinks"))
+                                    {
+                                        ExternalLinks = currentNode.GetPropertyValue<MultiUrls>("eventsExternalLinks");
+                                    }
+
+                                    @PrintNodes(eventNodes, pageUrl,title, singleNode, internalLink, ExternalLinks);
+
+                                }
+                                if (currentNode.HasValue("hideTrainingSection") && !currentNode.GetPropertyValue<bool>("hideTrainingSection"))
+                                {
+                                    MultiUrls internalLink = null, ExternalLinks = null;
+                                    var title = Model.Content.GetPropertyValue<string>("trainingSectionTitle");
+                                    if (currentNode.HasValue("trainingInternalLinks"))
+                                    {
+                                        internalLink = currentNode.GetPropertyValue<MultiUrls>("trainingInternalLinks");
+
+                                    }
+                                    if (currentNode.HasValue("trainingExternalLinks"))
+                                    {
+                                        ExternalLinks = currentNode.GetPropertyValue<MultiUrls>("trainingExternalLinks");
+                                    }
+                                    @PrintNodes(trainingNodes, pageUrl,title, singleNode, internalLink, ExternalLinks);
+                                }
+                            }                        
+                    </div>
+                </div>
+            </section>
+        }
+    }
+}
+
+@helper PrintNodes(IEnumerable<IPublishedContent> eventNodes,PageUrl pageUrl,string name,IPublishedContent singleNode, MultiUrls internalLink, MultiUrls ExternalLinks)
+{
+    if(eventNodes != null && eventNodes.Any())
+	{
+		
+    <div class="col-sm-6">               
+       <a href="@pageUrl.Url" target="@pageUrl.Target"><h3>@name</h3></a>
+
+        <ul>
+            @foreach (var childNode in eventNodes)
+            {
+                var childUrl = childNode.GetUrl();
+                var pageTitle = childNode.HasValue("title") ? childNode.GetPropertyValue<string>("title") : childNode.Name;
+                <li class="article-type-one">
+                    @if (childNode.HasValue("actualDate"))
+                    {
+                        <span class="date">@childNode.GetPropertyValue("actualDate")</span>
+                    }
+                    @if (childNode.DocumentTypeAlias == "singlePressRelease")
+                    {
+                        if (childNode.HasValue("bodyText"))
+                        {
+                            <a href="@childUrl.Url" target="@childUrl.Target"><h4 class="highlight-text">@pageTitle</h4></a>
+                        }
+                        else if (childNode.HasValue("attachment"))
+                        {
+                            var attachmentLink = childNode.GetPropertyValue<string>("attachment");
+                            <a href="@attachmentLink" target="_blank"><h4 class="highlight-text">@pageTitle</h4></a>
+                        }
+                        else
+                        {
+
+                            <a href="@childUrl.Url" target="@childUrl.Target"><h4 class="highlight-text">@pageTitle</h4></a>
+                        }
+                    }
+                    else
+                    {
+
+                        <a href="@childUrl.Url" target="@childUrl.Target"><h4 class="highlight-text">@pageTitle</h4></a>
+                    }
+
+                    @if (childNode.HasValue("shortDescripion"))
+                    {
+
+                        <p>@Html.Raw(childNode.GetPropertyValue("shortDescripion"))</p>
+                    }
+                    else if (childNode.HasValue("bodyText"))
+                    {
+                        <p>@Html.Raw(Phases.UmbracoUtils.Strings.TruncateAtWord(childNode.GetPropertyValue<string>("bodyText"), 130, "..."))</p>
+                    }
+                </li>
+            }
+
+        </ul>       
+            @if (internalLink != null && internalLink.Any())
+            {
+                foreach (var links in internalLink)
+                {
+                    <a href="@links.Url" target="@links.Target" class="standard-link">@links.Name</a>
+                }
+            }        
+       
+            @if (ExternalLinks != null && ExternalLinks.Any())
+            {
+                <br />
+                foreach (var urlLinks in ExternalLinks)
+                {
+                    <a href="@urlLinks.Url" target="@urlLinks.Target" class="standard-link">@urlLinks.Name</a><br />
+                }
+            }
+        
+    </div>
+	}
+}

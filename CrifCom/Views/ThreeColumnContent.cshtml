@@ -1,0 +1,125 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+	Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("linkToPages"))
+    {
+        var columnLinks = currentPage.GetPropertyValue<ArchetypeModel>("linkToPages");
+        if (columnLinks.Any() && columnLinks != null)
+        {
+            var cssClass = "";
+            if (columnLinks.Count() == 3)
+            {
+                cssClass = "col-sm-4";
+            }
+            else if (columnLinks.Count() == 2)
+            {
+                cssClass = "col-sm-6";
+            }
+            else if (columnLinks.Count() == 2)
+            {
+                cssClass = "col-sm-12";
+            }
+            else
+            {
+                cssClass = "col-sm-6";
+            }
+            //mobileImage
+            <section class="three-col-content text-center bg-grey-light padding-40">
+                <div class="container">
+                    <div class="row">
+                        @{
+                            foreach (var linkData in columnLinks)
+                            {
+                                var titleUrl="";
+                                var titleTarget = "";
+                                var urlName = "";
+                                if (linkData.HasValue("link"))
+                                {
+                                    var link = linkData.GetValue<MultiUrls>("link");
+                                    if (link.Any())
+                                    {
+                                        titleUrl = link.FirstOrDefault().Url;
+                                        titleTarget = link.FirstOrDefault().Target;
+                                        urlName = link.FirstOrDefault().Name;
+                                    }
+                                }
+
+                                <div class="@cssClass single-block">
+                                    @{
+                                        if (linkData.HasValue("image")||linkData.HasValue("title")||linkData.HasValue("mobileImage"))
+                                        {
+                                            if (!string.IsNullOrEmpty(titleUrl))
+                                            {
+                                                   <a class="mobile-link-block" href="@titleUrl" target="@titleTarget">
+                                                       @{
+                                                           if (linkData.HasValue("image") || linkData.HasValue("mobileImage"))
+                                                           { 
+                                                            <figure>
+                                                               @{
+                                                                   if (linkData.HasValue("image"))
+                                                                   {
+                                                                       var linkImage = Umbraco.TypedMedia(linkData.GetValue("image"));
+                                                                    <img class="hidden-xs" src="@linkImage.Url" alt="@linkImage.Name">
+                                                                   }
+                                                                   if (linkData.HasValue("mobileImage"))
+                                                                   {
+                                                                       var mobileLinkImage = Umbraco.TypedMedia(linkData.GetValue("mobileImage"));
+                                                                    <img class="hidden-sm hidden-lg hidden-md" src="@mobileLinkImage.Url?width=18px&height=18px" alt="@mobileLinkImage.Name">
+                                                                   }
+                                                                   else if (linkData.HasValue("image"))
+                                                                   {
+                                                                       var linkImage = Umbraco.TypedMedia(linkData.GetValue("image"));
+                                                                    <img class="hidden-sm hidden-lg hidden-md" src="@linkImage.Url?width=18px&height=18px" alt="@linkImage.Name">
+                                                                   }
+
+                                                            }
+                                                            </figure>
+                                                         } 
+                                                                   if (linkData.HasValue("title"))
+                                                                   { 
+                                                                        <h3>@linkData.GetValue("title")</h3> 
+                                                                   }
+                                                    }
+                                                   </a>
+                                            }
+                                          
+                                            
+                                        }
+                                        
+                                        if (linkData.HasValue("shortDescription"))
+                                        {
+                                            <p>
+                                               @Html.Raw(linkData.GetValue("shortDescription").Truncate(160))
+                                                
+                                           </p>
+                                        }
+                                        
+                                        if (!string.IsNullOrEmpty(titleUrl))
+                                        {
+                                            <a href="@titleUrl" target="@titleTarget" class="btn-primary" rel="nofollow">@urlName</a>
+                                        }
+
+                                    }
+                                    
+                                   
+                                  
+                                    
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </section>
+        }
+    }
+
+}
+
+
+ 

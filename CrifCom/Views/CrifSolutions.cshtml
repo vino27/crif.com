@@ -1,0 +1,80 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using Archetype.Models;
+@using RJP.MultiUrlPicker.Models
+@{
+	Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("sectionTitle") || currentPage.HasValue("shortDescription") || currentPage.HasValue("solutions"))
+    {
+        <section class="fullwidth-content padding-bottom-30 margin-top-30">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="border-top-gray">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    @if (currentPage.HasValue("sectionTitle"))
+                                    {
+                                        <h3>@currentPage.GetPropertyValue("sectionTitle")</h3>
+                                    }
+                                    @if (currentPage.HasValue("shortDescription"))
+                                    {
+                                        @currentPage.GetPropertyValue("shortDescription")
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @if (currentPage.HasValue("solutions"))
+                    {
+                        var solutions = Model.Content.GetPropertyValue<Archetype.Models.ArchetypeModel>("solutions");
+                        if (solutions != null && solutions.Any())
+                        {
+                            <div class="three-cols-wrap">
+                                @foreach (var solution in solutions)
+                                {
+                                    string link = "", name = "", target = "";
+                                    if (solution.HasValue("linkTo"))
+                                    {
+                                        var multiUrlPicker = solution.GetValue<RJP.MultiUrlPicker.Models.MultiUrls>("linkTo");
+                                        if (multiUrlPicker != null && multiUrlPicker.Any())
+                                        {
+                                            var linkItem = multiUrlPicker.FirstOrDefault();
+                                            link = linkItem.Url;
+                                            name = linkItem.Name;
+                                            target = linkItem.Target;
+                                        }
+                                    }
+                                    <div class="col-sm-4">
+                                        @if (solution.HasValue("logo"))
+                                        {
+                                            var solutionImagesList = solution.GetValue<string>("logo").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(int.Parse);
+                                            var solutionImagesCollection = Umbraco.TypedMedia(solutionImagesList).Where(x => x != null);
+                                            if (solutionImagesCollection != null)
+                                            {
+                                                var mediaItem = solutionImagesCollection.FirstOrDefault();
+                                                <a href="@link"><img src="@mediaItem.Url" alt="@mediaItem.Name"></a>
+                                            }
+
+                                        }
+                                        @if (solution.HasValue("shortDescription"))
+                                        {
+                                            @Html.Raw(solution.GetValue("shortDescription"));
+                                        }
+                                        @if (!string.IsNullOrEmpty(link))
+                                        {
+                                            <a href="@link" class="standard-link">@name</a>
+                                        }
+
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+    }
+}

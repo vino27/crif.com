@@ -1,0 +1,198 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@using Phases.UmbracoUtils
+@{
+    Layout = null;
+}
+@{
+    
+    var currentPage = Model.Content;
+
+    <section class="padding-30">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    @if (currentPage.HasValue("title"))
+                    {
+                        <h3>@currentPage.GetPropertyValue("title")</h3>
+                    }
+                    else
+                    {
+                        <h3>@currentPage.Name</h3>
+                    }
+
+                    @if (currentPage.HasValue("bodyText"))
+                    {
+                        @Html.Raw(currentPage.GetPropertyValue("bodyText"))
+                    }
+
+                </div>
+                @if (currentPage.HasValue("selectPressRelease"))
+                {
+                    var selectedNodes = currentPage.GetPropertyValue<string>("selectPressRelease");
+                    var nodesList = selectedNodes.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                    if (nodesList != null && nodesList.Any())
+                    {
+                        int divCount = 2;
+                        int listTotal = nodesList.Count();
+                        int listTake = 0;
+                        if (listTotal % 2 == 0)
+                        {
+                            listTake = listTotal / divCount;
+                        }
+                        else
+                        {
+                            listTake = (listTotal / divCount) + 1;
+                        }
+                        @PrintData(nodesList.Take(listTake))
+                        @PrintData(nodesList.Skip(listTake))
+                    }
+                }
+                else
+                {
+                      @PrintDataIfNothingSelected()
+                }
+
+               
+            </div>
+            @PrintLinks(currentPage)
+         
+        </div>
+    </section>
+}
+@helper PrintData(IEnumerable<string> nodeList)
+{
+
+    <div class="col-sm-6">
+        <ul class="list-unstyled">
+            @foreach (var singleNodes in nodeList)
+            {
+                var node = Umbraco.TypedContent(singleNodes);
+                if (node != null)
+                {
+                    var nodeUrl = node.GetUrl();
+
+                    <li class="article-type-one">
+                        @if (node.HasValue("actualDate"))
+                        {
+                            <span class="date">@node.GetPropertyValue("actualDate")</span>
+                        }
+                      
+                        @if (node.HasValue("title"))
+                        {
+                            <a href="@nodeUrl.Url" target="@nodeUrl.Target"><p class="highlight-text">@node.GetPropertyValue("title")</p> </a>
+                        }
+                        else
+                        {
+                            <a href="@nodeUrl.Url" target="@nodeUrl.Target"><p class="highlight-text">@node.Name</p></a>
+                        }
+                        @if (node.HasValue("shortDescripion"))
+                        {
+
+                            <p>@Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)node.GetPropertyValue("shortDescripion")))</p>
+                        }
+                        else if (node.HasValue("bodyText"))
+                        {
+                            <p>@Html.Raw(Phases.UmbracoUtils.Strings.TruncateAtWord(node.GetPropertyValue<string>("bodyText"), 130, "..."))</p>
+                        }
+                    </li>
+
+                }
+            }
+
+        </ul>
+       
+    </div>
+}
+@helper PrintDataIfNothingSelected()
+{
+var count = 6;
+if (Model.Content.HasValue("noOfItemsToShow"))
+{
+    count = Model.Content.GetPropertyValue<int>("noOfItemsToShow");
+}
+var currentPage = Model.Content.AncestorOrSelf(1).Descendants("areaStampa").FirstOrDefault();
+var childPages = currentPage.Descendants("newsSinglePage").Where(x => x.IsVisible()).OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(count);
+if (childPages != null && childPages.Any())
+{
+    int divCount = 2;
+    int listTotal = childPages.Count();
+    int listTake = 0;
+    if (listTotal % 2 == 0)
+    {
+        listTake = listTotal / divCount;
+    }
+    else
+    {
+        listTake = (listTotal / divCount) + 1;
+    }
+    @PrintAllData(childPages.Take(listTake))
+        @PrintAllData(childPages.Skip(listTake))
+}
+}
+@helper PrintAllData(IEnumerable<IPublishedContent> nodeList)
+    {
+
+        <div class="col-sm-6">
+            <ul class="list-unstyled">
+
+
+                @foreach (var singleNodes in nodeList)
+                {
+
+                    if (singleNodes != null)
+                    {
+                        var singleNodeUrl = singleNodes.GetUrl();
+                        var actualDate = "";
+                        if (singleNodes.HasValue("actualDate"))
+                        { 
+                            actualDate = singleNodes.GetPropertyValue<string>("actualDate");
+                        }
+                        
+                        <li class="article-type-one">
+                            <span class="date">@actualDate</span>
+                            @if (singleNodes.HasValue("title"))
+                            {
+                                <a href="@singleNodeUrl.Url" target="@singleNodeUrl.Target"><p class="highlight-text">@singleNodes.GetPropertyValue("title")</p> </a>
+                            }
+                            else
+                            {
+                                <a href="@singleNodeUrl.Url" target="@singleNodeUrl.Target"><p class="highlight-text">@singleNodes.Name</p></a>
+                            }
+                            @if (singleNodes.HasValue("shortDescripion"))
+                            {
+
+                                <p>@Html.Raw(singleNodes.GetPropertyValue("shortDescripion"))</p>
+                            }
+                            else if (singleNodes.HasValue("bodyText"))
+                            {
+                                <p>@Html.Raw(Phases.UmbracoUtils.Strings.TruncateAtWord(singleNodes.GetPropertyValue<string>("bodyText"), 130, "..."))</p>
+                            }
+                        </li>
+
+                    }
+                }
+
+            </ul>
+            
+        </div>
+    }
+@helper PrintLinks(IPublishedContent currentPage) {
+
+var childNode = currentPage.Descendants("newsHome").FirstOrDefault();
+if (childNode != null)
+{
+    if (childNode.HasValue("internalLinks"))
+    {
+        var internalLink = childNode.GetPropertyValue<MultiUrls>("internalLinks");
+        if (internalLink != null && internalLink.Any())
+        {
+            foreach (var links in internalLink)
+            {
+                    <a href="@links.Url" target="@links.Target" class="standard-link">@links.Name</a>
+            }
+        }
+
+    }
+}
+}

@@ -1,0 +1,52 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+    @{
+        var currentPage = Model.Content;
+        if (currentPage.HasValue("bannerTitle") || currentPage.HasValue("bannerDescription"))
+        {
+            <div class="col-sm-12 two-col-link-boxes border-top-gray">
+                <div class="row">
+                    @if (currentPage.HasValue("bannerTitle"))
+                    {
+                        <h3 class="clr-orange">@currentPage.GetPropertyValue("bannerTitle")</h3>
+                    } 
+                    <div class="row">
+                        @if (currentPage.HasValue("bannerDescription"))
+                        {
+                            <div class="col-sm-9">
+                                <p>@currentPage.GetPropertyValue("bannerDescription")</p>
+                            </div>
+                        }
+                        @if (currentPage.HasValue("contactExternalLink"))
+                        {
+                            var externalLink = currentPage.GetPropertyValue<MultiUrls>("contactExternalLink");
+                            if (externalLink != null)
+                            {
+                                <div class="col-sm-3 text-right">
+                                    <a href="@externalLink.FirstOrDefault().Url" target="@externalLink.FirstOrDefault().Target" class="btn-secondary">@externalLink.FirstOrDefault().Name</a>
+                                </div>
+                            }
+                        }
+                        else if (currentPage.HasValue("linkTo"))
+                        {
+                            var fileId = "";
+                            if (currentPage.HasValue("downloadFile"))
+                            {
+                                var file = Umbraco.TypedMedia(currentPage.GetPropertyValue("downloadFile"));
+                                if (file != null)
+                                {
+                                    fileId = file.Id.ToString();
+                                }
+
+                            }
+                            <div class="col-sm-3 text-right">
+                                <a  href="javascript:void(0)" data-id="@fileId" data-backdrop="static" data-toggle="modal" data-target="#downloadFormModal" class="btn-secondary  form-download">@currentPage.GetPropertyValue("linkTo")</a> <!--contact-modal-button-->
+                            </div>
+                        } 
+                    </div>
+                </div>
+            </div>
+        }
+
+    }
+@Umbraco.RenderMacro("DocumentDownloadPopUp")

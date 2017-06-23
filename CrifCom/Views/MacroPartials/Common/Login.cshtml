@@ -1,0 +1,162 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using CrifCom.Controllers
+@using CrifCom.Models 
+@using Phases.UmbracoUtils
+@using RJP.MultiUrlPicker.Models
+@{
+    Login login = new Login();
+    ForgotPassword forgotPassword = new ForgotPassword();
+    var home = Model.Content.AncestorOrSelf(1);
+    var loginNode = home.Descendant("loginForm");
+    var forgotPasswordNode = home.Descendant("forgotPasswordForm");
+    var currentMember = Phases.UmbracoUtils.Member.GetCurrentLoggedinMember();
+    if (currentMember != null)
+    {
+        var userProfileNode = home.Descendants("userProfile");
+        string url = "javascript:;";
+        if(userProfileNode != null && userProfileNode.Any())
+        {
+            url = userProfileNode.FirstOrDefault().Url;
+        }
+        var member = currentMember.Name;
+        int firstNameCount = member.IndexOf(",");
+        var firstName = "";
+        if (firstNameCount > 0)
+        {
+            firstName= member.Substring(0, firstNameCount);
+        }
+
+          <li class="clr-orange three-tier">
+              <a  href="@url" class="user-info"><i class="login-icon"></i>&nbsp;&nbsp;&nbsp;@firstName</a>            
+           </li>
+           <li class="submenu clr-orange"> 
+               @using (Html.BeginUmbracoForm<CrifCom.Controllers.RegistrationController>("MemberLogout", null, new { id = "signOut",@class="sign-out" }))
+               {
+                   <p>
+                       @if (loginNode.HasValue("logOutText"))
+                       {
+                           <a class="popup-trigger-button" href="javascript:void(0)"><i class="fa fa-sign-out" aria-hidden="true"></i><span>@loginNode.GetPropertyValue("logOutText")</span></a>
+                       } 
+                   </p>
+               }
+           </li>
+    }
+    else
+    {
+        <li class="submenu clr-orange">
+            <a href="#login-popup" class="popup-trigger-button"><i class="login-icon"></i><i class="close-icon-small active-icon"></i>&nbsp;&nbsp;&nbsp;Login</a>
+            <div id="login-popup" class="login-popup menu-dropdown">
+                <div class="login-form-wrapper" id="login-form-main">
+                
+                  
+                        @using (Html.BeginUmbracoForm<CrifCom.Controllers.RegistrationController>("Login", null, new { id = "loginForm" }))
+                        {
+							@Html.AntiForgeryToken()
+                            Html.EnableClientValidation();
+                            Html.EnableUnobtrusiveJavaScript();
+                            <div class="form-group">
+                             
+                                @Html.TextBoxFor(x => login.UserName, new
+                           {
+                               id = "userNameTxt",
+                               @class = "form-control",
+                               placeholder = loginNode.GetPropertyValue("usernamePlaceholder"),
+                               @data_val_required = loginNode.GetPropertyValue("usernameRequiredMessage"),
+								   @data_val_regex = loginNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                               autocorrect = "off",
+                               autocapitalize = "off",
+                               Name = "Username"
+                           })      
+                                @Html.ValidationMessageFor(x => login.UserName, null, new { @class = "errormessage", @data_valmsg_for = "Username" })         
+                            </div>
+                            <div class="form-group">
+                              
+                                @Html.PasswordFor(x => login.PassWord, new
+                           {
+                               id = "passwordTxthome",
+                               @class = "form-control",
+                               placeholder = loginNode.GetPropertyValue("passwordPlaceholder"),
+                               @data_val_required = loginNode.GetPropertyValue("passwordRequiredMessage"),
+								   @data_val_regex = loginNode.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                               autocorrect = "off",
+                               Name = "Password"
+                           })         
+                                @Html.ValidationMessageFor(x => login.PassWord, null, new { @class = "errormessage", @data_valmsg_for = "Password" }) 
+                            </div>
+                            <div class="invalid-login" id="invalid-login">
+                                <span>@loginNode.GetPropertyValue("invalidLoginText")</span>
+                            </div>
+                            <div class="button-wrapper">
+                                @*<button class="submit btn btn-primary">@home.GetPropertyValue("loginButtonText")</button>*@
+                                <input type="submit" value="@loginNode.GetPropertyValue("loginButtonText")" class="submit btn btn-primary" />
+                            </div> 
+                        } 
+                        <p>
+                            @if (loginNode.HasValue("forgotPasswordText"))
+                            {
+                                <a id="forgot-password" href="" class="link">@loginNode.GetPropertyValue("forgotPasswordText")</a>
+                            } 
+
+                        </p>
+                        <p>
+                            @PrintRegisterButton(loginNode)
+
+                        </p>
+                    @*<div class="loader-login" id="loader">
+                        <img src="/images/default.gif" alt="loader">
+                    </div>*@
+</div>
+                <div class="login-form-wrapper" id="reset-password" style="display:none">
+                    @using (Html.BeginUmbracoForm<CrifCom.Controllers.UserProfileController>("ForgotPassword", null, new { id = "forgotPasswordForm" }))
+                    { 
+                        <div class="form-group">
+                            @Html.TextBoxFor(x => forgotPassword.Email, new
+                       {
+                           id = "emailLoginTxt",
+                           @class = "form-control",
+                           placeholder = forgotPasswordNode.GetPropertyValue("emailPlaceHolder"),
+                           @data_val_required = forgotPasswordNode.GetPropertyValue<string>("emailRequiredMessage"),
+                           @data_val_regex = forgotPasswordNode.GetPropertyValue<string>("emailValidationMessage"),
+                           autocorrect = "off",
+                           autocapitalize = "off",
+                           Name = "Email"
+                       }) 
+                            @Html.ValidationMessageFor(x => forgotPassword.Email, null, new { @class = "errormessage", @data_valmsg_for = "Email" }) 
+                        </div>
+                        <div  class="alert alert-success alert-dismissible fade in resetSuccessMessage" role="alert">
+
+                            <strong>@forgotPasswordNode.GetPropertyValue("mailSentSuccessMessage")</strong>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible fade in reset-failed-message" role="alert">
+
+                            <strong>@forgotPasswordNode.GetPropertyValue("mailSentFailureMessage")</strong>
+                        </div>
+                        <div class="button-wrapper">
+                            <input type="submit" value="@forgotPasswordNode.GetPropertyValue("resetPasswordText")" class="submit btn btn-primary" />
+                           
+                        </div>
+                    }
+                    <p>
+                        @PrintRegisterButton(loginNode)
+                    </p>
+                    @*<div class="loader-reset-password" id="loader">
+                        <img src="/images/default.gif" alt="loader">
+                    </div>*@
+                </div>
+            </div>
+        </li>
+    }
+
+}
+
+@helper PrintRegisterButton(IPublishedContent home) {
+if (home.HasValue("registrationFormUrl"))
+{
+    var registrationUrl = home.GetPropertyValue<MultiUrls>("registrationFormUrl");
+    if (registrationUrl != null && registrationUrl.Any())
+    {
+            <a href="@registrationUrl.FirstOrDefault().Url" target="@registrationUrl.FirstOrDefault().Target" class="link">@registrationUrl.FirstOrDefault().Name</a>
+    }
+}
+
+}

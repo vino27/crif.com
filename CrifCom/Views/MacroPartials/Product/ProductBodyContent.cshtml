@@ -1,0 +1,63 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{
+	var currentNode = Model.Content;
+    <div class="title-block hidden-xs">
+        @*<div class="row">
+            <div class="col-sm-8">*@
+        @if (Model.Content.HasValue("pageIndicatorHeading"))
+        {
+            <p class="clr-blue category">
+                @if (Model.Content.HasValue("pageIndicatorLink"))
+                {
+                    var multiUrlPicker = Model.Content.GetPropertyValue<RJP.MultiUrlPicker.Models.MultiUrls>("pageIndicatorLink");
+                    if (multiUrlPicker.Any())
+                    {
+                        var item = multiUrlPicker.FirstOrDefault();
+                        <a href="@item.Url" target="@item.Target"><strong>@Model.Content.GetPropertyValue("pageIndicatorHeading")</strong></a>
+                    }
+                }
+                else
+                {
+                    <strong>@Model.Content.GetPropertyValue("pageIndicatorHeading")</strong>
+                }
+            </p>
+        }
+        <h1 class="article-title">@Umbraco.Field("title", altFieldAlias: "pageName")</h1>
+        @*</div>*@
+        @Umbraco.RenderMacro("SocialShare")
+        @*</div>*@
+    </div>
+	    <div class="title-block hidden-lg hidden-md hidden-sm">
+        @*<div class="row">
+            <div class="col-sm-8">*@
+        @if (Model.Content.HasValue("pageIndicatorHeading"))
+        {
+            <p class="clr-blue category">
+                @if (Model.Content.HasValue("pageIndicatorLink"))
+                {
+                    var multiUrlPicker = Model.Content.GetPropertyValue<RJP.MultiUrlPicker.Models.MultiUrls>("pageIndicatorLink");
+                    if (multiUrlPicker.Any())
+                    {
+                        var item = multiUrlPicker.FirstOrDefault();
+                        <a href="@item.Url" target="@item.Target"><strong>@Model.Content.GetPropertyValue("pageIndicatorHeading")</strong></a>
+                    }
+                }
+                else
+                {
+                    <strong>@Model.Content.GetPropertyValue("pageIndicatorHeading")</strong>
+                }
+            </p>
+        }
+        <h1 class="article-title">@Umbraco.Field("title", altFieldAlias: "pageName")</h1>
+        @*</div>*@
+        @*</div>*@
+    </div>
+    if (currentNode.HasValue("bodyText"))
+    {
+        @Html.Raw(currentNode.GetPropertyValue("bodyText"))
+    }
+	
+	<div class="title-block hidden-lg hidden-md hidden-sm">
+		@Umbraco.RenderMacro("SocialShare")
+	</div>
+}

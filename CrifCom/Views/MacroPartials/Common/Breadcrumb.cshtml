@@ -1,0 +1,67 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using System.Globalization;
+@{	
+    var currentPage = Model.Content;
+	
+	//if its a download confirmation page - use the source page as the current page 
+	bool downloadConfirmation = false;
+	if(currentPage.DocumentTypeAlias == "downloadConfirmation")
+	{
+		int downloadConfirmationPageId = 0;
+		if(Request["s1"] != null && int.TryParse(Request["s1"], out downloadConfirmationPageId))
+		{		
+			if( downloadConfirmationPageId > 0) 
+			{				
+				var downloadConfirmationPage = Umbraco.TypedContent(downloadConfirmationPageId);
+				if( downloadConfirmationPage != null &&  downloadConfirmationPage.Id > 0) 
+				{
+					downloadConfirmation = true;
+					currentPage = downloadConfirmationPage;			
+				}
+			}
+		}
+	}
+	
+	var selection = currentPage.Ancestors();
+	
+	
+    if (selection.Any())
+    {
+        var italianCulture = new CultureInfo("it-IT");
+        var englishCulture = new CultureInfo("en-GB");
+        string[] monthNames = englishCulture.DateTimeFormat.MonthGenitiveNames;
+        <section class="bg-grey-light breadcrumb-wrap">
+            <div class="container">
+                <div class="row">
+                    <ul class="breadcrumb">
+                        @foreach (var item in selection.OrderBy("Level"))
+                        {
+                            if (item.DocumentTypeAlias == "uDateFoldersyFolderMonth" || item.DocumentTypeAlias == "uDateFoldersyFolderYear" || item.DocumentTypeAlias == "consumerSection")
+                            {
+                                int monthPosition = Array.IndexOf(monthNames, item.Name);
+                                if (monthPosition > -1)
+                                {
+                                    DateTime Italiandate = Convert.ToDateTime("01-" + item.Name + "-2011"); 
+                                    <li>@Italiandate.ToString("MMMM", italianCulture)</li>
+                                }
+                                else
+                                {
+                                    <li>@item.Name</li>
+                                }
+
+                            }
+                            else
+                            {
+                                <li><a href="@item.Url">@item.Name</a> </li>
+                            }
+                        }
+						@if(downloadConfirmation){
+							<li><a href="@currentPage.Url">@currentPage.Name</a> </li>
+						} 
+                        <li class="active">@Model.Content.Name</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    }
+}

@@ -1,0 +1,72 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+    @{
+
+        var title = Model.MacroParameters["productFamilyTitle"];
+        var home = Model.Content.AncestorOrSelf(1);
+        var currentPage = Model.Content;
+        var productFamilyList = home.Descendants("dataRepository").DescendantsOrSelf("productFamilyHome").DescendantsOrSelf("productFamily").Where(x => x.IsVisible()
+                                && x.HasProperty("hideFromListing") && !x.GetPropertyValue<bool>("hideFromListing"));
+        if (productFamilyList != null && productFamilyList.Any())
+        {
+            <section class="publication-listing padding-30">
+                <div class="container">
+                    <div class="row">
+                        @if (title!=null)
+                        {
+                            <div class="col-sm-12 header">
+                                <h3>@Html.Raw(title)</h3>
+                            </div>
+                        }
+                         <div class="tile-listing">
+                             @foreach (var family in productFamilyList)
+                             {
+                                <div class="col-sm-6 single-column tab-two-col-listing">
+                                    @if (family.HasValue("thumbnailImage") || family.HasValue("mouseHoverImage"))
+                                        {
+                                    <div class="col-sm-3 image-holder">
+                                        <a href="#@family.Id"> 
+                                            <div class="image-with-border">
+                                                @if (family.HasValue("thumbnailImage"))
+                                                    {
+                                                        var thumbnailImage = Umbraco.TypedMedia(family.GetPropertyValue("thumbnailImage"));
+                                                    <img src="@thumbnailImage.Url" alt="@thumbnailImage.Name">
+                                                    }
+
+                                                @if (family.HasValue("mouseHoverImage"))
+                                                    {
+                                                        var hoverImage = Umbraco.TypedMedia(family.GetPropertyValue("mouseHoverImage"));
+                                                    <img src="@hoverImage.Url" alt="@hoverImage.Name">
+                                                    } 
+                                            </div> 
+                                        </a>
+                                    </div>
+                                      }
+                                    <div class="col-sm-9 content-holder">
+                                        <a href="#@family.Id">
+                                            @if (family.HasValue("title"))
+                                            {
+                                                <h2 class="article-heading">@family.GetPropertyValue("title")</h2>
+                                            }
+                                            else
+                                            {
+                                                <h2>@family.Name</h2>
+                                            }
+
+                                        </a>
+                                        @if (family.HasValue("shortDescription"))
+                                        {
+                                            <p>@family.GetPropertyValue("shortDescription")</p>
+                                        }
+                                       
+                                    </div>
+                                </div>
+                             }
+                         </div>
+                    </div>
+                </div>
+            </section>
+        }
+
+    }
+ 

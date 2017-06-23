@@ -1,0 +1,239 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using CrifCom.Controllers
+@using CrifCom.Models
+@using Archetype.Models;
+@using CrifCom.ViewModels
+@{
+    var currentPage = Model.Content;
+    var home = Model.Content.AncestorOrSelf(1);
+    var contactPage = home.Descendants("contact").FirstOrDefault();
+
+    ModalContactForm contact = new ModalContactForm();
+    Dictionary<string, string> market = new Dictionary<string, string>();
+    Dictionary<string, string> requestTypeoption = new Dictionary<string, string>();
+    var marketNodes = Model.Content.AncestorOrSelf(1).Descendants("market");
+    var parentMarket = Model.Content.Ancestor("market"); 
+	var marketId = 0;
+    if (parentMarket != null)
+    {
+        marketId = parentMarket.Id;
+    }
+    if (marketNodes != null && marketNodes.Any())
+    {
+        foreach (var marketnode in marketNodes)
+        {
+            market.Add(marketnode.Id.ToString(), marketnode.Name);
+        }
+    }
+    if (contactPage.HasValue("requestType"))
+    {
+        var requestTypes = contactPage.GetPropertyValue<ArchetypeModel>("requestType");
+        if (requestTypes != null && requestTypes.Any())
+        {
+            foreach (var requestType in requestTypes)
+            {
+                if (requestType.HasValue("type"))
+                {
+                    requestTypeoption.Add(requestType.GetValue("type"), requestType.GetValue("type"));
+                }
+            }
+        }
+    }
+    string typeofRequestPlaceholder = contactPage.HasValue("richiestaPlaceholder") ? contactPage.GetPropertyValue<string>("richiestaPlaceholder") : "--select riciesta--";
+    string marketPlaceholder = contactPage.HasValue("marketPalceholder") ? contactPage.GetPropertyValue<string>("marketPalceholder") : "--select market--";
+
+    <div class="modal fade flexible-modal" role="dialog" id="contactFormModal"> 
+        <div class="modal-dialog">
+            <!-- Modal content login form-->
+            <div class="modal-content big-layout">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="login-form-wrapper">
+                    <h3 class="clr-orange text-center">@contactPage.GetPropertyValue("contactFormTitle")</h3> 
+                    @using (Html.BeginUmbracoForm<CrifCom.Controllers.ContactController>("SubmitModalContactDetails", null, new { id = "ContactModalForm" }))
+                    {
+                        <div class="row row-offset-10">
+                            @*<div class="col-md-6 form-group">
+                                @Html.DropDownListFor(x => contact.RequestType, new SelectList(requestTypeoption, "Key", "Value"), typeofRequestPlaceholder,
+                                                                  new
+                                                                  {
+                                                                      @class = "form-control selectpicker",
+                                                                      id = "requestTypeTxt",
+                                                                      data_val = "true"
+                                                                  })
+                            </div>*@
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => contact.Name, new
+                       {
+                           id = "nameTxt",
+                           @class = "form-control",
+                           autocorrect = "off",
+                           autocapitalize = "on",
+                           maxlength = 500,
+                           placeholder = contactPage.GetPropertyValue<string>("namePlaceholder"),
+                           @data_val_required = Model.Content.GetPropertyValue<string>("nameFieldRequired"),
+                           data_val = "true"
+                       })
+                                @Html.ValidationMessageFor(x => contact.Name, null, new { @class = "errormessage" })
+                            </div>
+                            <div class="col-md-6 form-group">
+
+                                @Html.TextBoxFor(x => contact.Surname, new
+                             {
+                                 id = "surnameTxt",
+                                 @class = "form-control",
+                                 autocorrect = "off",
+                                 autocapitalize = "On",
+                                 maxlength = 500,
+                                 placeholder = contactPage.GetPropertyValue<string>("surnamePlaceholder"),
+                                 @data_val_required = contactPage.GetPropertyValue<string>("surnameFieldRequired"),
+                                 data_val = "true"
+                             })
+                                @Html.ValidationMessageFor(x => contact.Surname, null, new { @class = "errormessage" })
+                            </div>
+
+                        </div>
+                          <div class="row row-offset-10">
+                              
+                              <div class="col-md-6 form-group">
+                                  @Html.TextBoxFor(x => contact.Company, new
+                              {
+                                  id = "companyTxt",
+                                  @class = "form-control",
+                                  autocorrect = "off",
+                                  autocapitalize = "on",
+                                  maxlength = 500,
+                                  placeholder = contactPage.GetPropertyValue<string>("companyPlaceholder"),
+                                  @data_val_required = contactPage.GetPropertyValue<string>("companyFieldRequired"),
+                                  data_val = "true"
+                              })
+                                  @Html.ValidationMessageFor(x => contact.Company, null, new { @class = "errormessage" })
+
+                              </div>
+                              <div class="col-md-6 form-group">
+                                  @Html.TextBoxFor(x => contact.Email, new
+                           {
+                               id = "emailTxt",
+                               type = "email",
+                               @class = "form-control",
+                               autocorrect = "off",
+                               autocapitalize = "off",
+                               maxlength = 500,
+                               placeholder = contactPage.GetPropertyValue<string>("emailPlaceholder"),
+                               @data_val_required = contactPage.GetPropertyValue<string>("emailFieldRequired"),
+                               @data_val_regex = contactPage.GetPropertyValue<string>("invalidEmailError"),
+                               data_val = "true"
+                           })
+                                  @Html.ValidationMessageFor(x => contact.Email, null, new { @class = "errormessage" })
+                              </div>
+                          </div>
+                        <div class="row row-offset-10">
+                            
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => contact.Telephone, new
+                           {
+                               id = "telephoneTxt",
+                               @class = "form-control",
+                               autocorrect = "off",
+                               maxlength = 500,
+                               placeholder = contactPage.GetPropertyValue<string>("telephonePlaceholder"),
+                               @data_val_required = Model.Content.GetPropertyValue<string>("telephoneFieldRequired"),
+                               data_val = "true"
+                           })
+                                @Html.ValidationMessageFor(x => contact.Telephone, null, new { @class = "errormessage" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => contact.Role, new
+                           {
+                               id = "roleTxt",
+                               @class = "form-control",
+                               autocorrect = "off",
+                               autocapitalize = "on",
+                               maxlength = 500,
+                               placeholder = contactPage.GetPropertyValue<string>("rolePlaceholder"),
+                               data_val = "true"
+                           })
+
+                            </div>
+
+                        </div>
+                        <div class="row row-offset-10">
+                            
+                            <div class="col-md-6 form-group">
+                                @Html.DropDownListFor(x => contact.Market, new SelectList(market, "Key", "Value",marketId), marketPlaceholder,
+                                                                  new
+                                                                  {
+                                                                      @class = "form-control selectpicker",
+                                                                      id = "marketTxt",
+                                                                      @data_val_required = Model.Content.GetPropertyValue<string>("marketFieldRequired"),
+                                                                      data_val = "true"
+                                                                  })
+                                @Html.ValidationMessageFor(x => contact.Market, null, new { @class = "errormessage" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => contact.Nation, new
+                           {
+                               id = "nationTxt",
+                               @class = "form-control",
+                               autocorrect = "off",
+                               autocapitalize = "on",
+                               maxlength = 500,
+                               placeholder = contactPage.GetPropertyValue<string>("nationPlaceholder"),
+                               @data_val_required = contactPage.GetPropertyValue<string>("nationFieldRequired"),
+                               data_val = "true"
+                           })
+                                @Html.ValidationMessageFor(x => contact.Nation, null, new { @class = "errormessage" })
+                            </div>
+
+                        </div>
+                        @*<div class="row row-offset-10">
+                            
+                             
+                        </div>*@
+                         <div class="row row-offset-10">
+                              <div class="col-sm-12 form-group">
+                                  @Html.TextAreaFor(x => contact.Message, new
+                               {
+                                   id = "messageTxt",
+                                   @rows = 4,
+                                   autocorrect = "off",
+                                   autocapitalize = "on",
+                                   maxlength = 5000,
+                                   placeholder = contactPage.GetPropertyValue<string>("messagePlaceholer"),
+                                   data_val = "true"
+                               })
+                              </div>
+                         </div>
+                        <div class="row row-offset-10">
+                            <div class="col-sm-12 form-group">
+                                <div class="checkbox">
+                                    @Html.CheckBoxFor(x => contact.IsPrivacyChecked, new { id = "checkbox1", @class = "contact-mandatory", data_val_range = contactPage.GetPropertyValue("privacyPolicyRequired")})
+                                    <label id="terms-chkbx" for="checkbox1"><strong>@contactPage.GetPropertyValue("privacyTextTitle")</strong> @contactPage.GetPropertyValue("privacyText")</label>
+                                    @Html.ValidationMessageFor(x => contact.IsPrivacyChecked, null, new { @class = "errormessage" })
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-sm-12 text-center">
+                                <input type="submit" value="@contactPage.GetPropertyValue("buttonText")" class="btn-primary" />
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div id="message-failed-contact" class="alert alert-danger alert-dismissible fade in" role="alert">
+
+                    <strong>@contactPage.GetPropertyValue("contactRequestFailedMessage")</strong>
+                </div>
+
+                 
+
+                <div class="loader" id="loader">
+                    <img src="/images/default.gif" alt="loader">
+                </div>
+            </div>
+            
+
+        </div>
+
+    </div>
+}

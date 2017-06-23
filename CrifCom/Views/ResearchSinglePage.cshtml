@@ -1,0 +1,46 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "PageWithSideMenu.cshtml";
+    HttpContext.Current.Response.Cache.SetCacheability(HttpCacheability.NoCache);
+    HttpContext.Current.Response.Cache.SetNoServerCaching();
+    HttpContext.Current.Response.Cache.SetNoStore();
+}
+@{
+    
+    var home = Model.Content.AncestorOrSelf(1);
+    var registrationPage = home.Descendant("registration");
+    var currentMember = Phases.UmbracoUtils.Member.GetCurrentLoggedinMember();  
+    if (currentMember == null && Session["LoginId"] == null)
+    {
+        @Umbraco.RenderMacro("RegistrationFormPopUpBox") @* Area stampa folder*@
+    }
+    @Umbraco.RenderMacro("DocumentationFormPopUpBox") @* Area stampa folder*@
+if (TempData["activation"] != null && TempData["activation"].ToString() == "true")
+{
+        <div class="modal fade-in flexible-modal" role="dialog" id="activationModal">
+            <div class="modal-dialog">
+                <!-- Modal content login form-->
+                <div class="modal-content big-layout">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="login-form-wrapper">
+                        <h3 class="clr-orange text-center">@registrationPage.GetPropertyValue("activationMessageTitle")</h3>
+                        <div class="row row-offset-10">
+                            <div class="activation-message">@Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)registrationPage.GetPropertyValue("activationMessage")))</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@Umbraco.RenderMacro("TwoColumnLinkBoxes")
+
+	@section ResearchListing{
+        
+@Umbraco.RenderMacro("ResearchandPublications", new {noOfItemsToBeShown= 4 })
+}
+@Umbraco.RenderMacro("LoginModal")
+@Umbraco.RenderMacro("RegistrationModal")
+<script src="/scripts/ajaxhandler/research-page-login-ajax-handler.js"></script>
+<script src="/scripts/ajaxhandler/research-page-registration-ajax-handler.js"></script>

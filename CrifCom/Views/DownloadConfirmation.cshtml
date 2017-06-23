@@ -1,0 +1,53 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "PageWithSideMenu.cshtml";
+}
+@{
+	int pageId = 0, mediaId = 0;
+	string mediaFile = "";
+	bool pageAvailable = false;
+	if(Request["s1"] != null && int.TryParse(Request["s1"], out pageId))
+	{		
+		if( pageId > 0) 
+		{				
+			var page = Umbraco.TypedContent(pageId);				
+			if( page != null &&  page.Id > 0) 
+			{
+				pageAvailable = true;
+				
+				//get the media if its mentioned
+				if(Request["s2"] != null && int.TryParse(Request["s2"], out mediaId))
+				{
+					var media = Umbraco.TypedMedia(mediaId);
+					if( media != null &&  media.Id > 0)  
+					{
+						mediaFile = media.Url;
+					}
+				}				
+				
+				if( mediaFile != "" )
+				{
+					string downloadButtonLabel = umbraco.library.GetDictionaryItem("DownloadButtonLabel");
+					if( page.HasValue("thankYouPageDownloadButtonLabel", true) )
+					{
+						downloadButtonLabel = page.GetPropertyValue<string>("thankYouPageDownloadButtonLabel", true);
+					}					
+					@page.GetPropertyValue("thankYouMessageDownload", true)
+					<form method="post">
+						<input type="hidden" name="vari" value="@mediaId" />
+						<input type="submit" value="@downloadButtonLabel" class="btn-primary" />
+					</form>
+				} 
+				else 
+				{
+					@page.GetPropertyValue("contactMessageDownload", true)
+				}					
+			}
+		}
+	} 
+	
+	if(!pageAvailable)
+	{
+		Response.Redirect("/404");
+	}
+}

@@ -1,0 +1,45 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@{ var currentPage = Model.Content;
+    var parentPage = currentPage.Ancestors("researchAndPublicationType").FirstOrDefault();
+    if (currentPage.HasValue("showRegistrationBox"))
+    {
+        if (currentPage.GetPropertyValue<bool>("showRegistrationBox"))
+        {
+
+            if (parentPage != null)
+            {
+                <div class="col-sm-12 two-col-link-boxes border-top-gray">
+                    <div class="row">
+                        @if (parentPage.HasValue("popUpBoxTitle"))
+                        {
+                            <h3 class="clr-orange">@parentPage.GetPropertyValue("popUpBoxTitle")</h3>
+                        } 
+                        <div class="row">
+                           
+                            @if (parentPage.HasValue("popUpDescription"))
+                            { <div class="col-md-9">
+                                <p>@Html.Raw(parentPage.GetPropertyValue("popUpDescription"))</p>
+                            </div>
+                            }  
+                            <div class="col-md-3 text-right">
+                                @if (parentPage.HasValue("registrationButtonText"))
+                                {
+                                    <div><a href="" data-backdrop="static" data-toggle="modal" data-target="#RegistrationModal" class="btn-secondary register-modal-button">@parentPage.GetPropertyValue("registrationButtonText")</a></div>
+                                }
+                               
+                                @if (parentPage.HasValue("loginButtonText"))
+                                {
+                                   <div><a href="" data-backdrop="static" data-toggle="modal" data-target="#LoginModal" class="btn-secondary login-modal-button">@parentPage.GetPropertyValue("loginButtonText")</a></div>
+                                }
+                                
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        }
+    } 
+}
+ 

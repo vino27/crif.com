@@ -1,0 +1,175 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@{
+    IPublishedContent parentNode = null;
+    IEnumerable<IPublishedContent> childNodes = null;
+    var currentPage = Model.Content;
+    if (currentPage.DocumentTypeAlias == "productOrService")
+    {
+        parentNode = currentPage.AncestorOrSelf(1).Descendant("productFamilyHome");
+        var currentNodeFamily = currentPage.HasValue("selectFamily") ? currentPage.GetPropertyValue<string>("selectFamily").Split(new string[] { "," },
+                                StringSplitOptions.RemoveEmptyEntries).ToList().FirstOrDefault() : null;
+        if (parentNode != null)
+        {
+            childNodes = parentNode.Children();
+            @PrintRepositoryNavigation(childNodes, currentNodeFamily) /*this one is use to print repositoey navigation in product and service page*/
+        }
+    }
+    else
+    {
+        parentNode = currentPage.AncestorOrSelf(2);
+
+        if (parentNode != null)
+        {
+            if (currentPage.DocumentTypeAlias == "consumer" || currentPage.DocumentTypeAlias == "mettinconto")
+            {
+                parentNode = currentPage.AncestorOrSelf(1).Descendant("consumerHome");
+                childNodes = parentNode.Children().Where(x => x.IsVisible() && x.TemplateId > 0);
+                var currentConsumerParent = Model.Content.Parent;
+                @PrintConsumerSideNavigation(childNodes, currentConsumerParent)
+            }
+            else
+            {
+                childNodes = parentNode.Children().Where(x => x.IsVisible() && x.TemplateId > 0);
+                @PrintData(childNodes)
+            }
+
+        }
+    }
+}
+@helper PrintData(IEnumerable<IPublishedContent> childNodes)
+{
+
+if (childNodes != null && childNodes.Any())
+{
+        <nav class="side-nav">
+            <a href="javascript:;" class="btn-accordion">@Model.Content.Name</a>
+            <ul class="list-unstyled side-nav-ul">
+                @foreach (var childNode in childNodes)
+                {
+                    var nodeUrl = childNode.GetUrl();
+                    string activeClass = Model.Content.Path.Split(",".ToCharArray()).Contains(childNode.Id.ToString()) ? "class=\"active\"" : string.Empty;
+                    <li><a href="@nodeUrl.Url" target="@nodeUrl.Target" @Html.Raw(activeClass)>@childNode.Name</a></li>
+                }
+            </ul>
+        </nav>
+}
+}
+@helper PrintConsumerSideNavigation(IEnumerable<IPublishedContent> childNodes, IPublishedContent consumerParent)
+{
+
+if (childNodes != null && childNodes.Any())
+{
+
+    var currentParentName = consumerParent.Name;
+        <nav class="side-nav">
+            @if (currentParentName != null)
+            {
+                <a href="javascript:;" class="btn-accordion">@currentParentName</a>
+            }
+            <ul class="list-unstyled side-nav-ul">
+                @foreach (var childNode in childNodes)
+                {
+                    var childNodeLink = childNode.GetUrl();
+                    var childsUnderConsumer = childNode.Children.Where(x => x.IsVisible() && x.TemplateId > 0);
+                    string openMenuclass = "";
+                    string menuActiveClass = "";
+                    string menuIcon = "";
+                    if (childsUnderConsumer != null && childsUnderConsumer.Any())
+                    {
+                        openMenuclass = "class=\"link-with-submenu\"";
+                        if(Model.Content.Path.Split(",".ToCharArray()).Contains(childNode.Id.ToString()))
+                        {
+                            menuIcon = "<span class=\"arrow open\"></span>";
+                        }
+                        else
+                        {
+                            menuIcon = "<span class=\"arrow\"></span>";
+                        }
+                    }
+                    menuActiveClass = Model.Content.Path.Split(",".ToCharArray()).Contains(childNode.Id.ToString()) ? "class=\"active\"" : string.Empty;
+                    //if (Model.Content.Id.ToString() == childNode.Id.ToString())
+                    //{
+                    //    menuActiveClass = "class=\"active\"";
+                    //}
+                    <li @Html.Raw(menuActiveClass)>
+                        <a href="@childNodeLink.Url" target="@childNodeLink.Target">@childNode.Name</a>
+                        @Html.Raw(menuIcon)
+                        @if (childsUnderConsumer != null && childsUnderConsumer.Any())
+                        {
+                            <ul class="inner-menu open">
+                                @foreach (var selectedService in childsUnderConsumer)
+                                {
+                                    string activeClass = Model.Content.Id == selectedService.Id ? "class=\"active\"" : "";
+                                    var serviceUrl = selectedService.GetUrl();
+                                    <li><a @Html.Raw(activeClass) href="@serviceUrl.Url" target="@serviceUrl.Target">@selectedService.Name</a></li>
+                                }
+                            </ul>
+                        }
+                    </li>
+                }
+            </ul>
+        </nav>
+
+}
+
+}
+@helper PrintRepositoryNavigation(IEnumerable<IPublishedContent> childNodes, string currentNodeFamily)
+{
+
+if (childNodes != null && childNodes.Any())
+{
+    IPublishedContent currentItem = childNodes.Where(x => x.Id.ToString() == currentNodeFamily) != null ? childNodes.Where(x => x.Id.ToString() == currentNodeFamily).FirstOrDefault() : null;
+    var home = Model.Content.AncestorOrSelf(1);
+    var serviceHome = home.DescendantOrSelf("productAndServices");
+    var serviceLink = serviceHome.GetUrl();
+    var productOrServiceChilds = home.DescendantsOrSelf("productOrService").Where(x => x.IsVisible() && x.TemplateId > 0);
+    if (productOrServiceChilds != null && productOrServiceChilds.Any())
+    {
+            <nav class="side-nav">
+                @if (currentItem != null)
+                {
+                    <a href="javascript:;" class="btn-accordion">@currentItem.Name</a>
+                }
+                <ul class="list-unstyled side-nav-ul">
+                    @foreach (var childNode in childNodes)
+                    {
+                        var serviceUnderFamily = productOrServiceChilds.Where(x => x.HasValue("selectFamily") && x.GetPropertyValue<string>("selectFamily").Split(new string[] { "," },
+                                   StringSplitOptions.RemoveEmptyEntries).ToList().Contains(childNode.Id.ToString()));
+                        string openMenuclass = "";
+                        string menuActiveClass = "";
+                        // string menuIcon = "";
+                        //if (serviceUnderFamily != null && serviceUnderFamily.Any())
+                        //{
+                        //    openMenuclass = "class=\"link-with-submenu\"";
+                        //    menuIcon = "<span class=\"arrow\"></span>";
+                        //}
+                        if (currentNodeFamily == childNode.Id.ToString())
+                        {
+                            menuActiveClass = "active";
+                        }
+                        <li class="arrows-on-left @menuActiveClass">
+                            <a href="@serviceLink.Url#@childNode.Id" target="@serviceLink.Target">@childNode.Name</a>
+                            @*@Html.Raw(menuIcon)*@
+                            @*@if (serviceUnderFamily != null && serviceUnderFamily.Any())
+                                {
+                                    <ul class="inner-menu open">
+                                        @foreach (var selectedService in serviceUnderFamily)
+                                        {
+                                            string activeClass = Model.Content.Id == selectedService.Id ? "class=\"active\"" : "";
+                                            var serviceUrl = selectedService.GetUrl();
+                                            <li><a @Html.Raw(activeClass) href="@serviceUrl.Url" target="@serviceUrl.Target">@selectedService.Name</a></li>
+                                        }
+                                    </ul>
+                                }*@
+                        </li>
+                    }
+                </ul>
+            </nav>
+    }
+
+
+
+
+}
+}

@@ -1,0 +1,181 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils.YouTube
+@using Phases.UmbracoUtils.Vimeo
+@using Phases.UmbracoUtils
+@{
+    <!--
+    //IMPORTANT: Move style specified here to your style sheets. Author is not responsible for any style broken issues in site due to this.
+    //To render macro properly on RTE, style should be added to RTE style sheet too.
+    <style>
+        .video-container {
+            position: relative;
+            /*padding-bottom: 55.8%;*/
+            padding-top: 3px;
+            height: 0;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .video-container iframe, .video-container object, .video-container embed {
+             position:absolute;
+             top:0;
+             left:0;
+             width:100%;
+             height:100%;
+        }
+        .vidwrap {
+            position: absolute;
+            background: url("/images/play-btn.svg") no-repeat center;
+            -webkit-background-size: contain;
+            -moz-background-size: contain;
+            -o-background-size: contain;
+            background-size: contain;
+            overflow: hidden;
+            background-repeat: no-repeat;
+            width: 28%;
+            height: 28%;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%,-50%);
+            -moz-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+            transform: translate(-50%,-50%);
+        }
+    </style>
+   
+    //IMPORTANT: Move scripts specified here to your scripts file. This script is needed to work thumbnail image with play button.
+    <script>
+        function playVideo(playBtn) {
+            var videoId = playBtn.getAttribute("data-vid");
+            var $videoDiv = playBtn.parentNode;
+            if ($videoDiv) {
+                var iframeSrc = playBtn.getAttribute("data-iframe-src");
+                var iframeStyle = playBtn.getAttribute("data-iframe-style");
+
+                if (iframeStyle) {
+                    $videoDiv.innerHTML = '<iframe src="' + iframeSrc + '"' + ' frameborder="0" allowfullscreen style="' + iframeStyle + '"></iframe>';
+                }
+                $videoDiv.innerHTML = '<iframe src="' + iframeSrc + '"' + ' frameborder="0" allowfullscreen></iframe>';
+            }
+        }
+    </script>
+-->
+    var videoUrl = Model.MacroParameters["url"].ToSafeString();
+    if (!string.IsNullOrEmpty(videoUrl))
+    {
+        var videoThumbImage = Model.MacroParameters["thumbnailImage"].ToSafeString();
+        var width = Model.MacroParameters["width"].ToSafeString().Replace(" ", "");
+        string videoId = "";
+        string videoType = "";
+        string baseUrl = "";
+        string queryString = "?";
+
+        if (videoUrl.IsYoutubeUrl())
+        {
+
+            videoId = videoUrl.GetYouTubeId();
+            videoType = "youtube";
+            baseUrl = "https://www.youtube.com/embed/";
+            queryString += "rel=0&vq=hd1080&";
+        }
+        else if (videoUrl.IsVimeoUrl())
+        {
+
+            videoId = videoUrl.GetVimeoId();
+            videoType = "vimeo";
+            baseUrl = "https://player.vimeo.com/video/";
+        }
+
+
+        var thumbImage = Umbraco.TypedMedia(videoThumbImage);
+        bool hasVideoId = !string.IsNullOrEmpty(videoId);
+        if (hasVideoId)
+        {
+            var height = Model.MacroParameters["height"].ToSafeString().Replace(" ", "");
+            string iframeStyle = "";
+            string containerStyle = "";
+
+            bool autoPlay = Model.MacroParameters.TryGetValue<bool>("autoPlay", false);
+
+            if (!string.IsNullOrEmpty(height) && !string.IsNullOrEmpty(width))
+            {
+
+                if (width.EndsWith("px", StringComparison.OrdinalIgnoreCase))
+                {
+                    iframeStyle = string.Format("width:100%;max-width:{0};min-height:{1};height:{1};", width, height);
+                    containerStyle = iframeStyle;
+                }
+                else if (width.EndsWith("%"))
+                {
+                    iframeStyle = string.Format("width:100%;min-height:{0};height:{0};", height);
+                    containerStyle = string.Format("width:{0};min-height:{1};height:{1};", width, height);
+                }
+                else
+                {
+                    iframeStyle = string.Format("width:100%;max-width:{0}px;min-height:{1};height:{1};", width, height);
+                    containerStyle = iframeStyle;
+                }
+
+            }
+            else if (string.IsNullOrEmpty(height) && string.IsNullOrEmpty(width))
+            {
+                iframeStyle = string.Format("width:100%;min-height:300px;");
+                containerStyle = string.Format("padding-top:56.25%;width:100%;min-height:300px;");
+            }
+            else if (!string.IsNullOrEmpty(height) && string.IsNullOrEmpty(width))
+            {
+                iframeStyle = string.Format("width:100%;min-height:300px;height:{0}", height);
+                containerStyle = string.Format("width:100%;min-height:300px;height:{0}", height);
+            }
+            else if (string.IsNullOrEmpty(height) && !string.IsNullOrEmpty(width))
+            {
+                if (width.EndsWith("px", StringComparison.OrdinalIgnoreCase))
+                {
+                    iframeStyle = string.Format("width:100%;max-width:{0};min-height:300px;", width);
+                    containerStyle = iframeStyle;
+
+                }
+                else if (width.EndsWith("%"))
+                {
+                    iframeStyle = string.Format("width:100%;min-height:300px;");
+                    containerStyle = string.Format("width:{0};min-height:300px;", width);
+                }
+                else
+                {
+                    iframeStyle = string.Format("width:100%;max-width:{0}px;min-height:300px;", width);
+                    containerStyle = iframeStyle;
+                }
+            }
+
+            string iframeSrc = baseUrl + videoId + queryString;
+
+            if (thumbImage != null)
+            {
+                iframeSrc += "autoplay=1";
+
+                <div class="video-container vy-container" id="@videoId" data-v_type="@videoType" style="@(containerStyle)background-image:url(@thumbImage.Url);">
+                    <div onclick="playVideo(this);" class="vidwrap" data-vid="@videoId" data-iframe-style="@iframeStyle" data-iframe-src="@iframeSrc"></div>
+                </div>
+            }
+            else
+            {
+                if (autoPlay)
+                {
+                    iframeSrc += "autoplay=1";
+                }
+
+                <div class="video-container vy-container" style="@containerStyle">
+                    @Html.Raw(string.Format(
+                 "<iframe src=\"{0}\" style=\"{1}\" frameborder=\"0\" allowfullscreen></iframe>",
+                      iframeSrc, iframeStyle
+            ))
+                </div>
+            }
+        }
+    }
+
+}
+   

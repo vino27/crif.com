@@ -1,0 +1,44 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "PageWithSideMenu.cshtml";
+}
+
+@Umbraco.RenderMacro("FeaturedNewsListing")
+@if (Model.Content.DocumentTypeAlias == "successStoryHome")
+{
+    @Umbraco.RenderMacro("SuccessStoryTagFilter")
+}
+else
+{
+    @Umbraco.RenderMacro("NewsTagFilter")
+}
+
+
+    @if (Model.Content.DocumentTypeAlias == "successStoryHome")
+    {
+		<div class="success-ajax-section">
+        @Umbraco.RenderMacro("SuccesStoryListing")
+			</div>
+    }
+    else
+    {
+		<div class="news-ajax-section">
+        @Umbraco.RenderMacro("NewsHomeNewsListing")
+			</div>
+    }
+   
+
+<div class="no-items">
+    <p>@Umbraco.Field("noItemsFoundMessage", altText: "No items to be displayed.")</p>
+</div>
+<input type="text" id="txtNodId" value="@Model.Content.Id" style="display:none;" />
+@section InnerBottomScript{
+	@if (Model.Content.DocumentTypeAlias == "successStoryHome")
+    {
+		<script src="/scripts/ajaxhandler/success-story-ajaxhandler.js"></script>		
+	}
+	else
+	{
+		<script src="/scripts/ajaxhandler/ajaxhandler.js"></script>
+	}
+}

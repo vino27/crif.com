@@ -1,0 +1,93 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+	
+	@{
+        var home = Model.Content.AncestorOrSelf(1);
+        var title = Model.MacroParameters["researchTypeListingTitle"].ToString();
+        var currentPage = home.Descendants("researchAndPublicationType").Where(x=>x.IsVisible());
+        if (currentPage.Any())
+        {
+            	<section class="publication-listing margin-bottom-40">
+                     <div class="container">
+                           <div class="row">
+                               @if (!string.IsNullOrEmpty(title))
+                               {
+                                <div class="col-sm-12 header">
+                                    <h3>@Html.Raw(title)</h3>
+                                </div>
+                               }
+                               
+                               <div class="tile-listing">
+                                   @foreach (var items in currentPage)
+                                   {
+                                       if (items.HasValue("hideFromListing"))
+                                       {
+                                           if (!items.GetPropertyValue<bool>("hideFromListing"))
+                                           {
+                                            <div class="col-sm-6 col-md-4 single-column tab-two-col-listing">
+
+                                                @if (items.HasValue("imageIcon") || items.HasValue("mouseHoverImage"))
+                                                {
+                                                    <div class="col-sm-3 image-holder">
+                                                        <a href="@items.Url">
+                                                            <div class="image-with-border">
+                                                                @if (items.HasValue("imageIcon"))
+                                                                {
+                                                                    var mainImage = Umbraco.TypedMedia(items.GetPropertyValue<string>("imageIcon"));
+																	if(mainImage !=null)
+																	{
+                                                                    	<img src="@mainImage.Url" alt="@mainImage.Name">
+																	}
+                                                                }
+                                                                @if (items.HasValue("mouseHoverImage"))
+                                                                {
+                                                                    var mouseHoverImage = Umbraco.TypedMedia(items.GetPropertyValue<string>("mouseHoverImage"));
+																	if(mouseHoverImage != null)
+																	{
+                                                                    	<img src="@mouseHoverImage.Url" alt="@mouseHoverImage.Name">
+																	}
+                                                                }
+
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                }
+                                                <div class="col-sm-9 content-holder">
+                                                    <a href="@items.Url">
+													   @if (items.HasValue("pageIndicatorHeading"))
+														{
+															<span class="sub-title">@items.GetPropertyValue("pageIndicatorHeading")</span>
+														}
+                                                        @if (items.HasValue("title"))
+                                                        {
+                                                            <h2 class="article-heading">@items.GetPropertyValue("title")</h2>
+                                                        }
+                                                        else
+                                                        {
+                                                            <h2 class="article-heading">@items.Name</h2>
+                                                        }
+                                                    </a>
+                                                    @if (items.HasValue("shortDescription"))
+                                                    {
+                                                        <p>
+                                                            @Html.Raw(items.GetPropertyValue("shortDescription"))
+                                                    </p>
+                                                    }
+                                                    else if (items.HasValue("bodyText"))
+                                                    {
+                                                        <p>@Html.Raw(Phases.UmbracoUtils.Strings.TruncateAtWord(items.GetPropertyValue<string>("bodyText"), 130, "..."))</p>
+                                                    }
+                                                </div>
+                                            </div>
+                                           }
+                                       }
+
+                                   } 
+                                   
+                               </div>
+                           </div>
+                     </div>
+                </section>
+        }
+
+	}
+ 

@@ -1,0 +1,141 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+    Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("title") || currentPage.HasValue("shortDescription") || currentPage.HasValue("video"))
+    {
+        <section class="two-col-structure padding-30">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-10 col-centered">
+                        @if (currentPage.HasValue("youtubeOrVimeoUrl") || currentPage.HasValue("uploadVideo"))
+                        {
+                            if (currentPage.GetPropertyValue<bool>("alignVideoLeft"))
+                            {
+                                @PrintVideo(currentPage)
+                                @PrintData(currentPage)
+                            }
+                            else
+                            {
+                                @PrintData(currentPage)
+                                @PrintVideo(currentPage)
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+@helper PrintVideo(IPublishedContent currentPage)
+{
+if (currentPage.HasValue("youtubeOrVimeoUrl"))
+{
+        <div class="col-sm-6">
+            <div class="videocontent" style="height:300px;">
+                <video style="width:100%;height:100%;" controls="controls" width="100%" height="100%" id="player1" preload="none">
+                    <source type="video/youtube" src="@currentPage.GetPropertyValue("youtubeOrVimeoUrl")" />
+                </video>
+            </div>
+        </div>
+}
+else if (currentPage.HasValue("uploadVideo"))
+{
+    string imageUrl = "";
+    var mediaItem = Umbraco.TypedMedia(currentPage.GetPropertyValue("uploadVideo"));
+    if (currentPage.HasValue("vidoeThumbnail"))
+    {
+        var thumbImage = Umbraco.TypedMedia(currentPage.GetPropertyValue("vidoeThumbnail"));
+        if (thumbImage != null)
+        {
+            imageUrl = String.Format("poster=\"{0}\"",thumbImage.Url);
+        }
+    }
+
+
+        <div class="col-sm-6">
+            <div class="videocontent" style="height:300px;">
+                <video style="width:100%;height:100%;" @Html.Raw(imageUrl) controls="controls" width="100%" height="260px" id="player1" preload="none">
+                    @if (mediaItem.HasValue("h264MP4Video"))
+                    {
+                        <source src="@mediaItem.GetPropertyValue("h264MP4Video")" type="video/mp4">
+                    }
+                    @if (mediaItem.HasValue("webMVideo"))
+                    {
+                        <source src="@mediaItem.GetPropertyValue("webMVideo")" type="video/webm">
+                    }
+                    @if (mediaItem.HasValue("oggFile"))
+                    {
+                        <source src="@mediaItem.GetPropertyValue("oggFile")" type="video/ogg">
+                    }
+                    <p>Your browser does not support HTML5 Video. Please <a target="_blank" href="http://browsehappy.com/">upgrade</a> to a modern browser.</p>
+                </video>
+            </div>
+        </div>
+}
+}
+@helper PrintData(IPublishedContent currentPage)
+{
+    <div class="col-sm-6">
+        @{
+            var titleUrl = "";
+            var titleTarget = "";
+            if (Model.Content.HasValue("linkTo"))
+            {
+                var multiUrlPicker = Model.Content.GetPropertyValue<MultiUrls>("linkTo");
+                if (multiUrlPicker.Count() == 1)
+                {
+                    titleUrl = multiUrlPicker.FirstOrDefault().Url;
+                    titleTarget = multiUrlPicker.FirstOrDefault().Target;
+                }
+
+            }
+            if (currentPage.HasValue("title"))
+            {
+                if (titleUrl!="")
+                {
+                    <a href="@titleUrl" target="@titleTarget">
+                        <h3 class="section-title-medium">@currentPage.GetPropertyValue("title")</h3>
+                    </a>
+                }
+                else
+                {
+                    <h3 class="section-title-medium">@currentPage.GetPropertyValue("title")</h3>
+                }
+            }
+            if (currentPage.HasValue("shortDescription"))
+            {
+                <p>@Html.Raw(currentPage.GetPropertyValue("shortDescription"))</p>
+            }
+            if (Model.Content.HasValue("linkTo"))
+            {
+                var multiUrlPicker = Model.Content.GetPropertyValue<MultiUrls>("linkTo");
+                if (multiUrlPicker.Any())
+                {
+					if(multiUrlPicker.Count()==1)
+                        {
+                            <p><a href="@multiUrlPicker.FirstOrDefault().Url" class="standard-link" target="@multiUrlPicker.FirstOrDefault().Target" rel="nofollow">@multiUrlPicker.FirstOrDefault().Name</a></p>
+                        }
+                        else
+                        {
+                            foreach (var item in multiUrlPicker)
+							{
+								<p><a href="@item.Url" target="@item.Target" class="standard-link">@item.Name</a></p>
+							}
+                        }
+                    
+
+                }
+
+            }
+        }
+
+    </div>
+}
+

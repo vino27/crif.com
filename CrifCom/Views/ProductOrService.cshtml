@@ -1,0 +1,26 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "_Layout.cshtml";
+}
+@Umbraco.RenderMacro("Breadcrumb")
+ <section class="main-two-columns padding-30">
+    <div class="container">
+        <div class="row">
+            <aside class="col-sm-4 aside">
+                @Umbraco.RenderMacro("SideNavigation")
+                @Umbraco.RenderMacro("LeftSideWidget")
+            </aside>
+            <article class="col-sm-8 article-single">
+                @Umbraco.RenderMacro("ProductLogo")
+                @Umbraco.RenderMacro("ProductBodyContent") @*Body text Social share*@
+                @Umbraco.RenderMacro("ContactUsBanner")
+                @Umbraco.RenderMacro("PublicationsandResearch")
+                @Umbraco.RenderMacro("RelatedSuccessStoriesProduct")
+                @Umbraco.RenderMacro("RelatedProducts")
+            </article>
+
+                @Umbraco.RenderMacro("LeftSideWidgetMobile")
+</div>
+    </div>
+</section> 
+<script src="/scripts/ajaxhandler/contact-form-modal-ajax-handler.js"></script>

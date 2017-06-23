@@ -1,0 +1,125 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+    Layout = null;
+
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("selectResearchPublication"))
+    {
+        //var excludedDoctypes = new[] { "uDateFoldersyFolderYear", "uDateFoldersyFolderMonth" };
+        //bool isContainChild = false;
+        int count = 4;
+        if (Model.Content.HasValue("noOfItemsToShow"))
+        {
+            count = Model.Content.GetPropertyValue<Int32>("noOfItemsToShow");
+        }
+        //var nodeListValue = Model.Content.GetPropertyValue<string>("newsItems");
+        //var nodeList = nodeListValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+        ///*check list contains data*/
+        //if (nodeList != null && nodeList.Any())
+        //{
+        //    foreach (var nodeItem in nodeList)
+        //    {
+        //        var nodeID = Umbraco.TypedContent(nodeItem);
+        //        if (nodeID.Descendants().Where(x => x.IsVisible() && !excludedDoctypes.Contains(x.DocumentTypeAlias)).Any())
+        //        {
+        //            isContainChild = true;
+        //            break;
+        //        }
+        //    }
+        //}
+        //if (isContainChild)
+        //{
+
+        //}
+        var selectedNode = currentPage;
+        if (!string.IsNullOrEmpty(selectedNode.ToString()))
+        {
+            currentPage = Umbraco.TypedContent(selectedNode.ToString());
+        }
+        var childPaages = currentPage.Descendants("singleResearchPage");
+        if (childPaages != null && childPaages.Any())
+        {
+            <section class="four-col-list">
+                <div class="container">
+                    <div class="row">
+                        <div class="header col-sm-12">
+                            <a href="@currentPage.Url"><h3>@currentPage.Name</h3></a>
+
+                            @if (currentPage.HasValue("internalLinks"))
+                            {
+                                var internalLink = currentPage.GetPropertyValue<MultiUrls>("internalLinks");
+                                if (internalLink != null && internalLink.Any())
+                                {
+                                    foreach (var links in internalLink)
+                                    {
+                                        <a href="@links.Url" target="@links.Target" class="standard-link">@links.Name</a>
+                                    }
+                                }
+
+                            }
+                        </div>
+                        @foreach (var child in childPaages.Where(x => x.IsVisible() && x.HasValue("thumbnailImage")).OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(4))
+                    {
+                            <div class="single_item col-sm-3 col-xs-6">
+
+                                @if (child.HasValue("thumbnailImage"))
+                                {
+                                    var thumbnailImage = Umbraco.TypedMedia(child.GetPropertyValue("thumbnailImage"));
+                                    <a href="@child.Url"><img src="@thumbnailImage.Url" alt="@thumbnailImage.Name"></a>
+                                }
+
+
+                                <div class="article-type-one">
+                                    @{ var actualDate = "";
+                                        string eventLocation = "";
+                                        var literalChar = "";
+                                    }
+
+                                    @if (child.HasValue("actualDate"))
+                                    {
+                                        string date = Convert.ToDateTime(child.GetPropertyValue<string>("actualDate")).ToString("dd MMMM yyy");
+                                        actualDate = date;
+                                    }
+
+                                    @if (child.HasValue("location"))
+                                    {
+                                        eventLocation = child.GetPropertyValue<string>("location");
+                                    }
+
+                                    @if (actualDate != "" && eventLocation != "")
+                                    {
+                                        literalChar = " - ";
+                                    }
+
+                                    <span class="date">@eventLocation @literalChar @actualDate</span>
+
+                                    @if (child.HasValue("title"))
+                                    {
+                                        <a href="@child.Url">
+                                            <h3 class="highlight-text">@child.GetPropertyValue("title")</h3>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@child.Url">
+                                            <p class="highlight-text">@child.Name</p>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                                        }
+                    </div>
+                </div>
+            </section>
+                                            }
+                                        }
+
+}
+
+
+

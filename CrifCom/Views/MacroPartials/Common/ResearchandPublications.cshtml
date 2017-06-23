@@ -1,0 +1,127 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@using Phases.UmbracoUtils
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    var currentPage = home.Descendants("researchAndPublicationHome") != null && home.Descendants("researchAndPublicationHome").Any()
+                        ? home.Descendants("researchAndPublicationHome").FirstOrDefault()
+                        : null;
+    var childPages = currentPage.Descendants("singleResearchPage");
+    string itemsToBeShown = Model.MacroParameters["noOfItemsToBeShown"].ToString();
+    int noOfItems;
+    bool isNumeric = int.TryParse(itemsToBeShown, out noOfItems);
+    int count = 4;
+    if (isNumeric)
+    {
+        count = noOfItems;
+    }
+
+    if (currentPage != null && currentPage.Children.Any() && childPages != null && childPages.Any())
+    {
+
+
+        IEnumerable<IPublishedContent> ResearchPages = childPages.Where(x => x.IsVisible()&& x.HasValue("thumbnailImage")).OrderByDescending(x => x.GetPropertyValue("publicationDate"));
+
+        if (Model.Content.DocumentTypeAlias == "singleResearchPage")
+        {
+            var topics = Model.Content.HasValue("selectTopic") ? Model.Content.GetPropertyValue<string>("selectTopic").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList() : null;
+            ResearchPages = ResearchPages.Where(x => x.HasValue("selectTopic")
+                    && topics != null && topics.Any()
+                    && x.GetPropertyValue<string>("selectTopic").Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).ToList().Intersect(topics).Count() > 0
+                    && x.Id != Model.Content.Id).Take(count);
+        }
+        else if (Model.Content.DocumentTypeAlias == "market")
+        {
+            ResearchPages = ResearchPages.Where(x => x.HasValue("selectMarket") && x.GetPropertyValue<string>("selectMarket").Split(new string[] { "," },
+                StringSplitOptions.RemoveEmptyEntries).Contains(Model.Content.Id.ToString())).Take(count);
+
+        }
+        else if (Model.Content.DocumentTypeAlias == "marketNeeds")
+        {
+            ResearchPages = ResearchPages.Where(x=>x.HasValue("selectMarketNeeds") && x.GetPropertyValue<string>("selectMarketNeeds").Split(new string[] { "," },
+               StringSplitOptions.RemoveEmptyEntries).Contains(Model.Content.Id.ToString())).Take(count);
+
+        }
+        else
+        {
+            ResearchPages = ResearchPages.Take(count);
+        }
+        if (ResearchPages != null && ResearchPages.Any())
+        {
+            <section class="four-col-list border-top-gray">
+                <div class="container">
+                    <div class="row">
+                        <div class="header col-sm-12">
+                            <a href="@currentPage.Url"><h3>@currentPage.Name</h3></a> 
+                            @if (currentPage.HasValue("internalLinks"))
+                            {
+                                var internalLink = currentPage.GetPropertyValue<MultiUrls>("internalLinks");
+                                if (internalLink != null && internalLink.Any())
+                                {
+                                    foreach (var links in internalLink)
+                                    {
+                                        <a href="@links.Url" target="@links.Target" class="standard-link">@links.Name</a>
+                                    }
+                                }
+                            }
+                            @if (currentPage.HasValue("externalLinks"))
+                            {
+                                var links = currentPage.GetPropertyValue<MultiUrls>("externalLinks");
+                                if (links != null && links.Any())
+                                { 
+                                    foreach (var urlLinks in links)
+                                    {
+                                        <a href="@urlLinks.Url" target="@urlLinks.Target" class="standard-link">@urlLinks.Name</a><br />
+                                    }
+                                }
+                            }
+                        </div>
+
+
+                    @foreach (var child in ResearchPages)
+                    {
+                        var pageUrl = child.GetUrl();
+
+                            <div class="single_item col-sm-3 col-xs-6">
+                                @if (child.HasValue("thumbnailImage"))
+                                {
+                                    var thumbnailImage = Umbraco.TypedMedia(child.GetPropertyValue("thumbnailImage"));
+                                    if (thumbnailImage != null)
+                                    {
+                                        <div class="image-holder">
+                                            <a href="@pageUrl.Url" target="@pageUrl.Target"><img src="@thumbnailImage.Url" alt="@thumbnailImage.Name"></a>
+                                        </div>
+                                    }
+                                }
+                                <div class="article-type-one">
+                                    @if (child.HasValue("actualDate"))
+                                    { 
+                                        <span class="date">@child.Ancestors("researchAndPublicationType").FirstOrDefault().Name-@child.GetPropertyValue("actualDate")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="date">@child.Ancestors("researchAndPublicationType").FirstOrDefault().Name</span>
+                                    }
+                                    @if (child.HasValue("title"))
+                                    {
+                                        <a href="@pageUrl.Url" target="@pageUrl.Target">
+                                            <h3 class="highlight-text">@child.GetPropertyValue("title")</h3>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@child.Url" target="@pageUrl.Target">
+                                            <p class="highlight-text">@child.Name</p>
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </section>
+        }
+    }
+}

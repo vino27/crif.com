@@ -1,0 +1,215 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using CrifCom.Controllers
+@using CrifCom.Models
+@{
+        Registration Registration = new Registration();
+		var currentPage = Model.Content;
+		var homeNode = currentPage.AncestorOrSelf(1);
+        Dictionary<string, string> Market = new Dictionary<string, string>();
+        var marketNodes = homeNode.Descendants("market");
+        var registerPage = homeNode.Descendants("registration").FirstOrDefault();
+        if (marketNodes != null && marketNodes.Any())
+        {
+            foreach (var marketnode in marketNodes)
+            {
+                Market.Add(marketnode.Id.ToString(), marketnode.Name);
+            }
+
+        }
+    <div class="modal fade flexible-modal" role="dialog" id="RegistrationModal">
+        <div class="modal-dialog">
+            <!-- Modal content login form-->
+            <div class="modal-content big-layout">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="login-form-wrapper">
+                    <h3 class="clr-orange text-center">@registerPage.GetPropertyValue("registrationFormTitle")</h3>
+                  @using (Html.BeginUmbracoForm<CrifCom.Controllers.RegistrationController>("SubmitRegistration", null, new { id = "researchPageRegistrationForm" }))
+                  {
+                        <div class="row row-offset-10">
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => Registration.Name, new
+                           {
+                               id = "nameTxt",
+                               @class = "form-control",
+                               placeholder = registerPage.GetPropertyValue<string>("namePlaceHolder"),
+                               @data_val_required = registerPage.GetPropertyValue<string>("nameFieldRequired"),
+								   @data_val_regex = registerPage.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                               data_val = "true"
+                           })
+                                @Html.ValidationMessageFor(x => Registration.Name, null, new { @class = "errormessage" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => Registration.Surname, new
+                           {
+                               id = "surnameTxt",
+                               @class = "form-control",
+                               placeholder = registerPage.GetPropertyValue<string>("lastNamePlaceholder"),
+                               @data_val_required = registerPage.GetPropertyValue<string>("lastNameFieldRequired"),
+								   @data_val_regex = registerPage.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                               data_val = "true"
+                           })
+                                @Html.ValidationMessageFor(x => Registration.Surname, null, new { @class = "errormessage" })
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => Registration.Email, new
+                           {
+                               id = "emailTxt",
+                               @class = "form-control",
+                               placeholder = registerPage.GetPropertyValue<string>("emailPlaceholder"),
+                               @data_val_required = registerPage.GetPropertyValue<string>("emailFieldRequired"),
+                               @data_val_regex = registerPage.GetPropertyValue<string>("emailValidationErrorMessage"),
+                               data_val = "true"
+                           })
+                                @Html.ValidationMessageFor(x => Registration.Email, null, new { @class = "errormessage" })
+                            </div>
+                            <div class="col-md-6 form-group">
+                                @Html.TextBoxFor(x => Registration.Telephone, new
+                           {
+                               id = "telephoneTxt",
+                               @class = "form-control",
+                               placeholder = registerPage.GetPropertyValue<string>("telephonePlaceholder"),
+                               @data_val_required = registerPage.GetPropertyValue<string>("telephoneRequiredErrorMessage"), 
+								   @data_val_regex = registerPage.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                               data_val = "true"
+                           })
+                                @Html.ValidationMessageFor(x => Registration.Telephone, null, new { @class = "errormessage" }) 
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-md-6 form-group">
+                                @Html.DropDownListFor(x => Registration.Market, new SelectList(Market, "Key", "Value"), registerPage.GetPropertyValue<string>("marketPlaceholder"),
+                                                             new
+                                                             {
+                                                                 @class = "form-control selectpicker",
+                                                                 id = "marketTxt",
+                                                                 placeholder = registerPage.GetPropertyValue<string>("marketPlaceholder"),
+                                                                 @data_val_required = registerPage.GetPropertyValue<string>("marketFieldRequired"),
+                                                                 data_val = "true"
+                                                             })
+                                @Html.ValidationMessageFor(x => Registration.Market, null, new { @class = "errormessage" })
+
+                            </div>
+                            <div class="col-md-6 form-group">
+
+                                @Html.TextBoxFor(x => Registration.Company, new
+                           {
+                               id = "companyTxt",
+                               @class = "form-control",
+                               placeholder = registerPage.GetPropertyValue<string>("companyPlaceholder"),
+                               @data_val_required = registerPage.GetPropertyValue<string>("companyFieldRequired"),
+								   @data_val_regex = registerPage.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                               data_val = "true"
+                           })
+                                @Html.ValidationMessageFor(x => Registration.Company, null, new { @class = "errormessage" })
+
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-md-6 form-group">
+
+                                @Html.TextBoxFor(x => Registration.Role, new
+                           {
+                               id = "roleTxt",
+                               @class = "form-control",
+                               placeholder = registerPage.GetPropertyValue<string>("rolePlaceholder"),
+								   @data_val_regex = registerPage.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+								   data_val = "true"
+                           })
+								@Html.ValidationMessageFor(x => Registration.Role, null, new { @class = "errormessage" })
+                            </div>
+                            <div class="col-md-6 form-group">
+
+
+                                @Html.TextBoxFor(x => Registration.Nation, new
+                           {
+                               id = "nationTxt",
+                               @class = "form-control",
+                               placeholder = registerPage.GetPropertyValue<string>("nationPlaceholder"),
+                               @data_val_required = registerPage.GetPropertyValue<string>("nationFieldRequired"),
+								   @data_val_regex = registerPage.GetPropertyValue<string>("htmlNotAllowedErrorMessage"),
+                               data_val = "true"
+                           })
+                                @Html.ValidationMessageFor(x => Registration.Nation, null, new { @class = "errormessage" })
+                               
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-md-6 form-group">
+                                @Html.PasswordFor(x => Registration.Password, new
+                            {
+                                id = "passwordTxt",
+                                @class = "form-control",
+                                placeholder = registerPage.GetPropertyValue<string>("passwordPlaceholder"),
+                                @data_val_required = registerPage.GetPropertyValue<string>("passwordFieldRequired"),
+                                data_val = "true"
+                            })
+                                @Html.ValidationMessageFor(x => Registration.Password, null, new { @class = "errormessage" })
+                               
+                            </div>
+                              <div class="col-md-6 form-group">
+                                  @Html.PasswordFor(x => Registration.PasswordConfirmation, new
+                              {
+                                  id = "conformTxt",
+                                  @class = "form-control",
+                                  placeholder = registerPage.GetPropertyValue<string>("confirmPasswordPlaceholder"),
+                                  @data_val_required = registerPage.GetPropertyValue<string>("confirmPasswordFieldRequired"),
+                                  @data_val_equalto = registerPage.GetPropertyValue<string>("passwordMismatchErrorMessage"),
+                                  @data_val_regex = registerPage.GetPropertyValue<string>("passwordMinimumCharErrorMessage"),
+                                  data_val = "true"
+                              })
+                                  @Html.ValidationMessageFor(x => Registration.PasswordConfirmation, null, new { @class = "errormessage" })
+                              </div>
+                            @*<div class="col-md-6 form-group">
+                                
+                            </div>*@
+                        </div>
+						@Umbraco.RenderMacro("Googlecaptch")
+                        <div class="row row-offset-10">
+                            <div class="col-sm-12 form-group">
+                                <div class="checkbox">
+									@*<input type="checkbox" id="checkbox1" name="isprivacy" required>
+                                    <label id="terms-chkbx" for="checkbox1">
+                                        <strong>@registerPage.GetPropertyValue("privacyTitle")</strong>
+                                        @Html.Raw(Umbraco.ReplaceLineBreaksForHtml(registerPage.GetPropertyValue("privacyText").ToString()))
+                                    </label>*@
+                                    @Html.CheckBoxFor(x => Registration.IsPrivacyChecked, new { id = "checkbox2" })
+                                    @*<input type="checkbox" id="checkbox2" value="@Registration.IsPrivacyChecked" name="@Registration.IsPrivacyChecked" required>*@
+                                    <label id="terms-chkbx" for="checkbox2"><strong>@registerPage.GetPropertyValue("privacyTitle")</strong> @registerPage.GetPropertyValue("privacyText")</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-offset-10">
+                            <div class="col-sm-12 text-center">
+                                <input type="submit" value="@registerPage.GetPropertyValue("submitButtonText")" class="btn-primary" />
+                            </div>
+                        </div>
+                  }
+                </div>
+                @*<div id="RegistrationSuccessMessage" class="alert alert-success alert-dismissible fade in" role="alert">
+                    
+                    <strong>@registerPage.GetPropertyValue("ragistrationSuccessMessage")</strong>
+                </div>*@
+
+                <div id="RegistrationFailedMessage" class="alert alert-danger alert-dismissible fade in" role="alert">
+                    
+                    <strong>@registerPage.GetPropertyValue("registrationFailedText")</strong>
+                </div>
+
+                <div id="RegistrationAlreadyExistsMessage" class="alert alert-danger alert-dismissible fade in" role="alert">
+                    
+                    <strong>@registerPage.GetPropertyValue("alreadyExistMessage")</strong>
+                </div>
+
+                <div class="loader" id="loader">
+                    <img src="/images/default.gif" alt="loader">
+                </div>
+            </div>
+
+            <!-- Modal content register form-->
+
+        </div>
+       
+    </div>
+}

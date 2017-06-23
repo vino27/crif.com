@@ -1,0 +1,184 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+	@using RJP.MultiUrlPicker.Models;
+@{
+	Layout = "Pages.cshtml";
+}
+@{ string className = "col-sm-12";
+    var currentModel = Model.Content;}
+@if (currentModel.HasProperty("ctaButtonLink"))
+{
+	var links = currentModel.GetPropertyValue<MultiUrls>("ctaButtonLink");
+	if (links != null && links.Any())
+	{				
+		className = "col-sm-8";
+	}
+}
+
+<section class="main-two-columns padding-30">
+    <div class="container">
+        <div class="row">
+            <article class="col-sm-12 article-single mob-social-linked">
+                <div class="title-block">
+                    <div class="row">
+                        <div class="@className">
+                            @if (currentModel.HasValue("pageIndicatorHeading"))
+                            {
+                                <p class="clr-blue category">
+                                    @if (currentModel.HasValue("pageIndicatorLink"))
+                                    {
+                                        var multiUrlPicker = currentModel.GetPropertyValue<RJP.MultiUrlPicker.Models.MultiUrls>("pageIndicatorLink");
+                                        if (multiUrlPicker.Any())
+                                        {
+                                            var item = multiUrlPicker.FirstOrDefault();
+                                            <a href="@item.Url" target="@item.Target"><strong>@currentModel.GetPropertyValue("pageIndicatorHeading")</strong></a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                       <span><strong>@currentModel.GetPropertyValue("pageIndicatorHeading")</strong></span>
+                                    }
+                                </p>
+                            }
+                            @*else
+                            {
+                                if (currentModel.Level > 2)
+                                { 
+                                    <p class="clr-blue category">
+                                    @if (currentModel.HasValue("pageIndicatorLink"))
+                                    {
+                                        var multiUrlPicker = currentModel.GetPropertyValue<RJP.MultiUrlPicker.Models.MultiUrls>("pageIndicatorLink");
+                                        if (multiUrlPicker.Any())
+                                        {
+                                            var item = multiUrlPicker.FirstOrDefault();
+                                            <a href="@item.Url" target="@item.Target"><strong>@currentModel.Parent.Name</strong></a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        string url = currentModel.Parent.Url;
+                                        var name = currentModel.Parent.Name;
+                                        if(currentModel.DocumentTypeAlias== "newsSinglePage" || currentModel.DocumentTypeAlias == "singleEventPage" 
+                                            || currentModel.DocumentTypeAlias == "singleResearchPage" || currentModel.DocumentTypeAlias == "singlePressRelease")
+                                        {
+                                            url = currentModel.AncestorOrSelf(3).Url;
+                                            name = currentModel.AncestorOrSelf(3).Name;
+                                        }
+                                        <a href="@url"><strong>@name</strong></a>
+                                    }
+                                </p>
+                                }
+                            
+                            }*@
+                            
+                            
+                            @if (currentModel.DocumentTypeAlias != "mettinconto" && currentModel.Parent.DocumentTypeAlias != "mettinconto")
+                            {
+                                <h1 class="clr-orange">@Umbraco.Field("title", altFieldAlias: "pageName")</h1>
+                            }
+                            else
+                            {
+                                var mettinconto = currentModel.AncestorOrSelf(1).Descendants("mettinconto");
+                                if (mettinconto != null && mettinconto.Any())
+                                {
+                                    var nodeItem = mettinconto.FirstOrDefault();
+                                    //var title = nodeItem.HasValue("subheading") ? nodeItem.GetPropertyValue("subheading") :nodeItem.Name;
+                                    if (nodeItem.HasValue("logo", true))
+                                    {
+                                        var logo = Umbraco.TypedMedia(Model.Content.GetPropertyValue("logo", true));
+                                        if (logo != null)
+                                        {
+                                            <div class="image-holder">
+                                                <img src="@logo.Url" alt="@logo.Name">
+                                            </div>
+                                        }
+                                    }
+                                    if (nodeItem.HasValue("subheading"))
+                                    {
+                                        <h3 class="sub-title">@nodeItem.GetPropertyValue("subheading")</h3>
+                                    }
+                                }
+                            }
+                        </div>
+                        @Umbraco.RenderMacro("CtaButtonListing")
+                        @if (Model.Content.DocumentTypeAlias != "singleTwoColumnPage")
+                        {
+							<div class="top-social-share">
+                            @Umbraco.RenderMacro("SocialShare")
+								</div>
+                        } 
+                    </div>
+                </div>
+                @if (currentModel.DocumentTypeAlias != "mettinconto" && currentModel.Parent.DocumentTypeAlias!= "mettinconto")
+                {
+                    var currentMember = Phases.UmbracoUtils.Member.GetCurrentLoggedinMember();
+                    if (currentModel.DocumentTypeAlias == "singleResearchPage")
+                    {
+                        if (currentModel.HasValue("bodyTextForNonLoggedMember") && Session["LoginId"] == null)
+                        {
+                            string readMorePlaceHolder = "[READMORE]";
+                            //int length = currentModel.GetPropertyValue<int>("stripedContentLength");
+                            var readMore = " <a data-target=\"#LoginModal\" data-toggle=\"modal\" data-backdrop=\"static\" class=\"read-more\">" + Umbraco.GetDictionaryValue("Read More") + "</a>";
+
+                            @Html.Raw(Model.Content.GetPropertyValue<string>("bodyTextForNonLoggedMember").Replace(readMorePlaceHolder,readMore))
+                        }
+                        else if(currentModel.HasValue("bodyText"))
+                        {
+                            @Html.Raw(currentModel.GetPropertyValue("bodyText"))
+                        }
+                    }
+                    else
+                    {
+                        @Html.Raw(currentModel.GetPropertyValue("bodyText"))
+                    }                    
+                }
+
+				@*-- Download link --*@
+					@*@if(Model.Content.HasValue("downloadableFile") ) {
+						<form method="post">
+							<input type="hidden" name="vari" value="@Model.Content.GetPropertyValue("downloadableFile")" />
+							<input type="submit" value="Download" class="btn-primary" />
+						</form>
+					}*@
+
+
+               <div class="inner-page-with-sidemenu-wrapper">
+                @Umbraco.RenderMacro("TwoColumnLinkBoxes")
+@if (Model.Content.HasValue("googleSpreadsheetUrl"))
+{
+    @Umbraco.RenderMacro("TimeLine")
+}
+@Umbraco.RenderMacro("LocationListing")
+@Umbraco.RenderMacro("TabbedListing")
+
+
+@section InnerBottomScript{
+    <script>
+
+        var timeline = new TL.Timeline('timeline', '@Umbraco.Field("googleSpreadsheetUrl")', {
+         'scale_factor': 1,
+            'initial_zoom': 3,
+			'marker_height_min': 50,
+			'marker_width_min':150,
+            'timenav_height':250,
+				'timenav_mobile_height_percentage':50
+
+        });
+    </script>
+
+    <script src="/scripts/share/social_share.js"></script>
+}
+					 </div>
+            </article>
+				@if (Model.Content.DocumentTypeAlias != "singleTwoColumnPage")
+				{
+					   <div class="bottom-social-share">
+						   @Umbraco.RenderMacro("SocialShare")
+						   </div>
+				} 
+            @Umbraco.RenderMacro("LeftSideWidgetMobile")
+        </div>
+    </div>
+</section>
+@Umbraco.RenderMacro("TwoColumnNewsListing")
+
+

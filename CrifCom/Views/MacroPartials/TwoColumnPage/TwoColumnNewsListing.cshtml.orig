@@ -1,0 +1,152 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("hideNewsAndEvents"))
+    {
+        var excludedDoctypes = new[] { "uDateFoldersyFolderYear", "uDateFoldersyFolderMonth" };
+        bool isContainChild = false;
+        if (!currentPage.GetPropertyValue<bool>("hideNewsAndEvents"))
+        {
+            var nodeListValue = Model.Content.GetPropertyValue<string>("selectNewsAndEvents");
+            var nodeList = nodeListValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+
+
+            if (nodeList != null && nodeList.ToString() != "" && nodeList.Any())
+
+            /*check list contains data*/
+            if (nodeList != null && nodeList.Any())
+            {
+                foreach (var nodeItem in nodeList)
+                {
+                    var nodeID = Umbraco.TypedContent(nodeItem);
+                    if (nodeID.Descendants().Where(x => x.IsVisible() && !excludedDoctypes.Contains(x.DocumentTypeAlias)).Any())
+                    {
+                        isContainChild = true;
+                        break;
+                    }
+                }
+            }
+            /*check list contains data*/
+            if (isContainChild)
+
+            {
+                string cssClass = "";
+                int count = 6;
+                <section class="margin-bottom-30 border-top-gray">
+                    <div class="container">
+                        <div class="row">
+                            @if (nodeList.Count() == 3)
+                            {
+                                cssClass = "col-sm-4";
+                            }
+                            else if (nodeList.Count() == 2)
+                            {
+                                cssClass = "col-sm-6";
+                            }
+                            else if (nodeList.Count() == 2)
+                            {
+                                cssClass = "col-sm-12";
+                            }
+                            else
+                            {
+                                cssClass = "col-sm-6";
+                            }
+
+                            @if (Model.Content.HasValue("noOfItemsToShow"))
+                            {
+                                count = Model.Content.GetPropertyValue<Int32>("noOfItemsToShow");
+                            }
+                            @foreach (var nodes in nodeList)
+                            {
+                                var singleNode = Umbraco.TypedContent(nodes);
+                                if (singleNode != null)
+                                {
+                                    <div class="@cssClass">
+                                        <a href="@singleNode.Url"><h3>@singleNode.Name</h3></a>
+                                        <ul class="list-unstyled">
+                                            @if (singleNode != null && singleNode.Children.Any())
+                                            {
+                                              
+                                                foreach (var childNode in singleNode.Descendants().Where(x => x.IsVisible() && !excludedDoctypes.Contains(x.DocumentTypeAlias)).OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(count))
+                                                {
+                                                    var actualDate = "";
+                                                    if (childNode.HasValue("actualDate"))
+                                                    {
+                                                        string date = Convert.ToDateTime(childNode.GetPropertyValue<string>("actualDate")).ToString("dd MMMM yyy");
+                                                        actualDate = date;
+                                                    }
+                                                    <li class="article-type-one">
+                                                        @{ string eventLocation = "";
+                                                            if (childNode.HasValue("location"))
+                                                            {
+                                                                eventLocation = childNode.GetPropertyValue<string>("location");
+                                                            }
+                                                            var literalChar = "";
+                                                            if (actualDate != "" && eventLocation != "")
+                                                            {
+                                                                literalChar = " - ";
+                                                            }
+                                                        }
+                                                        <span class="date">@eventLocation @literalChar @actualDate</span>
+                                                        <a href="@childNode.Url">
+
+                                                            @if (childNode.HasValue("title"))
+                                                            {
+                                                                <p class="highlight-text">@childNode.GetPropertyValue("title")</p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <p class="highlight-text">@childNode.Name</p>
+                                                            }
+                                                            @if (childNode.HasValue("shortDescripion"))
+                                                            {
+                                                                <p>@Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)childNode.GetPropertyValue("shortDescripion")))</p>
+                                                            }
+                                                            else if (childNode.HasValue("bodyText"))
+                                                            {
+                                                                <p>@Html.Raw(Phases.UmbracoUtils.Strings.TruncateAtWord(childNode.GetPropertyValue<string>("bodyText"), 130, "..."))</p>
+                                                            }
+                                                        </a>
+                                                    </li>
+                                                                }
+                                                            }
+                                        </ul>
+                                        @if (singleNode.HasValue("internalLinks"))
+                                        {
+                                            var internalLink = singleNode.GetPropertyValue<MultiUrls>("internalLinks");
+                                            if (internalLink != null && internalLink.Any())
+                                            {
+                                                foreach (var links in internalLink)
+                                                {
+                                                    <a href="@links.Url" target="@links.Target" class="standard-link">@links.Name</a>
+                                                }
+                                            }
+
+                                        }
+
+                                        @if (singleNode.HasValue("externalLinks"))
+                                        {
+                                            var links = singleNode.GetPropertyValue<MultiUrls>("externalLinks");
+                                            if (links != null && links.Any())
+                                            {<br />
+                                                foreach (var urlLinks in links)
+                                                {
+                                                    <a href="@urlLinks.Url" target="@urlLinks.Target" class="standard-link">@urlLinks.Name</a><br />
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                                                }
+                                                            }
+                        </div>
+                    </div>
+                </section>
+                                                                    }
+
+                                                                }
+                                                            }
+}

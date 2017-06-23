@@ -1,0 +1,99 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+    Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+
+    string largeBgImage = "";
+    string smallBgImage = "";
+    var smallImageUrl = "";
+    string url = "",name="";
+    if (currentPage.HasValue("backgroundImage") || currentPage.HasValue("title") || currentPage.HasValue("shortDescription") || currentPage.HasValue("link"))
+    {
+        // var backgroundImage = Umbraco.TypedMedia(currentPage.GetPropertyValue("backgroundImage"));
+
+
+        <section class="banner text-center swith-bg">
+
+
+            @if (currentPage.HasValue("backgroundImage"))
+            {
+                var backgroundImage = Umbraco.TypedMedia(currentPage.GetPropertyValue("backgroundImage"));
+                if (backgroundImage != null)
+                {
+                    url = backgroundImage.Url;
+                    name = backgroundImage.Name;
+                    largeBgImage = "data-bg-desktop=\"" + backgroundImage.Url + "\"";
+                }
+
+            }
+            @if (currentPage.HasValue("mobileBackgroundImage"))
+                {
+                    var mobileImage = Umbraco.TypedMedia(currentPage.GetPropertyValue("mobileBackgroundImage"));
+                    if (mobileImage != null)
+                    {
+                        smallImageUrl = mobileImage.Url;
+                        smallBgImage = "data-bg-mob=\"" + mobileImage.Url + "\"";
+                    }
+
+                }
+            <div class="content-bg img-switch" @Html.Raw(largeBgImage) @Html.Raw(smallBgImage)></div>
+            <img src="@url" class="content-hidden-seo"  alt="@name"/>
+            }
+            <div class="container">
+                <div class="row">
+                    <div class="centered-text-block">
+                        @{
+                            var titleUrl = "";
+                            var titleTarget = "";
+                            var UrlName = "";
+                            if (currentPage.HasValue("link"))
+                            {
+                                var linkTo = currentPage.GetPropertyValue<MultiUrls>("link");
+                                if (linkTo.Any())
+                                {
+									var firstLink= linkTo.FirstOrDefault();
+                                    titleUrl = firstLink.Url;
+                                    titleTarget = firstLink.Target;
+                                    UrlName = firstLink.Name;
+                                }
+                            }
+
+                            if (currentPage.HasValue("title"))
+                            {
+                                if (!string.IsNullOrEmpty(titleUrl))
+                                {
+                                    <a href="@titleUrl" target="@titleTarget"><h2 class="section-title">@currentPage.GetPropertyValue("title")</h2></a>
+                                }
+                                else
+                                {
+                                    <h1 class="section-title">@currentPage.GetPropertyValue("title")</h1>
+                                }
+
+                            }
+                            if (currentPage.HasValue("shortDescription"))
+                            {
+                                <p>
+                                    @Html.Raw(currentPage.GetPropertyValue("shortDescription"))
+                                </p>
+                            }
+
+                            if (!string.IsNullOrEmpty(titleUrl))
+                            {
+                                <a href="@titleUrl" target="@titleTarget" class="btn btn-primary">@UrlName</a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+                            }
+    <!-- Banner with centered content//  -->
+
+}
+
+

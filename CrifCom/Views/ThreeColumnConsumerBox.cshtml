@@ -1,0 +1,95 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models
+@{
+	Layout = null;
+}
+@{
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("consumerList"))
+    {
+        var consumerList = currentPage.GetPropertyValue<ArchetypeModel>("consumerList");
+        if (consumerList != null && consumerList.Any())
+        {
+            
+           
+            
+            <section class="listin-wrap">
+                <div class="container">
+                    <div class="row">
+                        <div class="tile-listing">
+                            @foreach (var consumer in consumerList)
+                            {
+                                var targetUrl = "";
+                                var target = "";
+                                if (consumer.HasValue("linkTo"))
+                                {
+                                    var linkTo = consumer.GetValue<MultiUrls>("linkTo");
+                                    if (linkTo != null && linkTo.Any())
+                                    {
+                                        var firstLink = linkTo.FirstOrDefault();
+                                        targetUrl = firstLink.Url;
+                                        target = firstLink.Target;
+                                    }
+                                } 
+                                 <!-- single item  -->
+                                <div class="col-md-4 col-sm-6 single-column tab-two-col-listing">
+                                    @if (consumer.HasValue("image") || consumer.HasValue("hoverImage"))
+                                    {
+                                        <div class="col-sm-3 image-holder">
+                                            <a href="@targetUrl" target="@target">
+                                                <div class="image-with-border">
+                                                    @if (consumer.HasValue("image"))
+                                                    {
+                                                        var image = Umbraco.TypedMedia(consumer.GetValue("image"));
+                                                        if (image != null)
+                                                        {
+                                                            <img src="@image.Url" alt="@image.Name">
+                                                        }
+                                                    }
+                                                    @if (consumer.HasValue("hoverImage"))
+                                                    {
+                                                        var hoverImage = Umbraco.TypedMedia(consumer.GetValue("hoverImage"));
+                                                        if (hoverImage != null)
+                                                        {
+                                                            <img src="@hoverImage.Url" alt="@hoverImage.Name">
+                                                        }
+                                                    } 
+                                                    else if (consumer.HasValue("image"))
+                                                    {
+                                                    var image = Umbraco.TypedMedia(consumer.GetValue("image"));
+                                                    if (image != null)
+                                                    {
+                                                    <img src="@image.Url" alt="@image.Name">
+                                                    }
+                                                    }
+                                                </div>
+                                            </a>
+                                        </div>
+                                    }
+                                    
+                                    <div class="col-sm-9 content-holder">
+                                        <a href="@targetUrl" target="@target">
+                                            @if (consumer.HasValue("title"))
+                                            {
+                                                <h2 class="article-heading">@consumer.GetValue("title")</h2>
+                                            } 
+                                        </a>
+                                       @if (consumer.HasValue("shortDescription"))
+                                       {
+                                           @Html.Raw(consumer.GetValue("shortDescription"))
+                                       }
+                                    </div>
+                                </div>
+                            <!-- single item  -->
+                            }
+                           
+                            
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+    }
+}
+

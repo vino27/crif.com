@@ -1,0 +1,128 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@using Phases.UmbracoUtils
+@{
+    var currentPage = Model.Content;
+    var home = Model.Content.AncestorOrSelf(1);
+    int count = currentPage.HasValue("noOfProductsToBeShown") ? currentPage.GetPropertyValue<int>("noOfProductsToBeShown") : 4;
+    var productTagList = currentPage.HasValue("productTags") ? currentPage.GetPropertyValue<string>("productTags").Split(new string[] { "," },
+                                StringSplitOptions.RemoveEmptyEntries).ToList() : null;
+    var serviceProductList=currentPage.HasValue("selectProduct") ? currentPage.GetPropertyValue<string>("selectProduct").Split(new string[] { "," },
+                               StringSplitOptions.RemoveEmptyEntries).ToList() : null;
+
+    var ProductHomePage = home.Descendants("productAndServices").FirstOrDefault();
+    var productPage = home.Descendants("productAndServices").DescendantsOrSelf("productOrService");
+    if (currentPage.DocumentTypeAlias == "productOrService")
+    {
+
+        productPage= productPage.Where(x => x.IsVisible() && x.TemplateId > 0 && serviceProductList != null && serviceProductList.Contains(x.Id.ToString())).Take(count);
+    }
+    else {
+        productPage = productPage.Where(x => x.IsVisible() && x.TemplateId > 0 && productTagList!=null && productTagList.Contains(x.Id.ToString())).Take(count);
+    }
+    if (productPage != null && productPage.Any())
+    {
+        var title = "";
+            <div class="col-sm-12 border-top-gray">
+                <div class="row">
+
+                    @if (currentPage.HasValue("relatedProductTitle"))
+                    {
+                        title = currentPage.GetPropertyValue<string>("relatedProductTitle");
+                    }
+                    else
+                    {
+                        title = ProductHomePage.Name;
+                    }
+                    
+                    <div class="header">
+                        <h3>@title</h3>
+                        @if (ProductHomePage.HasValue("internalLinks"))
+                        {
+                            var link = ProductHomePage.GetPropertyValue<MultiUrls>("internalLinks");
+                            if (link != null && link.Any())
+                            {
+                                foreach (var linkUrl in link)
+                                {
+                                    <a href="@linkUrl.Url" target="@linkUrl.Target" class="standard-link">@linkUrl.Name</a>
+                                }
+                            }
+                        }
+                        @if (ProductHomePage.HasValue("externalLinks"))
+                        {
+                            var links = ProductHomePage.GetPropertyValue<MultiUrls>("externalLinks");
+                            if (links != null && links.Any())
+                            {
+                               
+                                foreach (var urlLinks in links)
+                                {
+                                    <a href="@urlLinks.Url" target="@urlLinks.Target" class="standard-link">@urlLinks.Name</a><br />
+                                }
+                            }
+                        }
+                    </div>
+                    <div class="main-slider-wrap product-slider-wrap">
+                        @PrintSlider(productPage) 
+                        @if (productPage.Count() > 2)
+                        {
+                            <div class="slider-controls container">
+                                <!-- Pagination -->
+                                <div id="pagination-wrap"></div>
+                                <!-- nav controls -->
+                                <span class="arrow-left"><i class="slider-prev-icon"></i></span>
+                                <span class="arrow-right"><i class="slider-next-icon"></i></span>
+                            </div>
+                        } 
+                    </div> 
+                </div>
+            </div>
+        }
+   
+}
+@helper PrintSlider(IEnumerable<IPublishedContent> productPage)
+{
+var totalCount = productPage.Count();
+var loopCount = 0;
+if (totalCount % 2 == 0)
+{
+    loopCount = totalCount / 2;
+}
+else
+{
+    loopCount = (totalCount / 2) + 1;
+}
+var skipPageCount = 0;
+    <div class="pdt-slider"> 
+        @for(var i= 0;i < loopCount;i++)
+         {
+            <div class="row slider-item">
+               @foreach (var items in productPage.Skip(skipPageCount).Take(2))
+               {
+                   var itemUrl = items.GetUrl();
+                <div class="col-sm-6">
+                    <div class="article-type-one">
+                        <a href="@itemUrl.Url" target="@itemUrl.Target">
+                            @if (items.HasValue("title"))
+                            {
+                                <a href="@items.Url"><h3 class="highlight-text">@items.GetPropertyValue("title")</h3></a>
+                            }
+                            else
+                            {
+                                <a href="@items.Url"><h3 class="highlight-text">@items.Name</h3></a>
+                            } 
+                        </a>
+                        @if (items.HasValue("shortDescription"))
+                        {
+                            <p>@umbraco.library.RemoveFirstParagraphTag(items.GetPropertyValue("shortDescription").ToString())</p>
+                        }
+                        
+                    </div>
+                </div>
+               }
+            </div>
+            skipPageCount = skipPageCount + 2;
+        }
+             
+        </div>
+
+        }

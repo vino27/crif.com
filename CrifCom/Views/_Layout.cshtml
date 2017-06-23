@@ -1,0 +1,186 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Threading;
+@{
+    Layout = null;
+	@Umbraco.RenderMacro("FileDownload")
+    Umbraco.RenderMacro("ExternalRedirect");
+	var homePage = CurrentPage.AncestorsOrSelf(1).First();
+	string Sitekey = System.Configuration.ConfigurationManager.AppSettings["SitekeyForCaptcha"].ToString();
+	var cookieText = System.Text.RegularExpressions.Regex.Replace(homePage.cookieBannerText.ToString(), @"[\r\n\x00\x1a\\'""]", @"\$0");
+	string[] myCookies = Request.Cookies.AllKeys;
+    if (Request.Cookies["cb-enabled"] == null)
+    {
+           foreach (string cookie in myCookies)
+           {
+               Response.Cookies[cookie].Expires = DateTime.Now.AddDays(-1);
+           }
+		Session.Abandon();
+    }
+
+}<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+	 @Umbraco.RenderMacro("MetaTags")    
+	<meta name="robots" content="nofollow">
+    <!-- Favicons and app icons -->
+    <link rel="shortcut icon" href="/images/icons/favicon.ico" type="image/x-icon" /> 
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/images/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/images/icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/images/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="/images/icons/android-chrome-192x192.png" sizes="192x192">
+    <meta name="msapplication-square70x70logo" content="/images/icons/smalltile.png" />
+    <meta name="msapplication-square150x150logo" content="/images/icons/mediumtile.png" />
+    <meta name="msapplication-wide310x150logo" content="/images/icons/widetile.png" />
+    <meta name="msapplication-square310x310logo" content="/images/icons/largetile.png" />
+    <!-- Stylesheets -->
+    <link href='https://fonts.googleapis.com/css?family=Playfair+Display:700italic,400italic,700,400' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/styles.css">
+    @*<link href="/css/custom.css" rel="stylesheet" />
+	<link href="/css/print.css" rel="stylesheet" />	*@
+    <link rel="author" href="humans.txt">
+	@Styles.Render("~/bundles/Commoncss")
+	<script src="/scripts/jquery-2.1.1.min.js"></script>
+    @*<script type='text/javascript'>
+(function (d, t) {
+  var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
+  bh.type = 'text/javascript';
+  bh.src = 'https://www.bugherd.com/sidebarv2.js?apikey=2ofmxbws5gp8unhus4kyrg';
+  s.parentNode.insertBefore(bh, s);
+  })(document, 'script');
+    </script>	*@	
+   	@Html.Raw(Model.Content.GetPropertyValue("googleExperimentsScripts", false))	
+    @RenderSection("TopScript",false)
+	<script src="https://www.google.com/recaptcha/api.js?onload=CaptchaCallback&render=explicit" async defer></script>
+	<script  type='text/javascript'>
+		var CaptchaCallback = function(){
+		$('.g-recaptcha').each(function(index, el) {
+			grecaptcha.render(el, {'sitekey' : '@Sitekey'});
+		});
+}
+	</script>
+</head>
+<body id="pageId@(Umbraco.Field("pageID"))" class="pageType@(Umbraco.Field("nodeTypeAlias"))">
+    <header class="main-header">
+        <div class="container">
+            <div class="row">
+                @Umbraco.RenderMacro("SearchBoxMobile")
+                @Umbraco.RenderMacro("SiteLogo")
+                <div class="mob-menus hidden-md hidden-lg pull-right">
+                    <ul class="list-inline">
+                        <li>
+                            <div id="toggle-menu" class="hidden-md hidden-lg pull-right" data-target="#main-nav-wrapper">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-wrapper" id="main-nav-wrapper">
+                    @if (Thread.CurrentThread.CurrentCulture.Name == "it-IT")
+                    {
+                        @Umbraco.RenderMacro("MainMenuNavigation")
+                        @Umbraco.RenderMacro("HeaderTopQuickLinks")
+                    }
+                    else if (Thread.CurrentThread.CurrentCulture.Name == "en-GB" || Thread.CurrentThread.CurrentCulture.Name == "fr-FR"
+                        && (Model.Content.DocumentTypeAlias == "consumerHome" || Model.Content.DocumentTypeAlias == "consumer"))
+                    {
+                        <nav class="top-nav with-btn">
+                            <ul class="list-unstyled top-navigation-list">
+                                @Umbraco.RenderMacro("SearchBox")
+                                @Umbraco.RenderMacro("ConsumerBackbutton")
+                                @Umbraco.RenderMacro("LanguageSwitch")
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+
+        </div>
+    </header>
+    <main class="main-content-wrap">
+        @{
+            var currentMember = Phases.UmbracoUtils.Member.GetCurrentLoggedinMember();
+            if (currentMember != null)
+            {
+				string encryptedMemberId = Crifireland.Utils.Utility.ToBase64Url(
+                    Phases.UmbracoUtils.Cryptography.Encrypt(currentMember.Id.ToString(),
+                    System.Configuration.ConfigurationManager.AppSettings["EncryptionPassPhrase"].ToString()));
+				string encryptedMailId = Crifireland.Utils.Utility.ToBase64Url(
+                    Phases.UmbracoUtils.Cryptography.Encrypt(currentMember.Email,
+                    System.Configuration.ConfigurationManager.AppSettings["EncryptionPassPhrase"].ToString()));
+                <input type="hidden" class="hidden member-data" value="@encryptedMemberId" />
+             <input type="hidden" class="hidden member-email" value="@encryptedMailId" />
+				@*string encryptedMailId = Crifireland.Utils.Utility.ToBase64Url(
+                    Phases.UmbracoUtils.Cryptography.Encrypt(currentMember.Email,
+                    System.Configuration.ConfigurationManager.AppSettings["EncryptionPassPhrase"].ToString()));
+                <input type="hidden" class="hidden member-data" value="@currentMember.Id" />
+             <input type="hidden" class="hidden member-email" value="@encryptedMailId" />*@
+            }
+        }
+        @RenderBody()
+    </main>
+
+    <!-- Footer block// -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="row footer-bottom">
+                @Umbraco.RenderMacro("FooterContent")
+            </div>
+        </div>
+    </footer>
+    <!-- //Footer block -->
+    <!-- Footer scripts -->
+    <script src="/scripts/main.js"></script>
+	<script src="/scripts/scripts.js"></script>
+	@if (Request.Cookies["cb-enabled"] != null)
+    {
+    	<script src="/scripts/mediaelement-and-player.min.js"></script>
+		<script>
+			 $('video,audio').mediaelementplayer({
+			alwaysShowControls: true,
+			success: function(mediaElement, domObject) {
+				mediaElement.addEventListener('play', function(e) {
+					$('.mejs-controls').css("visibility", "visible");
+				}, false);
+				}
+			});
+    	</script>
+	}
+    <script src="/scripts/vendor/jquery-validation/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/scripts/vendor/jquery-validation/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script src="/scripts/vendor/jquery-cookiebar/jquery.cookiebar.js" type="text/javascript"></script>
+    @Scripts.Render("~/bundles/CommonScripts")
+    @*<script src="/scripts/ajaxhandler/login-ajax-handler.js"></script>
+        <script src="/scripts/custom.js"></script>
+        <script src="~/scripts/ajaxhandler/forgot-password-ajax-handler.js"></script>*@
+    <script>
+        (function ($) {
+            $(document).ready(function () {
+                if ('@Html.Raw(cookieText)' != "") {
+                    $.cookieBar({
+                        message: '@Html.Raw(cookieText)',
+                        acceptButton: true,
+                        acceptText: '@Umbraco.Field("#acceptText")' //Text on accept/enable button
+                    });
+                }
+            });
+        })(jQuery);
+    </script>
+	@Html.Raw(Model.Content.GetPropertyValue("Ganalytics", true))
+    @RenderSection("BottomScript", false)
+		<input type="hidden" id="captchaerrordict" value="@Umbraco.GetDictionaryValue("Fill the captcha")" />
+</body>
+</html>

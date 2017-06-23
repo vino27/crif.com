@@ -1,0 +1,16 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "PageWithSideMenu.cshtml";
+}
+@if(Model.Content.Parent.DocumentTypeAlias== "mettinconto")
+{
+@Umbraco.RenderMacro("TabContents")
+} 
+@Umbraco.RenderMacro("BorderedContent")
+@Umbraco.RenderMacro("TwoColumnLinkBoxes") 
+
+@section CrifSolutions{
+    @Umbraco.RenderMacro("TwoColumnBanner")
+    @Umbraco.RenderMacro("CrifSolutions")
+    @Umbraco.RenderMacro("SliderBoxes")
+}

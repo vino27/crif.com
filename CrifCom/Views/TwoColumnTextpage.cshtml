@@ -1,0 +1,32 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "PageWithSideMenu.cshtml";
+}
+
+@Umbraco.RenderMacro("TwoColumnLinkBoxes")
+@if (Model.Content.HasValue("googleSpreadsheetUrl"))
+{
+    @Umbraco.RenderMacro("TimeLine")
+}
+@Umbraco.RenderMacro("LocationListing")
+@Umbraco.RenderMacro("TabbedListing")
+
+@section FullWidthBanner{
+	@Umbraco.RenderMacro("FullWidthBanner")		
+}
+@section InnerBottomScript{
+    <script>
+
+        var timeline = new TL.Timeline('timeline', '@Umbraco.Field("googleSpreadsheetUrl")', {
+            'scale_factor': 1,
+            'initial_zoom': 3,
+			'marker_height_min': 50,
+			'marker_width_min':150,
+            'timenav_height':250,
+				'timenav_mobile_height_percentage':50
+
+        });
+    </script>
+
+    <script src="/scripts/share/social_share.js"></script>
+}

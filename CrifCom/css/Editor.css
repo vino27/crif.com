@@ -1,0 +1,206 @@
+
+
+/**umb_name:Orange Text*/
+.clr-orange{color: #ee7d11;}
+
+/**umb_name:h1*/
+h1{}
+
+/**umb_name:h2*/
+h2{}
+
+/**umb_name:h3*/
+h3{}
+
+/**umb_name:h4*/
+h4{}
+
+/**umb_name:h5*/
+h5{}
+
+/**umb_name:h6*/
+h6{}
+
+/**umb_name:Normal Text*/
+p{}
+
+/**umb_name:Image Align Right*/
+.image-right{float: right;
+    display: inline-block;
+    margin: 5px 0 10px 27px;}
+
+/**umb_name:Image Align Left*/
+.image-left{float: left;
+    margin: 5px 27px 10px 0;}
+
+/**umb_name:Image Align Center*/
+.image-center{display: block;
+    text-align: center;
+    float: none;} 
+
+
+
+
+/**umb_name:Green Listing Tick*/
+.listing-tick-green{color: #409c35;
+    list-style: none;
+    position: relative;
+    padding-left: 18px;}
+
+/**umb_name:Green Button*/
+.btn btn-secondary-green{background: #409c35;}
+
+/**umb_name:Light Green Text*/
+.clr-green-light{color: #9bcd33;}
+
+
+
+
+
+
+
+
+.listing-tick-green {
+    padding-left: 0;
+    color: #409c35;
+    list-style: none;
+    position: relative;
+    padding-left: 18px;
+}
+
+.listing-tick-green:before {
+    content: "\f00c";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+.listing-tick-green a {
+    color: #409c35;
+    text-decoration: underline;
+}
+
+ul.listing-tick-green:before {
+    display: none;
+}
+
+ul.listing-tick-green li:before {
+    content: "\f00c";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    display: inline-block;
+    font: normal normal normal 14px/1 FontAwesome;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+}
+
+
+ol.colored-ol.green>li:before,
+ol.green.ol-list-lg>li:before,
+ol.green.ol-list-lg-green>li:before {
+    color: #409c35;
+}
+
+.ul-with-orange-dot,
+.ul-with-green-dot {
+    list-style: none;
+    padding: 0;
+}
+.ul-with-orange-dot li,
+.ul-with-green-dot li {
+    display: block;
+    position: relative;
+    padding-left: 20px;
+}
+
+.ul-with-orange-dot li:before,
+.ul-with-green-dot li:before {
+    content: "\2022";
+    color: #ee7d11;
+    position: absolute;
+    font-size: 13px;
+    padding-left: 4px;
+    padding-right: 10px;
+    left: 0;
+}
+
+.ul-with-orange-dot li p,
+.ul-with-green-dot li p {
+    margin-bottom: 10px;
+}
+
+.ul-with-green-dot li:before {
+    color: #409c35;
+}
+.text-right a {
+    display: inline-block;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+.btn-secondary, .btn-secondary-green {
+    border: none;
+    text-transform: uppercase;
+    background: #ee7d11;
+    color: #fff !important;
+    min-width: 100px;
+    text-align: center;
+}
+.btn, .btn-primary, .btn-secondary, .btn-secondary-green {
+    padding: 11px 15px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: bold;
+    box-shadow: none;
+}
+.col-sm-9 {
+    width: 75%;
+	float:left;
+}
+.col-sm-3 {
+    width: 25%;
+	float:left;
+}
+
+/**umb_name:Link  Blue*/
+.link-blue{color: #003b79;
+font-family: "Arial",sans-serif;
+font-size: 1.167em;
+font-weight: bold;}
+
+/**umb_name:Link   Orange*/
+.link-orange{color: #ee7d11;
+font-family: "Arial",sans-serif;
+font-size: 1.167em;
+font-weight: bold;}
+
+/**umb_name:Green Text*/
+.clr-green{color: #409c35;}
+a{
+   	color: #003b79;
+   font-family: "Arial",sans-serif;
+   font-size: 1.167em; 
+font-weight: bold;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+
+/**umb_name:Red Bordered Box*/
+div.bordered-content{border: 1px solid red ;}}}
+
+
+
+/**umb_name:Orange link with arrow*/
+.standard-link{}
+
+/**umb_name:Blue Button*/
+.btn btn-primary{background: #003b79;
+color:#fff;}

@@ -1,0 +1,297 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using CrifCom.Controllers
+@using CrifCom.Models
+@{
+    Registration Registration = new Registration();
+	var currentNode = Model.Content;
+    Dictionary<string, string> Market = new Dictionary<string, string>();
+    var marketNodes = currentNode.AncestorOrSelf(1).Descendants("market");
+    if (marketNodes != null && marketNodes.Any())
+    {
+        foreach (var marketnode in marketNodes)
+        {
+            Market.Add(marketnode.Id.ToString(), marketnode.Name);
+        }
+
+    }
+    if (TempData["activation"] != null && TempData["activation"].ToString() == "true")
+    {
+        <div class="modal fade-in flexible-modal" role="dialog" id="activationModal">
+            <div class="modal-dialog">
+                <!-- Modal content login form-->
+                <div class="modal-content big-layout">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <div class="login-form-wrapper">
+                        <h3 class="clr-orange text-center">@currentNode.GetPropertyValue("activationMessageTitle")</h3>
+                        <div class="row row-offset-10">
+							@if(currentNode.HasValue("activationMessage"))
+							{								
+                            	<label>@Html.Raw(@Umbraco.ReplaceLineBreaksForHtml((string)currentNode.GetPropertyValue("activationMessage")))</label>
+							}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    if(TempData["Name"] != null)
+    {
+        Registration.Name = TempData["Name"].ToString();
+    }
+    if (TempData["SurName"] != null)
+    {
+        Registration.Surname = TempData["SurName"].ToString();
+    }
+    if (TempData["Email"] != null)
+    {
+        Registration.Email = TempData["Email"].ToString();
+    }
+    if(TempData["Company"] != null)
+    {
+        Registration.Company = TempData["Company"].ToString();
+    }
+    if (TempData["Role"] != null)
+    {
+        Registration.Role = TempData["Role"].ToString();
+    }
+    if(TempData["Country"] != null)
+    {
+        Registration.Nation = TempData["Country"].ToString();
+    }
+    string strUserAgent = Request.UserAgent.ToString().ToLower();
+    var linkedInTitle = "";
+    if (currentNode.HasValue("linkedInLoginTitle"))
+    {
+        linkedInTitle = currentNode.GetPropertyValue<string>("linkedInLoginTitle");
+    }
+	if (strUserAgent != null)
+	{
+		if (strUserAgent.Contains("ipad") || strUserAgent.Contains("iphone"))
+		{
+			using (Html.BeginUmbracoForm<CrifCom.Controllers.LinkedInController>("index", null))
+            {
+	            <div class="col-sm-12 form-group linkedin-Login lnkdin-iphn">
+					<i class="fa fa-linkedin" aria-hidden="true"></i>
+                        <input type="submit" value="@linkedInTitle" class="fa fa-linkedin lnkdin-iphn-btn" />
+                </div> 
+            } 
+		}
+    }
+
+}
+<div class="margin-top-40">
+    <h3>@currentNode.GetPropertyValue("registrationFormTitle")</h3>
+
+    @using (Html.BeginUmbracoForm<CrifCom.Controllers.RegistrationController>("SubmitRegistration", null, new { id = "registrationform" }))
+    {
+       
+        <div class="row row-offset-10"> 
+				@{
+                if (strUserAgent != null)
+				{
+				
+					if (!(strUserAgent.Contains("ipad")) && !(strUserAgent.Contains("iphone")))
+					{
+						 <div class="col-sm-12 form-group linkedin-Login">
+                            <a href="javascript:void(0);" onclick="liAuth()"><i class="fa fa-linkedin" aria-hidden="true"></i>@linkedInTitle</a>
+                        </div>
+					}
+				}
+                }
+               
+            </div>
+
+            <div class="row row-offset-10">
+
+                <div class="col-sm-4 form-group">
+
+                    @Html.TextBoxFor(x => Registration.Name, new
+               {
+                   id = "nameTxt",
+                   @class = "form-control",
+                   placeholder = currentNode.GetPropertyValue<string>("namePlaceHolder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("nameFieldRequired"),
+                   autocorrect = "off",
+                   maxlength = 500,
+                   data_val = "true"
+               })
+                    @Html.ValidationMessageFor(x => Registration.Name, null, new { @class = "errormessage" })
+                </div>
+                <div class="col-sm-4 form-group">
+
+                    @Html.TextBoxFor(x => Registration.Surname, new
+               {
+                   id = "surnameTxt",
+                   @class = "form-control",
+                   placeholder = currentNode.GetPropertyValue<string>("lastNamePlaceholder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("lastNameFieldRequired"),
+                   autocorrect = "off",
+                   maxlength = 500,
+                   data_val = "true"
+               })
+                    @Html.ValidationMessageFor(x => Registration.Surname, null, new { @class = "errormessage" })
+                </div> 
+                <div class="col-sm-4 form-group">
+
+                    @Html.TextBoxFor(x => Registration.Company, new
+               {
+                   id = "companyTxt",
+                   @class = "form-control",
+                   autocorrect = "off",
+                   maxlength = 500,
+                   placeholder = currentNode.GetPropertyValue<string>("companyPlaceholder"),
+                   @data_val_required = currentNode.GetPropertyValue<string>("companyFieldRequired"),
+                   data_val = "true"
+               })
+                    @Html.ValidationMessageFor(x => Registration.Company, null, new { @class = "errormessage" })
+                </div>
+
+            </div>
+                <div class="row row-offset-10"> 
+                    <div class="col-sm-4 form-group">
+                        @Html.TextBoxFor(x => Registration.Role, new
+                   {
+                       id = "roleTxt",
+                       @class = "form-control",
+                       autocorrect = "off",
+                       maxlength = 500,
+                       placeholder = currentNode.GetPropertyValue<string>("rolePlaceholder"),
+                   })
+                    </div> 
+                    <div class="col-sm-4 form-group">
+
+                        @Html.TextBoxFor(x => Registration.Nation, new
+                   {
+                       id = "nationTxt",
+                       @class = "form-control",
+                       autocorrect = "off",
+                       maxlength = 200,
+                       placeholder = currentNode.GetPropertyValue<string>("nationPlaceholder"),
+                       @data_val_required = currentNode.GetPropertyValue<string>("nationFieldRequired"),
+                       data_val = "true"
+                   })
+                        @Html.ValidationMessageFor(x => Registration.Nation, null, new { @class = "errormessage" })
+                    </div> 
+                    <div class="col-sm-4 form-group">
+
+                        @Html.TextBoxFor(x => Registration.Telephone, new
+                   {
+                       id = "telephoneTxt",
+                       @class = "form-control",
+                       autocorrect = "off",
+                       maxlength = 200,
+                       placeholder = currentNode.GetPropertyValue<string>("telephonePlaceholder"),
+                       @data_val_required = currentNode.GetPropertyValue<string>("telephoneRequiredErrorMessage"),
+                       data_val = "true"
+                   })
+                        @Html.ValidationMessageFor(x => Registration.Telephone, null, new { @class = "errormessage" })
+                    </div>
+                </div>
+                <div class="row row-offset-10">
+                    <div class="col-sm-4 form-group">
+
+                        @Html.TextBoxFor(x => Registration.Email, new
+                   {
+                       id = "emailTxt",
+					   type="email",
+                       @class = "form-control",
+                       autocorrect = "off",
+                       autocapitalize = "off",
+                       maxlength = 500,
+                       placeholder = currentNode.GetPropertyValue<string>("emailPlaceholder"),
+                       @data_val_required = currentNode.GetPropertyValue<string>("emailFieldRequired"),
+                       @data_val_regex = currentNode.GetPropertyValue<string>("emailValidationErrorMessage"),
+                       data_val = "true"
+                   })
+                        @Html.ValidationMessageFor(x => Registration.Email, null, new { @class = "errormessage" })
+                    </div> 
+                    <div class="col-sm-4 form-group">
+
+                        @Html.PasswordFor(x => Registration.Password, new
+                   {
+                       id = "passwordTxt",
+                       @class = "form-control",
+                       autocorrect = "off",
+                       maxlength = 500,
+                       placeholder = currentNode.GetPropertyValue<string>("passwordPlaceholder"),
+                       @data_val_required = currentNode.GetPropertyValue<string>("passwordFieldRequired"),
+                       @data_val_regex = currentNode.GetPropertyValue<string>("passwordMinimumCharErrorMessage"),
+                       data_val = "true"
+                   })
+                        @Html.ValidationMessageFor(x => Registration.Password, null, new { @class = "errormessage" })
+                    </div>
+                    <div class="col-sm-4 form-group">
+
+                        @Html.PasswordFor(x => Registration.PasswordConfirmation, new
+                   {
+                       id = "conformTxt",
+                       @class = "form-control",
+                       autocorrect = "off",
+                       maxlength = 500,
+                       placeholder = currentNode.GetPropertyValue<string>("confirmPasswordPlaceholder"),
+                       @data_val_required = currentNode.GetPropertyValue<string>("confirmPasswordFieldRequired"),
+                       @data_val_equalto = currentNode.GetPropertyValue<string>("passwordMismatchErrorMessage"),
+                       data_val = "true"
+                   })
+                        @Html.ValidationMessageFor(x => Registration.PasswordConfirmation, null, new { @class = "errormessage" })
+                    </div>
+                </div>
+                <div class="row row-offset-10">
+                    <div class="col-sm-4 form-group">
+
+                        @Html.DropDownListFor(x => Registration.Market, new SelectList(Market, "Key", "Value"), currentNode.GetPropertyValue<string>("marketPlaceholder"),
+                                                                  new
+                                                                  {
+                                                                      @class = "form-control selectpicker",
+                                                                      id = "marketTxt",
+                                                                      placeholder = currentNode.GetPropertyValue<string>("marketPlaceholder"),
+                                                                      @data_val_required = currentNode.GetPropertyValue<string>("marketFieldRequired"),
+                                                                      data_val = "true"
+                                                                  })
+                        @Html.ValidationMessageFor(x => Registration.Market, null, new { @class = "errormessage" })
+                    </div>
+
+                </div>
+                <div class="row row-offset-10">
+                    <div class="col-sm-12 form-group">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(x=>Registration.IsPrivacyChecked,new { id= "checkbox1" })
+                            @*<input tabindex="" type="checkbox" id="checkbox1"  value="true" name="IsPrivacyChecked" data-val="true">*@
+                            <label id="terms-chkbx" for="checkbox1"><strong>@currentNode.GetPropertyValue("privacyTitle")</strong> @currentNode.GetPropertyValue("privacyText")</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-offset-10">
+
+                    <div class="col-sm-12 ">
+                        <input tabindex="" type="submit" value="@Model.Content.GetPropertyValue("submitButtonText")" class="btn-primary" />
+                    </div>
+                </div>
+    }
+
+
+    @*<div id="RegistrationSuccessMessage" class="alert alert-success alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>@Model.Content.GetPropertyValue("ragistrationSuccessMessage")</strong>
+    </div>*@
+
+    <div id="RegistrationFailedMessage" class="alert alert-danger alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>@currentNode.GetPropertyValue("registrationFailedText")</strong>
+    </div>
+
+    <div id="RegistrationAlreadyExistsMessage" class="alert alert-danger alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>@currentNode.GetPropertyValue("alreadyExistMessage")</strong>
+    </div>
+
+    <div class="loader" id="loader">
+        <img src="/images/default.gif" alt="loader">
+    </div>
+</div>

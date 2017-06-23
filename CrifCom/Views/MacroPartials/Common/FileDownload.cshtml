@@ -1,0 +1,14 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+	@if(!string.IsNullOrEmpty( Request["vari"] )){
+        var media = Umbraco.TypedMedia(Request["vari"] );
+        if(media != null && media.Url != null)
+        {
+            Response.ClearContent();
+            Response.Clear();
+            Response.AddHeader("Content-Disposition", "attachment; filename=" + System.IO.Path.GetFileName(media.Url) + ";");
+            Response.TransmitFile(Server.MapPath(media.Url));
+            Response.Flush();
+            Response.End();
+        }
+
+    }

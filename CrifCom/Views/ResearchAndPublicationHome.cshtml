@@ -1,0 +1,12 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "Pages.cshtml";
+}
+
+    @Umbraco.RenderMacro("SliderwithImageorVideo")
+    @(Model.Content.GetGridHtml(Html, "bodyContent"))
+
+@section InnerBottomScript{
+    <script src="/scripts/ajaxhandler/research-home-ajaxhandler.js"></script>
+}
+

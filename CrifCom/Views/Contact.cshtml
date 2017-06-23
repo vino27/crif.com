@@ -1,0 +1,81 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using System.Configuration;
+@{
+    Layout = "PageWithSideMenu.cshtml";
+}
+@{ var clientId = ConfigurationManager.AppSettings["ClientIDForLinkedInRegister"];
+   @*Response.AddHeader("Access-Control-Allow-Origin", "*");*@
+}
+@Umbraco.RenderMacro("ContactForm")
+@section OfficeWorldWide{
+    @Umbraco.RenderMacro("OfficeWorldWide")
+
+}
+<input id="hdApiClientId" type="hidden" value="@clientId" />
+@section InnerBottomScript{
+<script src="/scripts/country.js"></script>
+    <script type="text/javascript" language="javascript">
+        var defaultRangeValidator = $.validator.methods.range;
+        $.validator.methods.range = function (value, element, param) {
+            if (element.type === 'checkbox') {
+                // if it's a checkbox return true if it is checked
+                return element.checked;
+            } else {
+                // otherwise run the default validation function
+                return defaultRangeValidator.call(this, value, element, param);
+            }
+        }
+        //jQuery(document).ready(function () {          
+        //    jQuery.validator.unobtrusive.adapters.addBool("mandatory", "required");            
+        //});        
+    </script> 
+		<script type="text/javascript" src="/scripts/linkedin.js"></script>
+@*if (Request.Cookies["cb-enabled"] != null)
+    {*@
+    @*<script type="text/javascript">
+        $(document).ready(function() { 
+            $.getScript("https://platform.linkedin.com/in.js?async=true", function success() { 
+                IN.init({ 
+                    api_key: "@clientId",
+                    authorize: true,
+                    onLoad : onLinkedInLoad
+                }); 
+            }); 
+        });
+</script>
+<script>
+    // Once logged in this function should automatically invoke
+    function onLinkedInLoad() {
+        //IN.UI.Authorize().place();
+        IN.Event.on(IN, "auth", function () { onLinkedInLogin() });
+        IN.Event.on(IN, "logout", function () { onLinkedInLogout(); });
+
+
+    }
+    // If user logged in successfully, get user details
+    function onLinkedInLogin() {
+        IN.API.Profile("me")
+  .fields(["id", "firstName", "lastName", "industry", "positions", "emailAddress", "location"])
+  .result(function (result) {
+      // Get required fields
+      var details = result.values[0];
+      var countryname = getCountryName(details.location.country.code.toUpperCase());
+      $('#nameTxt').val(details.firstName);
+      $('#surnameTxt').val(details.lastName);
+      $('#emailTxt').val(details.emailAddress);
+      $('#companyTxt').val(details.positions.values[0].company.name);
+      $('#roleTxt').val(details.positions.values[0].title);
+      $('#nationTxt').val(countryname);
+  })
+.error(function (err) {
+    alert(err);
+});
+    }
+		
+    // This is required to acquire oAuth 2.0
+   function liAuth() {
+            IN.User.authorize(function () { });
+        } 
+</script>*@
+@*}*@
+}

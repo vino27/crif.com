@@ -1,0 +1,110 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using Phases.UmbracoUtils
+@using RJP.MultiUrlPicker.Models
+@{
+    var home = Model.Content.AncestorOrSelf(1);
+    @*var selection = home.Children.Where(x => x.IsVisible());*@
+var childNodes = home.Children.Where(x => x.IsVisible());
+    <nav class="main-nav" id="main-nav">
+        <ul class="nav navbar-nav">
+            @foreach (var child in childNodes)
+            {
+            
+                @PrintMenu(child, true)
+            }
+            @*to show thw top quicklinks in mobile navigation.*@
+            @if (home.HasValue("headerQuickLinks"))
+            {
+                var quickLinks = home.GetPropertyValue<MultiUrls>("headerQuickLinks");
+                if (quickLinks != null && quickLinks.Any())
+                {
+                    foreach (var links in quickLinks)
+                    {
+                        var className = Model.Content.Path.Split(",".ToCharArray()).Contains(links.Id.ToString()) ? "active" : string.Empty;
+                        <li class="hidden-lg hidden-md @className"><a href="@links.Url">@links.Name</a></li>
+                    }
+
+                }
+            }
+        </ul>
+    </nav>
+}
+@helper PrintMenu(IPublishedContent node, bool isMainMenuItem = false)
+{
+var childNodes = node.Children.Where(x => x.IsVisible() && x.Level <= 3);
+bool hasChild = childNodes.Any() && !node.GetPropertyValue<bool>("hideChildPagesInMainNavigation");
+string className = string.Empty;
+if (hasChild)
+{
+
+    className = "class=\"submenu hover  clr-blue  dropdown\"";
+    className = Model.Content.Path.Split(",".ToCharArray()).Contains(node.Id.ToSafeString()) ? "class=\" submenu hover  dropdown clr-orange active\"" : className;
+}
+else
+{
+    className = "";
+    className = Model.Content.Path.Split(",".ToCharArray()).Contains(node.Id.ToSafeString()) ? className + " class=\"active\"" : className;
+}
+if (node.DocumentTypeAlias == "consumerHome")
+{
+    className = "class=\"submenu hover  clr-blue  dropdown \"";
+    className = Model.Content.Path.Split(",".ToCharArray()).Contains(node.Id.ToSafeString()) ? "class=\"submenu hover  clr-blue  dropdown active\"" : className;
+}
+if (node.DocumentTypeAlias == "consumerSection")
+{
+    className = "class=\"submenu hover  clr-orange  dropdown \"";
+}
+var pageUrl = node.GetUrl();
+        <li @Html.Raw(className)>
+            @if (pageUrl.DisabledLink)
+            {
+                if (node.HasValue("menuAlternateText"))
+                {
+                    <span> @node.GetPropertyValue("menuAlternateText")</span>
+                }
+                else
+                {
+                    <span> @node.Name</span>
+                }
+                if (hasChild && isMainMenuItem)
+                {
+                    <span class="caret"></span>
+                }
+                else if (hasChild)
+                {
+                    // <i class="fa fa-angle-right"></i>
+                }
+            }
+            else {
+                <a href="@pageUrl.Url" target="@pageUrl.Target">
+                    @if (node.HasValue("menuAlternateText"))
+                    {
+                        @node.GetPropertyValue("menuAlternateText")
+                    }
+                    else
+                    {
+                        @node.Name
+                    }
+                </a>
+
+                if (hasChild && isMainMenuItem)
+                {
+                    <span class="caret"></span>
+                }
+                else if (hasChild)
+                {
+                    // <i class="fa fa-angle-right"></i>
+                }
+
+            }
+            @if (hasChild)
+            {
+                <ul class="menu-dropdown">
+                    @foreach (var child in childNodes)
+                    {
+                        @PrintMenu(child)
+                    }
+                </ul>
+            }
+        </li>
+}

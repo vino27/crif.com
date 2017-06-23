@@ -1,0 +1,8 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+	Layout = "Pages.cshtml";
+}
+ 
+
+         @Umbraco.RenderMacro("SliderwithImageorVideo")
+         @(Model.Content.GetGridHtml(Html, "bodyText"))

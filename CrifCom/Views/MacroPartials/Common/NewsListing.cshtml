@@ -1,0 +1,50 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using RJP.MultiUrlPicker.Models
+@{
+
+    var items = Model.MacroParameters["selectNews"];
+    var jsonString = Html.Raw(items.ToString());
+    @jsonString
+    //dynamic jsonDe = Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString.ToString());
+    // @Html.Raw(items.ToString())
+          @*var a = Newtonsoft.Json.JsonConvert.DeserializeObject<MultiUrls>("{a:10}");
+           @a*@
+
+    //var home = Model.Content.AncestorOrSelf(1);
+    //int count = 6;
+    //if (!string.IsNullOrEmpty(home.GetPropertyValue("noOfNewsAndEventsItems").ToString()))
+    //{
+    //    count = home.GetPropertyValue<Int32>("noOfNewsAndEventsItems");
+    //}
+    //var currentPage = Model.Content;
+    //var selectedNode = Model.MacroParameters["selectNews"];
+    //if (!string.IsNullOrEmpty(selectedNode.ToString()))
+    //{
+    //    //var dd = selectedNode.urlpicker.
+    //    //var quickLinks = home.GetPropertyValue<MultiUrls>("footerQuickLinks");
+    //    //  foreach (var id in selectedNode.)
+    //    // currentPage = Umbraco.TypedContent(Model.MacroParameters["selectNews"]);
+    //}
+
+    @*
+
+
+    if (currentPage.Children.Any())
+                {
+        <h3>@currentPage.Name</h3>
+       <ul>
+        @foreach (var items in currentPage.Children.Where(x => x.IsVisible()).OrderByDescending(x => x.GetPropertyValue("publicationDate")).Take(count))
+        {
+            <li class="article-type-one">
+                <span class="date">23 marzo 2016</span>
+                <a href="#">
+                    <p class="highlight-text">La nuova classificazione dei crediti (ex. Circolare 272 7° agg.): ristrutturazione del processo di valutazione di Federazione BCC Emilia Romagna.</p>
+                </a>
+                <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti</p>
+            </li>
+        }
+      </ul>
+    }*@
+    
+
+}

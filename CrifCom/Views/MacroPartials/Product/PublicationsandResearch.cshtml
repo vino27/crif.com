@@ -1,0 +1,89 @@
+﻿@inherits Umbraco.Web.Macros.PartialViewMacroPage
+@using ContentModels = Umbraco.Web.PublishedContentModels;
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models; 
+@using Phases.UmbracoUtils
+@{ 
+    int count = 4;
+
+    var home = Model.Content.AncestorOrSelf(1);
+    var currentPage = Model.Content;
+    if (currentPage.HasValue("noOfResearchToBeShown"))
+    {
+        count = currentPage.GetPropertyValue<int>("noOfResearchToBeShown");
+    }
+    var marketTagging = currentPage.HasValue("selectMarket") ? currentPage.GetPropertyValue<string>("selectMarket").Split(new string[] { "," },
+                                StringSplitOptions.RemoveEmptyEntries).ToList() : null;
+    var researchHomePage = home.Descendants("researchAndPublicationHome").Where(x => x.IsVisible() && x.TemplateId > 0).FirstOrDefault();
+    var researchPages = home.Descendants("singleResearchPage").Where(x => x.IsVisible() && x.TemplateId > 0 && marketTagging!=null && x.HasValue("selectMarket") &&
+                        x.GetPropertyValue<string>("selectMarket").Split(new string[] { "," },
+                                 StringSplitOptions.RemoveEmptyEntries).ToList().Intersect(marketTagging).Count() > 0).Take(count);
+    if(researchPages!=null && researchPages.Any())
+    {
+        <div class="single-listing border-top-gray col-sm-12 row">
+            <div class="header">
+                @if (currentPage.HasValue("researchListTitle"))
+                {
+                    <a href="@researchHomePage.Url"><h3>@currentPage.GetPropertyValue("researchListTitle")</h3>  </a>
+                }
+                else
+                {
+                    <a href="@researchHomePage.Url"><h3>@researchHomePage.Name</h3>  </a>
+                }
+              
+                @if (researchHomePage.HasValue("internalLinks"))
+                {
+                    var internalLink = researchHomePage.GetPropertyValue<MultiUrls>("internalLinks");
+                    if (internalLink != null && internalLink.Any())
+                    {
+                        foreach (var links in internalLink)
+                        {
+                            <a href="@links.Url" target="@links.Target" class="standard-link" rel="nofollow">@links.Name</a>
+                        }
+                    }
+                } 
+            </div>
+            <ul class="list-unstyled listing-type-one">
+                @foreach (var items in researchPages)
+                {
+                    var itemUrl = items.GetUrl();
+                    <li>
+                        @if (items.HasValue("thumbnailImage"))
+                        {
+                            var image=Umbraco.TypedMedia(items.GetPropertyValue("thumbnailImage"));
+                            <div class="image-holder">
+                                <a href="@itemUrl.Url" target="@itemUrl.Target"><img src="@image.Url" alt="@image.Name"></a>
+                            </div>
+                        }
+                        
+                        <div class="article-type-one">
+                            @if (items.HasValue("actualDate"))
+                            {
+                                <span class="date">@items.GetPropertyValue("actualDate")</span>
+                            }
+                           
+                           
+                                <a href="@itemUrl.Url" target="@itemUrl.Target">
+                                        @if (items.HasValue("title"))
+                                        {
+                                          <p class="highlight-text">@items.GetPropertyValue("title")</p>
+                                        }else
+                                        {
+                                            <p class="highlight-text">@items.Name</p>
+                                        }
+                                </a>
+                           
+                            @if (items.HasValue("shortDescripion"))
+                            {
+                                <p>@Html.Raw(items.GetPropertyValue("shortDescripion"))</p>
+                            }
+                           
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+
+}
+ 

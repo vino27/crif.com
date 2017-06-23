@@ -1,0 +1,80 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using umbraco.cms.businesslogic.web
+@using Umbraco.Core.Services;
+@{
+	Layout = null;
+}
+@{
+	
+@***Delete nodes under news***@
+@*Document parentNode = new Document(1346);//use id of parent node 
+foreach (Document child in parentNode.Children)
+{
+	var id=child.Id;
+    child.delete();
+        umbraco.library.UpdateDocumentCache(child.Id);  
+	@id 
+}
+umbraco.library.RefreshContent();*@
+	
+	
+@****Assign Templates to resigna stamba ****@
+	IContentService cs = ApplicationContext.Current.Services.ContentService;
+    int cnt = 0; int emptycnt = 0;
+    //var parent = Umbraco.TypedContent(1147);
+	//var parent = Umbraco.TypedContent(1155);
+    var parent = Umbraco.TypedContent(1413);
+	//var parent = Umbraco.TypedContent(1501);
+    //newsSinglePage
+int ind = 1725;
+    foreach (var page in parent.DescendantsOrSelf("singlePressRelease").OrderByDescending(x => x.CreateDate).Take(42))
+{
+    var content = cs.GetById(page.Id);
+    
+	ind--;
+    string attachment = content.GetValue<string>("attachment").ToString();
+    var newattachment = attachment.Split('/').Last();
+    attachment = "/Media/Attachments/"+ind.ToString()+"/"+newattachment;
+    content.SetValue("attachment", attachment);
+	@attachment<br/>
+    
+    @*string shortDescription=content.GetValue<String>("shortDescription");*@
+        @*string date=content.GetValue<DateTime>("publicationDate").ToString();*@
+    @*if(pageIndicatorHeading==null)
+    {
+        pageIndicatorHeading = string.Empty;
+    }*@
+    //string browserTitle = content.GetValue<String>("browserTitle");
+        //string title = content.GetValue<String>("title");
+    //if (browserTitle == null)
+    //{
+    //    browserTitle = string.Empty;
+    //}
+    @*if(pageIndicatorHeading.Trim()==String.Empty)
+    {
+        //emptycnt++;
+        content.SetValue("pageIndicatorHeading", string.Empty);
+       //cs.SaveAndPublishWithStatus(content);   
+    }*@
+    //else if(pageIndicatorHeading==String.Empty)
+    //{
+    //    emptycnt++;
+    //    //content.SetValue("pageIndicatorHeading", browserTitle);
+    //}
+     @*   else
+    {
+        cnt++;
+        //content.SetValue("pageIndicatorHeading", browserTitle);
+    }*@
+   cs.SaveAndPublishWithStatus(content);
+	
+	//cs.Delete(content);
+    
+@*}*@
+@*<p>Empty Count - @emptycnt.ToString()</p>
+    <p>other - @cnt.ToString()</p>*@
+        @*date*@
+		@*parent.DescendantsOrSelf("newsSinglePage").Count()*@
+}
+@parent.DescendantsOrSelf("singlePressRelease").Count()
+}

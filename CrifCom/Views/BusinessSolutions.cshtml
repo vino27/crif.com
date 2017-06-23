@@ -1,0 +1,98 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@using RJP.MultiUrlPicker.Models
+@using Archetype.Models;
+@{
+	Layout = null;
+}
+@{
+   var currentPage = Model.Content;	
+    if (currentPage.HasValue("title") || currentPage.HasValue("subTitle") || currentPage.HasValue("threeColumnBox"))
+    {
+        <section class="business-info">
+            <div class="container">
+                @{
+                    if (currentPage.HasValue("title"))
+                    {
+                        <h2 class="section-title">@currentPage.GetPropertyValue("title")</h2>
+                    }
+                    if (currentPage.HasValue("subTitle"))
+                    {
+                        <h3 class="section-sub-title">@currentPage.GetPropertyValue("subTitle")</h3>
+                    }
+                    if (currentPage.HasValue("threeColumnBox"))
+                    {
+                        var boxContent = currentPage.GetPropertyValue<ArchetypeModel>("threeColumnBox");
+                        if (boxContent!=null && boxContent.Any())
+                        {
+                              <div class="box-wrapper no-gutter">
+                                  @foreach (var contents in boxContent)
+                                  {
+                                    <div class="col-sm-4">
+                                        @{
+                                            if (contents.HasValue("linkTo"))
+                                            {
+                                                var linkUrl = contents.GetValue<MultiUrls>("linkTo");
+                                                if (linkUrl.Any())
+                                                {
+													var firstLink = linkUrl.FirstOrDefault();
+                                                    if (!string.IsNullOrEmpty(firstLink.Url))
+                                                    {
+                                                        <a href="@firstLink.Url" target="@firstLink.Target">
+                                                            @BoxBinding(contents)
+                                                        </a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    @BoxBinding(contents)
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                @BoxBinding(contents)
+                                            }
+
+
+
+                                        }
+                                        
+                                    </div>
+                                  }
+
+                              </div>
+                        }
+                    }
+                }
+              
+              
+            </div>
+        </section>
+    }
+}
+@helper BoxBinding(ArchetypeFieldsetModel contents) {
+if (contents.HasValue("image"))
+{
+    var image = Umbraco.TypedMedia(contents.GetValue("image"));
+	if(image != null)
+	{		
+        <img src="@image.Url" alt="@image.Name">
+	}
+}
+
+if (contents.HasValue("hoverImage"))
+{
+ var hoverImage = Umbraco.TypedMedia(contents.GetValue("hoverImage"));
+	if(hoverImage != null)
+	{
+ 		<img src="@hoverImage.Url" alt="@hoverImage.Name">
+	}
+}
+
+if (contents.HasValue("tilte"))
+{
+        <h3>@contents.GetValue("tilte")</h3>
+}
+}
+ <!-- //Business information Block  -->
+ 
